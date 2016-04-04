@@ -2120,10 +2120,10 @@ adapters.forEach(function (adapters) {
                 } else {
                   should.exist(err);
                 }
-                check_docs(docs.shift());
+                check_docs.apply(this, docs.shift());
               });
             }
-            check_docs(docs.shift());
+            check_docs.apply(this, docs.shift());
           });
         }
         function second_replicate() {
@@ -2165,10 +2165,10 @@ adapters.forEach(function (adapters) {
                 } else {
                   should.exist(err);
                 }
-                check_docs(docs.shift());
+                check_docs.apply(this, docs.shift());
               });
             }
-            check_docs(docs.shift());
+            check_docs.apply(this, docs.shift());
           });
         }
         // Done the test
@@ -2243,10 +2243,10 @@ adapters.forEach(function (adapters) {
                 } else {
                   should.exist(err);
                 }
-                check_docs(docs.shift());
+                check_docs.apply(this, docs.shift());
               });
             }
-            check_docs(docs.shift());
+            check_docs.apply(this, docs.shift());
           });
         }
         function second_replicate() {
@@ -2288,10 +2288,10 @@ adapters.forEach(function (adapters) {
                 } else {
                   should.exist(err);
                 }
-                check_docs(docs.shift());
+                check_docs.apply(this, docs.shift());
               });
             }
-            check_docs(docs.shift());
+            check_docs.apply(this, docs.shift());
           });
         }
         // Done the test
