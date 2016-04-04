@@ -2218,6 +2218,20 @@ adapters.forEach(function (adapters) {
             result.errors[0].error.should.equal('mock error');
             result.errors[0].reason.should.equal('mock get failure');
             result.docs_written.should.equal(4);
+
+            var docs = [
+              [ 'doc_0', true ],
+              [ 'doc_1', true ],
+              [ 'doc_2', true ],
+              [ 'doc_3', false ],
+              [ 'doc_4', false ],
+              [ 'doc_5', false ],
+              [ 'doc_6', false ],
+              [ 'doc_7', false ],
+              [ 'doc_8', false ],
+              [ 'doc_9', false ]
+            ];
+
             function check_docs(id) {
               if (!id) {
                 second_replicate();
@@ -2232,48 +2246,6 @@ adapters.forEach(function (adapters) {
                 check_docs(docs.shift());
               });
             }
-            var docs = [
-              [
-                'doc_0',
-                true
-              ],
-              [
-                'doc_1',
-                true
-              ],
-              [
-                'doc_2',
-                true
-              ],
-              [
-                'doc_3',
-                false
-              ],
-              [
-                'doc_4',
-                false
-              ],
-              [
-                'doc_5',
-                false
-              ],
-              [
-                'doc_6',
-                false
-              ],
-              [
-                'doc_7',
-                false
-              ],
-              [
-                'doc_8',
-                false
-              ],
-              [
-                'doc_9',
-                false
-              ]
-            ];
             check_docs(docs.shift());
           });
         }
@@ -2285,6 +2257,20 @@ adapters.forEach(function (adapters) {
             should.not.exist(err);
             should.exist(result);
             result.docs_written.should.equal(6);
+
+            var docs = [
+              [ 'doc_0', true ],
+              [ 'doc_1', true ],
+              [ 'doc_2', true ],
+              [ 'doc_3', true ],
+              [ 'doc_4', true ],
+              [ 'doc_5', true ],
+              [ 'doc_6', true ],
+              [ 'doc_7', true ],
+              [ 'doc_8', true ],
+              [ 'doc_9', true ]
+            ];
+
             function check_docs(id, exists) {
               if (!id) {
                 db.info(function (err, info) {
@@ -2305,48 +2291,6 @@ adapters.forEach(function (adapters) {
                 check_docs(docs.shift());
               });
             }
-            var docs = [
-              [
-                'doc_0',
-                true
-              ],
-              [
-                'doc_1',
-                true
-              ],
-              [
-                'doc_2',
-                true
-              ],
-              [
-                'doc_3',
-                true
-              ],
-              [
-                'doc_4',
-                true
-              ],
-              [
-                'doc_5',
-                true
-              ],
-              [
-                'doc_6',
-                true
-              ],
-              [
-                'doc_7',
-                true
-              ],
-              [
-                'doc_8',
-                true
-              ],
-              [
-                'doc_9',
-                true
-              ]
-            ];
             check_docs(docs.shift());
           });
         }
