@@ -2110,46 +2110,16 @@ adapters.forEach(function (adapters) {
               });
             }
             var docs = [
-              [
-                'doc_0',
-                true
-              ],
-              [
-                'doc_1',
-                true
-              ],
-              [
-                'doc_2',
-                true
-              ],
-              [
-                'doc_3',
-                false
-              ],
-              [
-                'doc_4',
-                false
-              ],
-              [
-                'doc_5',
-                false
-              ],
-              [
-                'doc_6',
-                false
-              ],
-              [
-                'doc_7',
-                false
-              ],
-              [
-                'doc_8',
-                false
-              ],
-              [
-                'doc_9',
-                false
-              ]
+              [ 'doc_0', true ],
+              [ 'doc_1', true ],
+              [ 'doc_2', true ],
+              [ 'doc_3', false ],
+              [ 'doc_4', false ],
+              [ 'doc_5', false ],
+              [ 'doc_6', false ],
+              [ 'doc_7', false ],
+              [ 'doc_8', false ],
+              [ 'doc_9', false ]
             ];
             check_docs(docs.shift());
           });
@@ -2183,46 +2153,16 @@ adapters.forEach(function (adapters) {
               });
             }
             var docs = [
-              [
-                'doc_0',
-                true
-              ],
-              [
-                'doc_1',
-                true
-              ],
-              [
-                'doc_2',
-                true
-              ],
-              [
-                'doc_3',
-                true
-              ],
-              [
-                'doc_4',
-                true
-              ],
-              [
-                'doc_5',
-                true
-              ],
-              [
-                'doc_6',
-                true
-              ],
-              [
-                'doc_7',
-                true
-              ],
-              [
-                'doc_8',
-                true
-              ],
-              [
-                'doc_9',
-                true
-              ]
+              [ 'doc_0', true ],
+              [ 'doc_1', true ],
+              [ 'doc_2', true ],
+              [ 'doc_3', true ],
+              [ 'doc_4', true ],
+              [ 'doc_5', true ],
+              [ 'doc_6', true ],
+              [ 'doc_7', true ],
+              [ 'doc_8', true ],
+              [ 'doc_9', true ]
             ];
             check_docs(docs.shift());
           });
