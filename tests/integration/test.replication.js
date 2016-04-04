@@ -2048,7 +2048,7 @@ adapters.forEach(function (adapters) {
       });
     });
 
-    it.skip('(#1240) - get error', function (done) {
+    it('(#1240) - get error', function (done) {
       var db = new PouchDB(dbs.name);
       var remote = new PouchDB(dbs.remote);
       // 10 test documents
@@ -2057,29 +2057,45 @@ adapters.forEach(function (adapters) {
       for (var i = 0; i < num; i++) {
         docs.push({
           _id: 'doc_' + i,
-          foo: 'bar_' + i
+          foo: 'bar_' + i,
+          // needed to cause the code to fetch using get
+          _attachments: {
+            text: {
+              content_type: 'text\/plain',
+              data: "VGhpcyBpcyBhIGJhc2U2NCBlbmNvZGVkIHRleHQ="
+            }
+          }
         });
       }
       // Initialize remote with test documents
-      remote.bulkDocs({ docs: docs }, {}, function () {
-        var get = remote.get;
+      remote.bulkDocs({ docs: docs }, {}, function (err, results) {
+        var bulkGet = remote.bulkGet;
         function first_replicate() {
-          // Mock remote.get to fail writing doc_3 (fourth doc)
-          remote.get = function () {
-            // Simulate failure to get the document with id 'doc_4'
-            // This should block the replication at seq 4
-            if (arguments[0] === 'doc_4') {
-              arguments[2].apply(null, [{}]);
-            } else {
-              get.apply(this, arguments);
+          remote.bulkGet = function () {
+            var getResults = [];
+            for (var i = 0; i < docs.length; i++) {
+              var doc = docs[i];
+              getResults.push({
+                id: doc._id,
+                docs: [ {
+                  ok: {
+                    _id: doc._id,
+                    foo: doc.foo,
+                    _attachments: doc._attachments,
+                    _rev: results[i].rev
+                  }
+                } ]
+              });
             }
+            // Mock remote.get to fail writing doc_3 (fourth doc)
+            getResults[3].docs[0] = { error: new Error('timeout') };
+            return Promise.resolve({ results: getResults });
           };
           // Replicate and confirm failure, docs_written and target docs
-          db.replicate.from(remote, function (err, result) {
-            should.exist(err);
+          db.replicate.from(remote).then(function(result) {
             should.exist(result);
             result.docs_written.should.equal(4);
-            function check_docs(id) {
+            function check_docs(id, result) {
               if (!id) {
                 second_replicate();
                 return;
@@ -2139,8 +2155,8 @@ adapters.forEach(function (adapters) {
           });
         }
         function second_replicate() {
-          // Restore remote.get to original
-          remote.get = get;
+          // Restore remote.bulkGet to original
+          remote.bulkGet = bulkGet;
           // Replicate and confirm success, docs_written and target docs
           db.replicate.from(remote, function (err, result) {
             should.not.exist(err);
@@ -2157,7 +2173,7 @@ adapters.forEach(function (adapters) {
                 });
                 return;
               }
-              db.get(id, function (err) {
+              db.get(id, function (err, result) {
                 if (exists) {
                   should.not.exist(err);
                 } else {
