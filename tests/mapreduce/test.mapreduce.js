@@ -1147,6 +1147,22 @@ function tests(suiteName, dbName, dbType, viewType) {
       });
     });
 
+    it("#7127 reduce should default to false", function () {
+      var db = new PouchDB(dbName);
+      return createView(db, {
+        map: function (doc) {
+          emit(true);
+        },
+        reduce: function () {
+          return false;
+        }
+      }).then(function (queryFun)) {
+        return db.query(queryFun);
+      }).then(function (resp) {
+        should.exist(resp.rows);
+      });
+    });
+
     it("#6364 Recognize built in reduce functions with trailing garbage", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
