@@ -58,7 +58,7 @@ adapters.forEach(function (adapters) {
       var remote = new PouchDB(dbs.remote);
 
       // intentionally throw an error during replication
-      remote.bulkGet = function () {
+      remote.allDocs = function () {
         return testUtils.Promise.reject(new Error('flunking you'));
       };
 
@@ -87,7 +87,7 @@ adapters.forEach(function (adapters) {
       var remote = new PouchDB(dbs.remote);
 
       // intentionally throw an error during replication
-      remote.bulkGet = function () {
+      remote.allDocs = function () {
         return testUtils.Promise.reject(new Error('flunking you'));
       };
 
@@ -120,7 +120,7 @@ adapters.forEach(function (adapters) {
       var remote = new PouchDB(dbs.remote);
 
       // intentionally throw an error during replication
-      remote.bulkGet = function () {
+      remote.allDocs = function () {
         return testUtils.Promise.reject(new Error('flunking you'));
       };
 
@@ -149,7 +149,7 @@ adapters.forEach(function (adapters) {
       var remote = new PouchDB(dbs.remote);
 
       // intentionally throw an error during replication
-      remote.bulkGet = function () {
+      remote.allDocs = function () {
         return testUtils.Promise.reject(new Error('flunking you'));
       };
 
@@ -844,6 +844,7 @@ adapters.forEach(function (adapters) {
         }
         var cancelling = toCancel.shift();
         cancelling.on('complete', complete);
+        console.log(11, '> 5997 sync 2 databases, cancel');
         cancelling.cancel();
       }
     });

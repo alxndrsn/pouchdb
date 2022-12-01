@@ -25,17 +25,17 @@ adapters.forEach(function (adapters) {
     it('retry stuff', function (done) {
       var remote = new PouchDB(dbs.remote);
       var Promise = testUtils.Promise;
-      var bulkGet = remote.bulkGet;
+      var allDocs = remote.allDocs;
 
       // Reject attempting to write 'foo' 3 times, then let it succeed
       var i = 0;
-      remote.bulkGet = function (opts) {
-        if (opts.docs[0].id === 'foo') {
+      remote.allDocs = function (opts) {
+        if (opts.keys[0] === 'foo') {
           if (++i !== 3) {
             return Promise.reject(new Error('flunking you'));
           }
         }
-        return bulkGet.apply(remote, arguments);
+        return allDocs.apply(remote, arguments);
       };
 
       var db = new PouchDB(dbs.name);
@@ -148,14 +148,14 @@ adapters.forEach(function (adapters) {
       var remote = new PouchDB(dbs.remote);
       var Promise = testUtils.Promise;
 
-      var bulkGet = remote.bulkGet;
+      var origGet = remote.get;
       var i = 0;
-      remote.bulkGet = function () {
+      remote.get = function () {
         // Reject three times, every 5th time
         if ((++i % 5 === 0) && i <= 15) {
           return Promise.reject(new Error('flunking you'));
         }
-        return bulkGet.apply(remote, arguments);
+        return origGet.apply(remote, arguments);
       };
 
       var rep = db.replicate.from(remote, {
@@ -220,14 +220,14 @@ adapters.forEach(function (adapters) {
       var remote = new PouchDB(dbs.remote);
       var Promise = testUtils.Promise;
 
-      var remoteBulkGet = remote.bulkGet;
+      var origGet = remote.get;
       var i = 0;
-      remote.bulkGet = function () {
+      remote.get = function () {
         // Reject three times, every 5th time
         if ((++i % 5 === 0) && i <= 15) {
           return Promise.reject(new Error('flunking you'));
         }
-        return remoteBulkGet.apply(remote, arguments);
+        return origGet.apply(remote, arguments);
       };
 
       var rep = db.replicate.from(remote, {
@@ -303,14 +303,14 @@ adapters.forEach(function (adapters) {
         var remote = new PouchDB(dbs.remote);
         var Promise = testUtils.Promise;
 
-        var remoteBulkGet = remote.bulkGet;
+        var origGet = remote.get;
         var i = 0;
-        remote.bulkGet = function () {
+        remote.get = function () {
           // Reject three times, every 5th time
           if ((++i % 5 === 0) && i <= 15) {
             return Promise.reject(new Error('flunking you'));
           }
-          return remoteBulkGet.apply(remote, arguments);
+          return origGet.apply(remote, arguments);
         };
 
         var rep = db.replicate.from(remote, {
@@ -379,14 +379,14 @@ adapters.forEach(function (adapters) {
       var remote = new PouchDB(dbs.remote);
       var Promise = testUtils.Promise;
 
-      var remoteBulkGet = remote.bulkGet;
+      var origGet = remote.get;
       var i = 0;
-      remote.bulkGet = function () {
+      remote.get = function () {
         // Reject three times, every 5th time
         if ((++i % 5 === 0) && i <= 15) {
           return Promise.reject(new Error('flunking you'));
         }
-        return remoteBulkGet.apply(remote, arguments);
+        return origGet.apply(remote, arguments);
       };
 
       var rep = db.replicate.from(remote, {
@@ -452,15 +452,15 @@ adapters.forEach(function (adapters) {
       var Promise = testUtils.Promise;
 
       var flunked = 0;
-      var remoteBulkGet = remote.bulkGet;
+      var origGet = remote.get;
       var i = 0;
-      remote.bulkGet = function () {
+      remote.get = function () {
         // Reject five times, every 5th time
         if ((++i % 5 === 0) && i <= 25) {
           flunked++;
           return Promise.reject(new Error('flunking you'));
         }
-        return remoteBulkGet.apply(remote, arguments);
+        return origGet.apply(remote, arguments);
       };
 
       var rep = db.replicate.from(remote, {
