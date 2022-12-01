@@ -125,5 +125,8 @@
       "readable-stream",
       "stream-to-promise"
     ]
+  },
+  "volta": {
+    "node": "12.22.12"
   }
 }
