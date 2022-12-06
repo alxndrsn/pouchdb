@@ -1,0 +1,31 @@
+#!/bin/bash -eu
+set -o pipefail
+
+logPrefix="$(basename "$0")"
+log() {
+  echo "[$logPrefix] [$(date)] $*"
+}
+
+log "Starting dev server..."
+SERVER="pouchdb-express-router"
+
+CLIENT="node" COUCH_HOST="http://127.0.0.1:5984" nodemon -w packages ./bin/dev-server.js >dev.log 2>&1 &
+
+log "Starting couch..."
+docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -it --name my-couchdb -p 5984:5984 trivago/couchdb-cors:latest &
+
+./wait-for-it.sh localhost:5984
+log "Couch started OK :-)"
+
+./wait-for-it.sh localhost:8000
+log "Pouch started OK :-)"
+
+
+while true; do
+	./scripts/playwright-perf-test
+# TODO browse to http://127.0.0.1:8000/tests/integration/
+# exec window.testEvents() and add event listeners
+# TODO get console output
+# TODO print test report and save to file
+	read -p "Press any key to run tests again... " -n1 -s
+done
