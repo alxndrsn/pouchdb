@@ -9,7 +9,7 @@ log() {
 log "Starting dev server..."
 SERVER="pouchdb-express-router"
 
-CLIENT="node" COUCH_HOST="http://127.0.0.1:5984" nodemon -w packages ./bin/dev-server.js >dev.log 2>&1 &
+CLIENT="node" COUCH_HOST="http://127.0.0.1:5984" npx nodemon -w packages ./bin/dev-server.js >dev.log 2>&1 &
 
 log "Starting couch..."
 docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -it --name my-couchdb -p 5984:5984 trivago/couchdb-cors:latest &
