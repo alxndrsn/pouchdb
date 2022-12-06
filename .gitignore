@@ -27,3 +27,4 @@ package-lock.json
 yarn.lock
 /.eslintcache
 release-todo.txt
+/*.log
