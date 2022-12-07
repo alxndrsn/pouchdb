@@ -15,15 +15,15 @@ function runTestSuites(PouchDB) {
   var count = 0;
   function checkDone(adapterUsed) {
     theAdapterUsed = theAdapterUsed || adapterUsed;
-    if (++count === 1) { // number of perf.xxxx.js tests
+    if (++count === 4) { // number of perf.xxxx.js tests
       reporter.complete(theAdapterUsed);
     }
   }
 
   require('./perf.basics')(PouchDB, checkDone);
-//  require('./perf.views')(PouchDB, checkDone);
-//  require('./perf.find')(PouchDB, checkDone);
-//  require('./perf.attachments')(PouchDB, checkDone);
+  require('./perf.views')(PouchDB, checkDone);
+  require('./perf.find')(PouchDB, checkDone);
+  require('./perf.attachments')(PouchDB, checkDone);
 }
 
 var PouchDB = commonUtils.loadPouchDB({ plugins: ['pouchdb-find'] });
