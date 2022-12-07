@@ -7,9 +7,10 @@ log() {
 }
 
 log "Starting dev server..."
-SERVER="pouchdb-express-router"
+SERVER="pouchdb-express-router" # TODO what is this doing?
+export COUCH_HOST="http://admin:password@127.0.0.1:5984" 
 
-CLIENT="node" COUCH_HOST="http://127.0.0.1:5984" npx nodemon -w packages ./bin/dev-server.js >dev.log 2>&1 &
+CLIENT="node" npx nodemon -w ./packages/node_modules/ -w ./tests/performance/ ./bin/dev-server.js >dev.log 2>&1 &
 
 log "Starting couch..."
 docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -it --name my-couchdb -p 5984:5984 trivago/couchdb-cors:latest &
@@ -20,12 +21,18 @@ log "Couch started OK :-)"
 ./wait-for-it.sh localhost:8000
 log "Pouch started OK :-)"
 
+# FIXME none of the code above actually works for starting pouch or the local server
+# so to make up for it, we don't run tests until the user says they're ready
+read -p "Press enter to run tests for first time... " -s
 
 while true; do
-	./scripts/playwright-perf-test
-# TODO browse to http://127.0.0.1:8000/tests/integration/
-# exec window.testEvents() and add event listeners
-# TODO get console output
-# TODO print test report and save to file
-	read -p "Press any key to run tests again... " -n1 -s
+	resultsDir="perf-test-results/$(date -Iseconds | head -c-7)"
+	mkdir -p "$resultsDir"
+	./scripts/playwright-perf-test "$resultsDir" idb
+	./scripts/playwright-perf-test "$resultsDir" indexeddb
+	log "Results written to: $resultsDir"
+	echo
+	
+	read -p "Press enter to run tests again... " -s
+	echo
 done

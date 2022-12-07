@@ -1,16 +1,138 @@
 #!/usr/bin/env node
+const fs = require('node:fs');
 const { chromium, firefox, webkit } = require('playwright');
+const MochaSpecReporter = require('mocha').reporters.Spec;
+
+const bail = true; // not sure what this is yet
 
 const log = (...args) => console.log(`[${new Date()}]`, 'INFO', ...args);
+
+const [ , , resultsDir, adapter ] = process.argv;
 
 (async () => {
   log('launching browser...');
   const browser = await chromium.launch({ headless:false }); // Or 'firefox' or 'webkit'.
+
   const page = await browser.newPage();
-  log('heading for perf test page...');
-  await page.goto('http://127.0.0.1:8000/tests/performance/');
-	// ...
-  log('closing browser...');
-  await browser.close();
-  log('browser closed.');
+	const url = `http://127.0.0.1:8000/tests/performance/?couchHost=${process.env.COUCH_HOST}&adapters=${adapter}`;
+  log('heading for perf test page:', url);
+  await page.goto(url);
+
+  const runner = new RemoteRunner();
+  //new MochaSpecReporter(runner);
+
+  let currentSuite, currentTest;
+  const results = {};
+  runner.on('start', (...args) => {});
+  runner.on('suite', suite => { currentSuite = results[suite.title] = {}; });
+  runner.on('test end',  (           ...args) => console.log('Unhandled event:', 'test end',  { args }));
+  runner.on('pass', test => { console.log('pass', test); currentTest = test.title; });
+  runner.on('fail',      (test, err, ...args) => console.log('Unhandled event:', 'fail',      { test, err, args }));
+  runner.on('pending',   (test,      ...args) => console.log('Unhandled event:', 'pending',   { args }));
+  runner.on('suite end', (suite,     ...args) => console.log('Unhandled event:', 'suite end', { args }));
+  runner.on('end', (...args) => console.log('Unhandled event:', 'end', { args }));
+  runner.on('benchmark:result', res => {
+    console.log('     ', res); // for the CLI reporter (mocha-style)
+    currentSuite[currentTest] = res; // for later, e.g. saving to file
+  });
+
+  const interval = setInterval(catchTestEvents, 500);
+
+  async function catchTestEvents() {
+    try {
+      const events = await page.evaluate('window.testEvents?.()');
+      if(!events?.length) return;
+      console.log('Running results:', JSON.stringify(results, null, 2));
+      runner.handleEvents(events);
+      if (runner.completed || (runner.failed && bail)) {
+        if(runner.completed) {
+          const json = JSON.stringify(results, null, 2);
+          console.log('Tests completed ok.  Results:', json);
+          fs.writeFileSync(`${resultsDir}/${adapter}.json`, json);
+        }
+        if (!runner.completed && runner.failed) {
+          try {
+            runner.bail();
+          } catch (e) {
+            // Temporary debugging of bailing failure
+            console.log('An error occurred while bailing:');
+            console.log(e);
+          }
+        }
+        cleanup();
+      }
+    } catch(err) {
+      console.log('Test error:', err);
+      await cleanup();
+    }
+  }
+
+  async function cleanup() {
+    clearInterval(interval);
+    log('closing browser...');
+    await browser.close();
+    log('browser closed.');
+  }
 })();
+
+// from test-browser.js
+class RemoteRunner {
+  constructor() {
+    this.handlers = {};
+    this.completed = false;
+    this.failed = false;
+  }
+
+  on(name, handler) {
+    var handlers = this.handlers;
+  
+    if (!handlers[name]) {
+      handlers[name] = [];
+    }
+    handlers[name].push(handler);
+  }
+
+  handleEvents(events) {
+    console.log('handleEvents()', events);
+    var handlers = this.handlers;
+
+    events.forEach((event) => {
+      this.completed = this.completed || event.name === 'end';
+      this.failed = this.failed || event.name === 'fail';
+  
+      var additionalProps = ['pass', 'fail', 'pending'].indexOf(event.name) === -1 ? {} : {
+        slow: event.obj.slow ? function () { return event.obj.slow; } : function () { return 60; },
+        fullTitle: event.obj.fullTitle ? function () { return event.obj.fullTitle; } : undefined
+      };
+      var obj = Object.assign({}, event.obj, additionalProps);
+  
+      console.log('Handling event:', event);
+      handlers[event.name].forEach(function (handler) {
+        handler(obj, event.err);
+      });
+  
+      if (event.logs && event.logs.length > 0) {
+        event.logs.forEach(function (line) {
+          if (line.type === 'log') {
+            console.log(line.content);
+          } else if (line.type === 'error') {
+            console.error(line.content);
+          } else {
+            console.error('Invalid log line', line);
+          }
+        });
+        console.log();
+      }
+    });
+  }
+  
+  bail() {
+    var handlers = this.handlers;
+  
+    handlers['end'].forEach(function (handler) {
+      handler();
+    });
+  
+    this.completed = true;
+  }
+}
