@@ -20,7 +20,7 @@ SERVER="pouchdb-express-router" # TODO what is this doing?
 export COUCH_HOST="http://admin:password@127.0.0.1:5984" 
 
 rm .dev-server-ready || true
-CLIENT="node" npx nodemon -w ./packages/node_modules/ -w ./tests/performance/ ./scripts/start-dev-server-for-continuous-perf.js &
+CLIENT="node" npx node ./scripts/start-dev-server-for-continuous-perf.js &
 
 log "Starting couch..."
 couchDockerContainer="couchdb-$(date +%s)-$RANDOM"
@@ -42,8 +42,8 @@ read -p "Press enter to run tests for first time... " -s
 while true; do
   resultsDir="perf-test-results/$(date -Iseconds | head -c-7)"
   mkdir -p "$resultsDir"
-  ./scripts/playwright-perf-test "$resultsDir" idb       suites
-  ./scripts/playwright-perf-test "$resultsDir" indexeddb suites
+  ./scripts/playwright-perf-test "$resultsDir" idb       basics
+  ./scripts/playwright-perf-test "$resultsDir" indexeddb basics
   log "Results written to: $resultsDir"
   echo
   
