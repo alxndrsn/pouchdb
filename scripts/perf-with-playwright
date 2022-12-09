@@ -6,6 +6,12 @@ log() {
   echo "[$logPrefix] [$(date)] $*"
 }
 
+shutdown_docker_containers() {
+  if [[ -n "${couchDockerContainer-}" ]]; then
+    docker kill "$couchDockerContainer" || log "WARN: failed to shut down couch docker container; maybe it never started?"
+  fi
+}
+
 log "Starting dev server..."
 SERVER="pouchdb-express-router" # TODO what is this doing?
 export COUCH_HOST="http://admin:password@127.0.0.1:5984" 
@@ -13,7 +19,9 @@ export COUCH_HOST="http://admin:password@127.0.0.1:5984"
 CLIENT="node" npx nodemon -w ./packages/node_modules/ -w ./tests/performance/ ./bin/dev-server.js >dev.log 2>&1 &
 
 log "Starting couch..."
-docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -it --name my-couchdb -p 5984:5984 trivago/couchdb-cors:latest &
+couchDockerContainer="couchdb-$(date +%s)-$RANDOM"
+trap shutdown_docker_containers EXIT
+docker run -d --rm -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -it --name "$couchDockerContainer" -p 5984:5984 trivago/couchdb-cors:latest &
 
 ./wait-for-it.sh localhost:5984
 log "Couch started OK :-)"
@@ -26,13 +34,13 @@ log "Pouch started OK :-)"
 read -p "Press enter to run tests for first time... " -s
 
 while true; do
-	resultsDir="perf-test-results/$(date -Iseconds | head -c-7)"
-	mkdir -p "$resultsDir"
-	./scripts/playwright-perf-test "$resultsDir" idb
-	./scripts/playwright-perf-test "$resultsDir" indexeddb
-	log "Results written to: $resultsDir"
-	echo
-	
-	read -p "Press enter to run tests again... " -s
-	echo
+  resultsDir="perf-test-results/$(date -Iseconds | head -c-7)"
+  mkdir -p "$resultsDir"
+  ./scripts/playwright-perf-test "$resultsDir" idb
+  ./scripts/playwright-perf-test "$resultsDir" indexeddb
+  log "Results written to: $resultsDir"
+  echo
+  
+  read -p "Press enter to run tests again... " -s
+  echo
 done
