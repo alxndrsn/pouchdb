@@ -33,7 +33,7 @@ docker run -d --rm -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -it --name
 log "Couch started OK :-)"
 
 log "Waiting for pouch to build..."
-timeout 30 bash -c 'while ! [[ -f .dev-server-ready ]]; do echo -n .; sleep 1; done'
+timeout 60 bash -c 'while ! [[ -f .dev-server-ready ]]; do echo -n .; sleep 1; done'
 echo
 log "Pouch started OK :-)"
 
