@@ -311,5 +311,11 @@ module.exports = function (PouchDB, callback) {
     }
   ];
 
-  utils.runTests(PouchDB, 'basics', testCases, callback);
+  const testFilter = commonUtils.params().testFilter?.split(',');
+  if(testFilter) {
+    const filteredTestCases = testCases.filter(t => testFilter.includes(t.name));
+    utils.runTests(PouchDB, 'basics', filteredTestCases, callback);
+  } else {
+    utils.runTests(PouchDB, 'basics', testCases, callback);
+  }
 };

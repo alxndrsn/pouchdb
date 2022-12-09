@@ -12,7 +12,7 @@ const [ , , resultsDir, adapter, suites ] = process.argv;
 (async () => {
   log('launching browser...');
   const options = {
-    headless: true,
+    headless: false,
   };
   const browser = await chromium.launch(options); // Or 'firefox' or 'webkit'.
 
@@ -45,7 +45,6 @@ const [ , , resultsDir, adapter, suites ] = process.argv;
     try {
       const events = await page.evaluate('window.testEvents?.()');
       if(!events?.length) return;
-      console.log('Running results:', JSON.stringify(results, null, 2));
       runner.handleEvents(events);
       if (runner.completed || (runner.failed && bail)) {
         if(runner.completed) {

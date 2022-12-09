@@ -65,6 +65,7 @@ exports.runTests = function (PouchDB, suiteName, testCases, callback) {
 
       t.test(testName, function (t) {
         t.plan(testCase.assertions);
+        window.console.profile(testName);
         var num = 0;
         function next() {
           nextTick(function () {
@@ -88,6 +89,7 @@ exports.runTests = function (PouchDB, suiteName, testCases, callback) {
         next();
       });
       t.test('teardown', function (t) {
+        window.console.profileEnd();
         var testCaseTeardown = testCase.tearDown ?
           testCase.tearDown(db, setupObj) :
           Promise.resolve();
