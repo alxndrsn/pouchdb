@@ -17,12 +17,12 @@ const [ , , resultsDir, adapter, suites ] = process.argv;
   const browser = await chromium.launch(options); // Or 'firefox' or 'webkit'.
 
   const page = await browser.newPage();
+  const favIconError = message => !message.location().url && message.text().includes(404); // TODO come up with a better check
   page.on('console', message => {
     const type = message.type();
-    const text = message.text();
     const { url, lineNumber } = message.location();
-    log('BROWSER', type.toUpperCase(), `${url}:${lineNumber}`, text);
-    if(type === 'error' && url !== 'favicon.ico') process.exit(1);
+    log('BROWSER', type.toUpperCase(), `${url}:${lineNumber}`, ...message.args());
+    //TODO this doesn't work: if(type === 'error' && !favIconError(message)) process.exit(1);
   });
   const url = `http://127.0.0.1:8000/tests/performance/?couchHost=${process.env.COUCH_HOST}&adapters=${adapter}&suites=${suites}`;
   log('heading for perf test page:', url);
