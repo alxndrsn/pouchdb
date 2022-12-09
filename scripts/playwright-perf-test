@@ -19,8 +19,10 @@ const [ , , resultsDir, adapter, suites ] = process.argv;
   const page = await browser.newPage();
   page.on('console', message => {
     const type = message.type();
-    log('BROWSER', type.toUpperCase(), message.text());
-    if(type === 'error') process.exit(1);
+    const text = message.text();
+    const { url, lineNumber } = message.location();
+    log('BROWSER', type.toUpperCase(), `${url}:${lineNumber}`, text);
+    if(type === 'error' && url !== 'favicon.ico') process.exit(1);
   });
   const url = `http://127.0.0.1:8000/tests/performance/?couchHost=${process.env.COUCH_HOST}&adapters=${adapter}&suites=${suites}`;
   log('heading for perf test page:', url);
