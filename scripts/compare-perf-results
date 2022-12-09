@@ -1,4 +1,13 @@
 #!/bin/bash -eux
+
 resultsDir="./perf-test-results"
-latest="$(ls -t "$resultsDir" | head -n1)"
-node ./scripts/compare-perf-results.js $(find "./perf-test-results/$latest/" -name \*.json -type f)
+
+if [[ $# = 0 ]]; then
+	# latest
+	runstamp="$(ls -t "$resultsDir" | head -n1)"
+else
+	runstamp="$1"
+	shift
+fi
+
+node ./scripts/compare-perf-results.js $(find "./perf-test-results/$runstamp/" -name \*.json -type f)
