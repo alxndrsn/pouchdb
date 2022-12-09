@@ -20,7 +20,9 @@ SERVER="pouchdb-express-router" # TODO what is this doing?
 export COUCH_HOST="http://admin:password@127.0.0.1:5984" 
 
 rm .dev-server-ready || true # maybe do this inside the script
-CLIENT="node" npx nodemon -w ./packages/node_modules/ -w ./tests/performance/ ./scripts/start-dev-server-for-continuous-perf.js &
+//CLIENT="node" npx nodemon -w ./packages/node_modules/ -w ./tests/performance/ ./scripts/start-dev-server-for-continuous-perf.js &
+# I'm really not sure nodemon is working reliably...
+CLIENT="node" node ./scripts/start-dev-server-for-continuous-perf.js &
 
 log "Starting couch..."
 couchDockerContainer="couchdb-$(date +%s)-$RANDOM"
@@ -42,11 +44,11 @@ while true; do
 
 	log "Starting tests at $runstamp..."
 
-	log "Testing adapter: indexeddb..."
-  ./scripts/playwright-perf-test "$resultsDir" indexeddb basics
-
 	log "Testing adapter: idb..."
   ./scripts/playwright-perf-test "$resultsDir" idb       basics
+
+	log "Testing adapter: indexeddb..."
+  ./scripts/playwright-perf-test "$resultsDir" indexeddb basics
 
   log "Results written to: $resultsDir"
 
