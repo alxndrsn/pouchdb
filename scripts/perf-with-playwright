@@ -19,8 +19,8 @@ log "Starting dev server..."
 SERVER="pouchdb-express-router" # TODO what is this doing?
 export COUCH_HOST="http://admin:password@127.0.0.1:5984" 
 
-rm .dev-server-ready || true
-CLIENT="node" npx node ./scripts/start-dev-server-for-continuous-perf.js &
+rm .dev-server-ready || true # maybe do this inside the script
+CLIENT="node" npx nodemon -w ./packages/node_modules/ -w ./tests/performance/ ./scripts/start-dev-server-for-continuous-perf.js &
 
 log "Starting couch..."
 couchDockerContainer="couchdb-$(date +%s)-$RANDOM"
@@ -30,21 +30,24 @@ docker run -d --rm -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -it --name
 ./wait-for-it.sh localhost:5984
 log "Couch started OK :-)"
 
-echo -n "[$logPrefix] [$(date)] Waiting for pouch to build..."
+log "Waiting for pouch to build..."
 timeout 30 bash -c 'while ! [[ -f .dev-server-ready ]]; do echo -n .; sleep 1; done'
 echo
 log "Pouch started OK :-)"
-
-# FIXME none of the code above actually works for starting pouch or the local server
-# so to make up for it, we don't run tests until the user says they're ready
-read -p "Press enter to run tests for first time... " -s
 
 while true; do
 	runstamp="$(date -Iseconds | head -c-7)"
   resultsDir="perf-test-results/$runstamp"
   mkdir -p "$resultsDir"
-  ./scripts/playwright-perf-test "$resultsDir" idb       basics
+
+	log "Starting tests at $runstamp..."
+
+	log "Testing adapter: indexeddb..."
   ./scripts/playwright-perf-test "$resultsDir" indexeddb basics
+
+	log "Testing adapter: idb..."
+  ./scripts/playwright-perf-test "$resultsDir" idb       basics
+
   log "Results written to: $resultsDir"
 
 	./scripts/compare-perf-results "$runstamp"

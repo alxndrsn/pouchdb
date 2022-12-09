@@ -52,7 +52,7 @@ function forHumans(n) {
 }
 
 function isBetter(a, b) {
-  if(Math.abs(a - b) / a < 0.01) return ' ~'; // less than 1 percent different
+  if(Math.abs(a - b) / a < 0.05) return ' ~'; // less than 5 percent different - is it significant?  do we care?
   if(a < b) return ' !';
   if(a > b) return '  ';
   throw new Error(`Not sure how we got here! ${JSON.stringify({ a, b })}`);
