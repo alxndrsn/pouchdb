@@ -26,3 +26,4 @@ tests/integration/utils-bundle.js
 /pouchdb-server-install
 package-lock.json
 /*.log
+/.dev-server-ready
