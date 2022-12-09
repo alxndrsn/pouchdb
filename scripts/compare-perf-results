@@ -1,0 +1,4 @@
+#!/bin/bash -eux
+resultsDir="./perf-test-results"
+latest="$(ls -t "$resultsDir" | head -n1)"
+node ./scripts/compare-perf-results.js $(find ./perf-test-results/2022-12-07T14\:53\:44/ -name \*.json -type f)
