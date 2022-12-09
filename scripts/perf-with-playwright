@@ -6,6 +6,8 @@ log() {
   echo "[$logPrefix] [$(date)] $*"
 }
 
+suites="${1-}"
+
 shutdown_docker_containers() {
   if [[ -n "${couchDockerContainer-}" ]]; then
 		log "Shutting down couch docker container..."
@@ -40,8 +42,8 @@ read -p "Press enter to run tests for first time... " -s
 while true; do
   resultsDir="perf-test-results/$(date -Iseconds | head -c-7)"
   mkdir -p "$resultsDir"
-  ./scripts/playwright-perf-test "$resultsDir" idb
-  ./scripts/playwright-perf-test "$resultsDir" indexeddb
+  ./scripts/playwright-perf-test "$resultsDir" idb       suites
+  ./scripts/playwright-perf-test "$resultsDir" indexeddb suites
   log "Results written to: $resultsDir"
   echo
   
