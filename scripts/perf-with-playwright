@@ -40,11 +40,14 @@ log "Pouch started OK :-)"
 read -p "Press enter to run tests for first time... " -s
 
 while true; do
-  resultsDir="perf-test-results/$(date -Iseconds | head -c-7)"
+	runstamp="$(date -Iseconds | head -c-7)"
+  resultsDir="perf-test-results/$runstamp"
   mkdir -p "$resultsDir"
   ./scripts/playwright-perf-test "$resultsDir" idb       basics
   ./scripts/playwright-perf-test "$resultsDir" indexeddb basics
   log "Results written to: $resultsDir"
+
+	./scripts/compare-perf-results "$runstamp"
   echo
   
   read -p "Press enter to run tests again... " -s

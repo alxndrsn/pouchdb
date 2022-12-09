@@ -4,7 +4,7 @@ const { basename } = require('node:path');
 const [ , , ...files ] = process.argv;
 if(files.length !== 2) throw new Error('Can currently only compare 2 results.');
 
-const log = (...args) => console.log('[compare-perf-results]', ...args);
+const log    = (...args) => console.error('[compare-perf-results]', ...args);
 const report = (...args) => console.log('   ', ...args);
 
 const [ a, b ] = files.map(loadResultFile);
@@ -52,7 +52,8 @@ function forHumans(n) {
 }
 
 function isBetter(a, b) {
-  if(a > b) return ' x';
-  if(a < b) return '  ';
-  return ' ?';
+  if(Math.abs(a - b) / a < 0.01) return ' ~'; // less than 1 percent different
+  if(a < b) return ' !';
+  if(a > b) return '  ';
+  throw new Error(`Not sure how we got here! ${JSON.stringify({ a, b })}`);
 }
