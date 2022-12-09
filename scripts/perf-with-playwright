@@ -8,6 +8,7 @@ log() {
 
 shutdown_docker_containers() {
   if [[ -n "${couchDockerContainer-}" ]]; then
+		log "Shutting down couch docker container..."
     docker kill "$couchDockerContainer" || log "WARN: failed to shut down couch docker container; maybe it never started?"
   fi
 }
@@ -16,7 +17,8 @@ log "Starting dev server..."
 SERVER="pouchdb-express-router" # TODO what is this doing?
 export COUCH_HOST="http://admin:password@127.0.0.1:5984" 
 
-CLIENT="node" npx nodemon -w ./packages/node_modules/ -w ./tests/performance/ ./bin/dev-server.js >dev.log 2>&1 &
+rm .dev-server-ready || true
+CLIENT="node" npx nodemon -w ./packages/node_modules/ -w ./tests/performance/ ./scripts/start-dev-server-for-continuous-perf.js &
 
 log "Starting couch..."
 couchDockerContainer="couchdb-$(date +%s)-$RANDOM"
@@ -26,7 +28,9 @@ docker run -d --rm -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -it --name
 ./wait-for-it.sh localhost:5984
 log "Couch started OK :-)"
 
-./wait-for-it.sh localhost:8000
+echo -n "[$logPrefix] [$(date)] Waiting for pouch to build..."
+timeout 30 bash -c 'while ! [[ -f .dev-server-ready ]]; do echo -n .; sleep 1; done'
+echo
 log "Pouch started OK :-)"
 
 # FIXME none of the code above actually works for starting pouch or the local server
