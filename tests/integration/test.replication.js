@@ -7,10 +7,6 @@ var adapters = [
   ['local', 'local']
 ];
 
-if ('saucelabs' in testUtils.params()) {
-  adapters = [['local', 'http'], ['http', 'local']];
-}
-
 adapters.forEach(function (adapters) {
   describe('suite2 test.replication.js-' + adapters[0] + '-' + adapters[1], function () {
 
@@ -2148,9 +2144,6 @@ adapters.forEach(function (adapters) {
     });
 
     it('Replicate large number of docs', function (done) {
-      if ('saucelabs' in testUtils.params() || testUtils.isIE()) {
-        return done();
-      }
       var db = new PouchDB(dbs.name);
       var remote = new PouchDB(dbs.remote);
       var docs = [];
