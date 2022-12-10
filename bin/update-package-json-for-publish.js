@@ -53,6 +53,7 @@ modules.forEach(function (mod) {
   // add "browser" switches for both CJS and ES modules
   if (pkg.browser) {
     pkg.browser = {
+      //...pkg.browser,
       './lib/index.js': './lib/index-browser.js',
       './lib/index.es.js': './lib/index-browser.es.js',
     };

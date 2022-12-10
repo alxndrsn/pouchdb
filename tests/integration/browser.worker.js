@@ -47,11 +47,15 @@ function runTests() {
     });
   }
 
-  describe('browser.worker.js', function () {
+  describe.only('browser.worker.js', function () {
 
     var dbs = {};
 
     beforeEach(function (done) {
+      if (testUtils.adapters()[0] === 'leveldown') {
+        this.skip();
+        return;
+      }
       dbs.name = testUtils.adapterUrl('local', 'testdb');
       dbs.remote = testUtils.adapterUrl('http', 'test_repl_remote');
       testUtils.cleanup([dbs.name, dbs.remote], done);
