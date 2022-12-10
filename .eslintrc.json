@@ -39,7 +39,7 @@
     "curly": ["off", "all"],
     "space-unary-ops": ["error", {"words": true}],
     "space-before-function-paren": ["error", {"anonymous": "always", "named": "never"}],
-    "max-len": ["error", 100, {"ignoreComments": true, "ignoreStrings": true, "ignoreRegExpLiterals": true}],
+    "max-len": ["error", 200, {"ignoreComments": true, "ignoreStrings": true, "ignoreRegExpLiterals": true}],
     "keyword-spacing": ["off"],
     "space-before-blocks": ["error"]
   }
