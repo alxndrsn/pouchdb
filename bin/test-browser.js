@@ -153,7 +153,7 @@ async function startTest() {
   const page = await browser.newPage();
   page.on('console', message => {
     const { url, lineNumber } = message.location();
-    console.log('BROWSER', message.type().toUpperCase(), `${url}:${lineNumber}`, message.text());
+    if(process.env.BROWSER_CONSOLE) console.log('BROWSER', message.type().toUpperCase(), `${url}:${lineNumber}`, message.text());
   });
   await page.goto(testUrl);
 
