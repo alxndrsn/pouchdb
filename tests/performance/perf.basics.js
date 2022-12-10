@@ -311,8 +311,8 @@ module.exports = function (PouchDB, callback) {
     }
   ];
 
-  const testFilter = commonUtils.params().testFilter?.split(',');
-  if(testFilter) {
+  if(commonUtils.params().testFilter) { // FIXME no-safe-null-deref
+    const testFilter = commonUtils.params().testFilter.split(',');
     const filteredTestCases = testCases.filter(t => testFilter.includes(t.name));
     utils.runTests(PouchDB, 'basics', filteredTestCases, callback);
   } else {

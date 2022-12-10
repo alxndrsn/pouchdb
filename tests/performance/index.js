@@ -18,7 +18,7 @@ function runTestSuites(PouchDB) {
     (adapters.length > 0 ? (', using adapter(s): ' + adapters.join(', ')) : '') +
     '\n\n');
 
-  const suites = commonUtils.params().suites?.split(',') || ALL_SUITES;
+  const suites = (commonUtils.params().suites && commonUtils.params().suites.split(',')) || ALL_SUITES;// FIXME no-safe-null-deref
   console.log('Suites:', suites);
   if(suites.some(s => !ALL_SUITES.includes(s))) throw new Error(`Unrecongnised suite(s): '${suites}'`);
 
