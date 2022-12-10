@@ -151,10 +151,12 @@ async function startTest() {
   };
   const browser = await browserImpl.launch(options); // FIXME Or 'firefox' or 'webkit'.
   const page = await browser.newPage();
-  page.on('console', message => {
-    const { url, lineNumber } = message.location();
-    if(process.env.BROWSER_CONSOLE) console.log('BROWSER', message.type().toUpperCase(), `${url}:${lineNumber}`, message.text());
-  });
+  if (process.env.BROWSER_CONSOLE) {
+    page.on('console', message => {
+      const { url, lineNumber } = message.location();
+      console.log('BROWSER', message.type().toUpperCase(), `${url}:${lineNumber}`, message.text());
+    });
+  }
   await page.goto(testUrl);
 
   const userAgent = await page.evaluate('navigator.userAgent');
