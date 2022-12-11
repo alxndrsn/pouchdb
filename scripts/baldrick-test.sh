@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash -ex
 
 # Run PouchDB test suite, expect a global couchdb command to be installed
 #

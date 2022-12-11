@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 echo '<!DOCTYPE html><html>' > test.html
 echo "<head><meta charset='utf-8'></head>" >> test.html

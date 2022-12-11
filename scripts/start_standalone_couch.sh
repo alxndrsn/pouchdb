@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -eu
 
 # Start a standalone CouchDB, this is a wrapper around the $ couchdb
 # command that will create a standalone instance of CouchDB allowing
