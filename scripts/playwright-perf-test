@@ -21,7 +21,7 @@ const [ , , resultsDir, adapter, suites ] = process.argv;
   page.on('console', message => {
     const type = message.type();
     const { url, lineNumber } = message.location();
-    log('BROWSER', type.toUpperCase(), `${url}:${lineNumber}`, ...message.args());
+    log('BROWSER', type.toUpperCase(), `${url}:${lineNumber}`, message.text());
     //TODO this doesn't work: if(type === 'error' && !favIconError(message)) process.exit(1);
   });
   const url = `http://127.0.0.1:8000/tests/performance/?couchHost=${process.env.COUCH_HOST}&adapters=${adapter}&suites=${suites}`;
