@@ -44,11 +44,11 @@ while true; do
 
 	log "Starting tests at $runstamp..."
 
-	log "Testing adapter: idb..."
-  ./scripts/playwright-perf-test "$resultsDir" idb       basics
-
 	log "Testing adapter: indexeddb..."
   ./scripts/playwright-perf-test "$resultsDir" indexeddb basics
+
+	log "Testing adapter: idb..."
+  ./scripts/playwright-perf-test "$resultsDir" idb       basics
 
   log "Results written to: $resultsDir"
 
