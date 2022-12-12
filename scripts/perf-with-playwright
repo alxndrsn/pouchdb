@@ -10,7 +10,7 @@ suites="${1-}"
 
 shutdown_docker_containers() {
   if [[ -n "${couchDockerContainer-}" ]]; then
-		log "Shutting down couch docker container..."
+    log "Shutting down couch docker container..."
     docker kill "$couchDockerContainer" || log "WARN: failed to shut down couch docker container; maybe it never started?"
   fi
 }
@@ -38,21 +38,21 @@ echo
 log "Pouch started OK :-)"
 
 while true; do
-	runstamp="$(date -Iseconds | head -c-7)"
+  runstamp="$(date -Iseconds | head -c-7)"
   resultsDir="perf-test-results/$runstamp"
   mkdir -p "$resultsDir"
 
-	log "Starting tests at $runstamp..."
+  log "Starting tests at $runstamp..."
 
-	log "Testing adapter: indexeddb..."
+  log "Testing adapter: indexeddb..."
   ./scripts/playwright-perf-test "$resultsDir" indexeddb basics
 
-	log "Testing adapter: idb..."
+  log "Testing adapter: idb..."
   ./scripts/playwright-perf-test "$resultsDir" idb       basics
 
   log "Results written to: $resultsDir"
 
-	./scripts/compare-perf-results "$runstamp"
+  ./scripts/compare-perf-results "$runstamp"
   echo
   
   read -p "Press enter to run tests again... " -s
