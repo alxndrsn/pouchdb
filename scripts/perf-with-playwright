@@ -55,6 +55,7 @@ while true; do
   ./scripts/compare-perf-results "$runstamp"
   echo
   
+  while read -t 0.01; do true; done # clear input buffer
   read -p "Press enter to run tests again... " -s
   echo
 done
