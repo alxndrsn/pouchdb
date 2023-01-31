@@ -132,7 +132,7 @@ adapters.forEach(function (adapter) {
           skip: 1,
           limit: 4,
         });
-      }).then(function(result) {
+      }).then(function (result) {
         result.rows.map(keyFunc).should.deep.equal([ '2', 'also-not-a-doc', '1', '2' ]);
         result.rows[0].value.deleted.should.equal(true, 'deleted doc with keys option');
         result.rows[1].error.should.equal('not_found');
