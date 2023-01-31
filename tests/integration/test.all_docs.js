@@ -127,6 +127,16 @@ adapters.forEach(function (adapter) {
         result.rows.map(keyFunc).should.deep.equal(keys);
         result.rows[keys.indexOf('2')].value.deleted.should.equal(true, 'deleted doc with keys option');
         (result.rows[keys.indexOf('2')].doc === null).should.equal(true, 'deleted doc with keys option');
+        return db.allDocs({
+          keys: ['not-a-doc', '2', 'also-not-a-doc', '1', '2', '3', '0', '1', '2', '3'],
+          skip: 1,
+          limit: 4,
+        });
+      }).then(function(result) {
+        result.rows.map(keyFunc).should.deep.equal([ '2', 'also-not-a-doc', '1', '2' ]);
+        result.rows[0].value.deleted.should.equal(true, 'deleted doc with keys option');
+        result.rows[1].error.should.equal('not_found');
+        result.rows[3].value.deleted.should.equal(true, 'deleted doc with keys option');
       });
     });
 
