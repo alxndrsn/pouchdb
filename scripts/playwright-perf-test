@@ -24,7 +24,8 @@ const [ , , resultsDir, adapter, suites ] = process.argv;
     log('BROWSER', type.toUpperCase(), `${url}:${lineNumber}`, message.text());
     //TODO this doesn't work: if(type === 'error' && !favIconError(message)) process.exit(1);
   });
-  const url = `http://127.0.0.1:8000/tests/performance/?couchHost=${process.env.COUCH_HOST}&adapters=${adapter}&suites=${suites}`;
+  let url = `http://127.0.0.1:8000/tests/performance/?couchHost=${process.env.COUCH_HOST}&adapters=${adapter}`;
+  if(suites) url += `&suites=${suites}`;
   log('heading for perf test page:', url);
   await page.goto(url);
 

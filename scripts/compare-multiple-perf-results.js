@@ -21,9 +21,9 @@ rawResults.forEach(({ adapter, results }) => {
 
     Object.entries(tests).forEach(([ t, { median } ]) => {
       if(!testSuites[suite].includes(t)) testSuites[suite].push(t);
-      if(!resultsByAdapter[adapter][suite][t]) resultsByAdapter[adapter][suite][t] = { iterations:0, min:Number.MAX_VALUE };
+      if(!resultsByAdapter[adapter][suite][t]) resultsByAdapter[adapter][suite][t] = { numIterations:0, min:Number.MAX_VALUE };
       resultsByAdapter[adapter][suite][t].min = Math.min(resultsByAdapter[adapter][suite][t].min, median);
-      resultsByAdapter[adapter][suite][t].iterations++;
+      resultsByAdapter[adapter][suite][t].numIterations++;
     });
   });
 });
