@@ -42,9 +42,9 @@ function printComparisonReport(a, b, { useStat }) {
           if(!idx) reportTableDivider();
           suiteName = idx ? '' : suite;
           const resA        = testResults[useStat];
-          const iterationsA = testResults.iterations;
+          const iterationsA = testResults.numIterations;
           const resB        = b.results[suite][test][useStat];
-          const iterationsB = b.results[suite][test].iterations;
+          const iterationsB = b.results[suite][test].numIterations;
           reportTableRow(suiteName, test,
             iterationsA,
             forHumans(resA) + isBetter(resA, resB),
