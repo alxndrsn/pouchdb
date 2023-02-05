@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const child_process = require('node:child_process');
 const fs = require('node:fs');
 const { chromium, firefox, webkit } = require('playwright');
 const MochaSpecReporter = require('mocha').reporters.Spec;
@@ -33,7 +34,9 @@ const [ , , resultsDir, adapter, suites ] = process.argv;
   //new MochaSpecReporter(runner);
 
   let currentSuite, currentTest;
-  const results = {};
+  const gitHash = exec('git rev-parse HEAD');
+  const gitDiff = exec('git diff');
+  const results = { gitHash, gitDiff };
   runner.on('start', (...args) => {});
   runner.on('suite', suite => { currentSuite = results[suite.title] = {}; });
   runner.on('test end',  (           ...args) => console.log('Unhandled event:', 'test end',  { args }));
@@ -145,4 +148,8 @@ class RemoteRunner {
   
     this.completed = true;
   }
+}
+
+function exec(cmd) {
+  return child_process.execSync(cmd, { encoding:'utf-8' }).trim();
 }
