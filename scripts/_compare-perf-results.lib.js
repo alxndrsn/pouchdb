@@ -8,7 +8,7 @@ const { basename } = require('node:path');
 
 function loadResultFile(file) {
   console.error(`[compare-perf-results.lib]`, 'Loading file:', file, '...');
-  const results = JSON.parse(fs.readFileSync(file, { encoding:'utf8' }));
+  const { gitDiff, gitHash, ...results } = JSON.parse(fs.readFileSync(file, { encoding:'utf8' }));
   const adapter = basename(file).split('.', 1)[0];
   return { adapter, results };
 }
