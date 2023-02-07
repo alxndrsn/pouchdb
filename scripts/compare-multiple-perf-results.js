@@ -29,7 +29,7 @@ rawResults.forEach(({ adapter, results }) => {
 });
 
 if(adapters.length !== 2) {
-  throw new Error('Currently this script can only compare 2 adapters.');
+  throw new Error(`Currently this script can only compare 2 adapters.  Got: ${adapters}`);
 }
 
 adapters.sort();
