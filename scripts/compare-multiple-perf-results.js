@@ -32,6 +32,8 @@ if(adapters.length !== 2) {
   throw new Error('Currently this script can only compare 2 adapters.');
 }
 
+adapters.sort();
+
 const [ a, b ] = [
   { adapter:adapters[0], results:resultsByAdapter[adapters[0]] },
   { adapter:adapters[1], results:resultsByAdapter[adapters[1]] },
