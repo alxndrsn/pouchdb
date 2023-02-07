@@ -6,7 +6,11 @@ log() {
   echo "[$logPrefix] [$(date)] $*"
 }
 
-suites="${1-}"
+continuous="false"
+if [[ "${1-}" = "--continuous" ]]; then
+  continuous="true"
+  shift
+fi
 
 shutdown_docker_containers() {
   if [[ -n "${couchDockerContainer-}" ]]; then
@@ -45,17 +49,26 @@ while true; do
   log "Starting tests at $runstamp..."
 
   log "Testing adapter: indexeddb..."
-  ./scripts/playwright-perf-test "$resultsDir" indexeddb basics
+  ./scripts/playwright-perf-test "$resultsDir" indexeddb "${@-basics}"
 
   log "Testing adapter: idb..."
-  ./scripts/playwright-perf-test "$resultsDir" idb       basics
+  ./scripts/playwright-perf-test "$resultsDir" idb       "${@-basics}"
 
   log "Results written to: $resultsDir"
 
   ./scripts/compare-perf-results "$runstamp"
   echo
   
-  while read -t 0.01; do true; done # clear input buffer
-  read -p "Press enter to run tests again... " -s
-  echo
+  if [[ "$continuous" = "true" ]]; then
+    log "Running tests again in 10 seconds..."
+    # There's no particular reason to take a break here, it's
+    # probably just superstition.  It might provide comfort to anyone
+    # watching, or give the computer time to relax a bit.
+    sleep 10
+    log "Running tests again NOW!"
+  else
+    while read -t 0.01; do true; done # clear input buffer
+    read -p "Press enter to run tests again... " -s
+    echo
+  fi
 done
