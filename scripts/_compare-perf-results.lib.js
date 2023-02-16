@@ -5,6 +5,7 @@ module.exports = {
 
 const fs = require('node:fs');
 const { basename } = require('node:path');
+const _ = require('lodash');
 
 function loadResultFile(file) {
   console.error(`[compare-perf-results.lib]`, 'Loading file:', file, '...');
@@ -15,50 +16,55 @@ function loadResultFile(file) {
 
 function report (...args) { console.log('   ', ...args); }
 
-const colWidth = [ 12, 32, 10, 12, 10, 12 ];
-const padFunc  = [ 'padEnd', 'padEnd', 'padStart', 'padStart', 'padStart', 'padStart' ];
-function reportTableRow(...cols) {
-  report(cols.map((c, i) => c.toString()[padFunc[i]](colWidth[i], ' ')).join(' | '));
-}
-function reportTableDivider() {
-  const line = colWidth.map(w => ''.padStart(w+2, '-')).join('|');
-  report(line.substring(1, line.length-1));
-}
-
 function forHumans(n) {
   return n.toFixed(2);
 }
 
-function printComparisonReport(a, b, { useStat }) {
+function printComparisonReport({ useStat }, ...results) {
+  const colWidth = [ 12, 32,             ...results.map(() => [10, 12]).flat() ];
+  const padFunc  = [ 'padEnd', 'padEnd', ...results.map(() => ['padStart', 'padStart']).flat() ];
+
   report();
-  report('Comparing:', a.adapter, 'vs', b.adapter, `(${useStat})`);
+  report('Comparing:', results.map(r => r.adapter).join(' vs '), `(${useStat})`);
   report();
-  reportTableRow('', '', a.adapter, a.adapter, b.adapter, b.adapter);
-  reportTableRow('', '', 'iterations', useStat, 'iterations', useStat);
-  Object.entries(a.results)
+  reportTableRow('', '', ...results.map(r  => [r.adapter,  r.adapter]).flat());
+  reportTableRow('', '', ...results.map(() => ['iterations', useStat]).flat());
+  Object.entries(results[0].results)
     .forEach(([ suite, suiteResults ]) => {
       Object.entries(suiteResults)
         .forEach(([ test, testResults ], idx) => {
           if(!idx) reportTableDivider();
           suiteName = idx ? '' : suite;
-          const resA        = testResults[useStat];
-          const iterationsA = testResults.numIterations;
-          const resB        = b.results[suite][test][useStat];
-          const iterationsB = b.results[suite][test].numIterations;
+
+          const relevant = results.map(r => ({
+            numIterations: r.results[suite][test].numIterations,
+            score:         r.results[suite][test][useStat],
+          })).flat();
+          const scores = relevant.map(r => r.score);
+
           reportTableRow(suiteName, test,
-            iterationsA,
-            forHumans(resA) + isBetter(resA, resB),
-            iterationsB,
-            forHumans(resB) + isBetter(resB, resA),
+            ...relevant.map((r, idx) => [
+              r.numIterations,
+              forHumans(r.score) + ratingMarker(scores, r.score),
+            ]).flat(),
           );
         });
     });
   report();
+
+  function reportTableRow(...cols) {
+    report(cols.map((c, i) => c.toString()[padFunc[i]](colWidth[i], ' ')).join(' | '));
+  }
+
+  function reportTableDivider() {
+    const line = colWidth.map(w => ''.padStart(w+2, '-')).join('|');
+    report(line.substring(1, line.length-1));
+  }
 }
 
-function isBetter(a, b) {
-  if(Math.abs(a - b) / a < 0.05) return ' ~'; // less than 5 percent different - is it significant?  do we care?
-  if(a < b) return ' !';
-  if(a > b) return '  ';
-  throw new Error(`Not sure how we got here! ${JSON.stringify({ a, b })}`);
+function ratingMarker(scores, thisScore) {
+  const best = _.min(scores);
+  if(thisScore === best) return ' !';
+  if(Math.abs(best - thisScore) / best < 0.05) return ' ~'; // less than 5 percent different - is it significant?  do we care?
+  return '  ';
 }

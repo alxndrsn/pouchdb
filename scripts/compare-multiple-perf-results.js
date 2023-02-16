@@ -28,15 +28,11 @@ rawResults.forEach(({ adapter, results }) => {
   });
 });
 
-if(adapters.length !== 2) {
-  throw new Error(`Currently this script can only compare 2 adapters.  Got: ${adapters}`);
-}
-
 adapters.sort();
 
-const [ a, b ] = [
-  { adapter:adapters[0], results:resultsByAdapter[adapters[0]] },
-  { adapter:adapters[1], results:resultsByAdapter[adapters[1]] },
-];
+const results = adapters.map(a => ({
+  adapter: a,
+  results: resultsByAdapter[a],
+}));
 
-printComparisonReport(a, b, { useStat:'min' });
+printComparisonReport({ useStat:'min' }, ...results);
