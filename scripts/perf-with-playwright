@@ -19,16 +19,6 @@ shutdown_docker_containers() {
   fi
 }
 
-run_tests_with_adapter() {
-  local adapter="$1"
-  log "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-  log "@@@"
-  log "@@@   Testing adapter: $adapter..."
-  log "@@@"
-  log "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-  ./scripts/playwright-perf-test "$resultsDir" "$adapter" "$@"
-}
-
 log "Starting dev server..."
 SERVER="pouchdb-express-router" # TODO what is this doing?
 export COUCH_HOST="http://admin:password@127.0.0.1:5984" 
@@ -58,13 +48,19 @@ while true; do
 
   log "Starting tests at $runstamp..."
 
-  run_tests_with_adapter idb
-  run_tests_with_adapter baseline
-  run_tests_with_adapter indexeddb
+  # randomise the adapter order here in case there's any warm-up cost
+  for adapter in $(shuf -e baseline idb indexeddb); do
+    log "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+    log "@@@"
+    log "@@@   Testing adapter: $adapter..."
+    log "@@@"
+    log "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+    ./scripts/playwright-perf-test "$resultsDir" "$adapter" "$@"
+  done
 
   log "Results written to: $resultsDir"
 
-  #./scripts/compare-perf-results "$runstamp"
+  ./scripts/compare-perf-results "$runstamp"
   echo
   
   if [[ "$continuous" = "true" ]]; then

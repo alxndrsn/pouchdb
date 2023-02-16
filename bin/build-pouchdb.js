@@ -40,6 +40,7 @@ var comments = {
   '\n// For all details and documentation:' +
   '\n// http://pouchdb.com\n',
 
+  'baseline': '// PouchDB baseline plugin ' + version + '\n',
   'indexeddb': '// PouchDB indexeddb plugin ' + version + '\n',
 
   'memory': '// PouchDB in-memory plugin ' + version +
