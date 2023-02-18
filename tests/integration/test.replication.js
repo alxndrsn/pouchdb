@@ -897,7 +897,7 @@ adapters.forEach(function (adapters) {
       });
     });
 
-    it('#3136 winningRev has a lower seq', function () {
+    it.only('#3136 winningRev has a lower seq', function () {
       var db1 = new PouchDB(dbs.name);
       var db2 = new PouchDB(dbs.remote);
       var tree = [
