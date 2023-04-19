@@ -153,7 +153,7 @@ describe('migration', function () {
         if (scenario in PouchDB.adapters) {
           dbs.first.localOpts.adapter = scenario;
         } else if (scenario.endsWith(' (indexeddb)')) {
-          if(!PouchDB.adapters.indexeddb || !constructors[scenario].adapters.indexeddb) {
+          if (!PouchDB.adapters.indexeddb || !constructors[scenario].adapters.indexeddb) {
             throw new Error('Scenario ' + scenario + ' not possible as indexeddb adapter(s) not found.  PouchDB.adapters:' + PouchDB.adapters + '; ' + scenario + '.adapters:' + constructors[scenario].adapters);
           }
           dbs.first.localOpts.adapter = 'indexeddb';
@@ -536,7 +536,7 @@ describe('migration', function () {
             return oldPouch.close();
           }).then(function () {
             var newPouch = new dbs.second.pouch(dbs.second.local,
-              {...dbs.second.localOpts, auto_compaction: false});
+              Object.assign({}, dbs.second.localOpts, {auto_compaction: false}));
             return newPouch.get('doc1').then(function (doc1) {
               return newPouch.remove(doc1);
             }).then(function () {
@@ -570,7 +570,7 @@ describe('migration', function () {
             return oldPouch.close();
           }).then(function () {
             var newPouch = new dbs.second.pouch(dbs.second.local,
-              {...dbs.second.localOpts, auto_compaction: false});
+              Object.assign({}, dbs.second.localOpts, {auto_compaction: false}));
             return newPouch.put({
               _id: 'doc2',
               _attachments: {
@@ -628,7 +628,7 @@ describe('migration', function () {
             return oldPouch.close();
           }).then(function () {
             var newPouch = new dbs.second.pouch(dbs.second.local,
-              {...dbs.second.localOpts, auto_compaction: false});
+              Object.assign({}, dbs.second.localOpts, {auto_compaction: false}));
             return newPouch.put({
               _id: 'doc2',
               _attachments: {
@@ -680,7 +680,7 @@ describe('migration', function () {
             return oldPouch.close();
           }).then(function () {
             var newPouch = new dbs.second.pouch(dbs.second.local,
-              {...dbs.second.localOpts, auto_compaction: false});
+              Object.assign({}, dbs.second.localOpts, {auto_compaction: false}));
             return newPouch.put({
               _id: 'doc2',
               _attachments: {
@@ -750,7 +750,7 @@ describe('migration', function () {
             return oldPouch.close();
           }).then(function () {
             var newPouch = new dbs.second.pouch(dbs.second.local,
-              {...dbs.second.localOpts, auto_compaction: false});
+              Object.assign({}, dbs.second.localOpts, {auto_compaction: false}));
             return newPouch.put({
               _id: 'doc2',
               _attachments: {
@@ -819,7 +819,7 @@ describe('migration', function () {
             return oldPouch.close();
           }).then(function () {
             var newPouch = new dbs.second.pouch(dbs.second.local,
-              {...dbs.second.localOpts, auto_compaction: false});
+              Object.assign({}, dbs.second.localOpts, {auto_compaction: false}));
             return newPouch.put({
               _id: 'doc_b',
               _attachments: {
@@ -863,7 +863,7 @@ describe('migration', function () {
             return oldPouch.put(doc);
           }).then(function () {
             var newPouch = new dbs.second.pouch(dbs.second.local,
-              {...dbs.second.localOpts, auto_compaction: false});
+              Object.assign({}, dbs.second.localOpts, {auto_compaction: false}));
             return newPouch.compact().then(function () {
               return newPouch.get('foo', {attachments: true});
             }).then(function (doc) {
@@ -901,7 +901,7 @@ describe('migration', function () {
             return oldPouch.put(doc);
           }).then(function () {
             var newPouch = new dbs.second.pouch(dbs.second.local,
-              {...dbs.second.localOpts, auto_compaction: false});
+              Object.assign({}, dbs.second.localOpts, {auto_compaction: false}));
             return newPouch.compact().then(function () {
               return newPouch.get('foo', {attachments: true});
             }).then(function (doc) {
@@ -967,7 +967,7 @@ describe('migration', function () {
             return oldPouch.close();
           }).then(function () {
             var newPouch = new dbs.second.pouch(dbs.second.local,
-              {...dbs.second.localOpts, auto_compaction: false});
+              Object.assign({}, dbs.second.localOpts, {auto_compaction: false}));
             return newPouch.changes({
               return_docs: true,
               include_docs: true,
@@ -1217,7 +1217,7 @@ describe('migration', function () {
             return oldPouch.close();
           }).then(function () {
             newPouch = new dbs.second.pouch(dbs.second.local,
-                {...dbs.second.localOpts, auto_compaction: false});
+                Object.assign({}, dbs.second.localOpts, {auto_compaction: false}));
             return newPouch.allDocs();
           }).then(function (res) {
             res.rows.should.have.length(0, 'all docs length is 0');
