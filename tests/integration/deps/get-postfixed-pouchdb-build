@@ -4,39 +4,31 @@ log() {
   echo "[get-postfixed-pouchdb-build] $*"
 }
 
-version="$1"
-shift
-
 # Recently, postfixed JS files have been added in minified form.
-filenameSuffix="-$version.min"
-versionSuffix=""
-if [[ $# -gt 0 ]]; then
+infix=".min"
+while [[ $# -gt 1 ]]; do
   if [[ $1 = --no-minify ]]; then
-    filenameSuffix="-$version"
-  elif [[ $1 = --indexeddb ]]; then
-    filenameSuffix=".indexeddb.min"
-    versionSuffix="-indexeddb"
+    infix=""
   else
     echo "!!! Unrecognised arg: $1"
     exit 1
   fi
   shift
-fi
-if [[ $# -gt 0 ]]; then
-  echo "!!! Multiple flags not supported.  Aborting."
-  exit 1
+done
+
+version="$1"
+if [[ "${version%%*}" -gte 6 ]]; then
+  infix=".indexeddb"
 fi
 
-target="./pouchdb-$version$versionSuffix-postfixed.js"
-nodots="$(sed s/[.-]//g <<<"PouchDBVersion$version$versionSuffix")"
+target="./pouchdb-$version-postfixed.js"
+nodots="$(tr -d . <<<"$version")"
 tmp="$(mktemp)"
 
 log "Fetching minified pouch build..."
-wget "https://github.com/pouchdb/pouchdb/releases/download/$version/pouchdb${filenameSuffix}.js" --output-document="$tmp"
+wget "https://github.com/pouchdb/pouchdb/releases/download/$version/pouchdb-${version}${infix}.js" --output-document="$tmp"
 
 log "Converting globals..."
-sed "s/PouchDB/$nodots/g" "$tmp" > "$target"
-
-log "Now add $nodots to tests/integration/browser.migration.js"
+sed "s/PouchDB/PouchDBVersion$nodots/g" "$tmp" > "$target"
 
 log "Completed OK."
