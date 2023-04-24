@@ -1197,7 +1197,7 @@ describe('migration', function () {
               ];
 
               var oldPouch = new dbs.first.pouch(
-                  dbs.first.local, Object.assign({ adapter }, dbs.first.localOpts));
+                  dbs.first.local, Object.assign({adapter: adapter}, dbs.first.localOpts));
               var newPouch;
 
               return oldPouch.bulkDocs(data[0], {
@@ -1208,7 +1208,7 @@ describe('migration', function () {
                 return oldPouch.close();
               }).then(function () {
                 newPouch = new dbs.second.pouch(dbs.second.local,
-                    {adapter, auto_compaction: false});
+                    {adapter: adapter, auto_compaction: false});
                 return newPouch.allDocs();
               }).then(function (res) {
                 res.rows.should.have.length(0, 'all docs length is 0');
