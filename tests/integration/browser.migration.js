@@ -5,7 +5,7 @@
 
 describe('migration', function () {
   it('should tell me which part of the matrix this runs on', () => {
-    throw new Error('hiiiiiiiii');
+    throw new Error('hiiiiiiiii' + scenarios);
   });
 
   function usingDefaultPreferredAdapters() {
@@ -62,9 +62,13 @@ describe('migration', function () {
 
         const version = match[1];
 
-        includeDep('deps/pouchdb-' + version + '-postfixed.js');
-        if (parseInt(version) >= 6) {
-          includeDep('deps/pouchdb-' + version + '.indexeddb-postfixed.js');
+        if (parseInt(version) < 6) {
+          return includeDep('deps/pouchdb-' + version + '-postfixed.js');
+        } else {
+          return testUtils.Promise.all([
+            includeDep('deps/pouchdb-' + version + '-postfixed.js'),
+            includeDep('deps/pouchdb-' + version + '.indexeddb-postfixed.js'),
+          ]);
         }
       });
     }));
