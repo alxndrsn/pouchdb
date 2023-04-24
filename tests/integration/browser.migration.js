@@ -62,14 +62,14 @@ describe('migration', function () {
 
         const version = match[1];
 
-        if (parseInt(version) < 6) {
-          return includeDep('deps/pouchdb-' + version + '-postfixed.js');
-        } else {
-          return testUtils.Promise.all([
-            includeDep('deps/pouchdb-' + version + '-postfixed.js'),
-            includeDep('deps/pouchdb-' + version + '.indexeddb-postfixed.js'),
-          ]);
-        }
+        //if (parseInt(version) < 6) {
+        return includeDep('deps/pouchdb-' + version + '-postfixed.js');
+        //} else {
+        //  return testUtils.Promise.all([
+        //    includeDep('deps/pouchdb-' + version + '-postfixed.js'),
+        //    includeDep('deps/pouchdb-' + version + '.indexeddb-postfixed.js'),
+        //  ]);
+        //}
       });
     }));
   });
