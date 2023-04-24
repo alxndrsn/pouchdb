@@ -17,10 +17,6 @@ while [[ $# -gt 1 ]]; do
 done
 
 version="$1"
-if [[ "${version%%*}" -gte 6 ]]; then
-  infix=".indexeddb"
-fi
-
 target="./pouchdb-$version-postfixed.js"
 nodots="$(tr -d . <<<"$version")"
 tmp="$(mktemp)"
