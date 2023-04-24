@@ -49,11 +49,18 @@ describe('migration', function () {
         return testUtils.Promise.resolve();
       }
       return new testUtils.Promise(function (resolve, reject) {
-        var script = document.createElement('script');
-        script.onload = resolve;
-        script.onerror = reject;
-        script.src = 'deps/pouchdb-' + match[1] + '-postfixed.js';
-        document.body.appendChild(script);
+        function includeDep(path) {
+          var script = document.createElement('script');
+          script.onload = resolve;
+          script.onerror = reject;
+          script.src = path;
+          document.body.appendChild(script);
+        }
+
+        includeDep('deps/pouchdb-' + match[1] + '-postfixed.js');
+        if(parseInt(match[1]) >= 6) {
+          includeDep('deps/pouchdb-' + match[1] + '.indexeddb-postfixed.js');
+        }
       });
     }));
   });

@@ -4,6 +4,22 @@ log() {
   echo "[get-postfixed-pouchdb-build] $*"
 }
 
+fetch() {
+  local version="$1"
+  local remoteFile="$2"
+  local target="$3"
+
+  local nodots="$(tr -d . <<<"$version")"
+
+  local tmp="$(mktemp)"
+
+  log "Fetching minified pouch build $target..."
+  wget "https://github.com/pouchdb/pouchdb/releases/download/$version/$remoteFile" --output-document="$tmp"
+
+  log "Converting globals..."
+  sed "s/PouchDB/PouchDBVersion$nodots/g" "$tmp" > "$target"
+}
+
 # Recently, postfixed JS files have been added in minified form.
 infix=".min"
 while [[ $# -gt 1 ]]; do
@@ -17,21 +33,10 @@ while [[ $# -gt 1 ]]; do
 done
 
 version="$1"
-echo "Checking major version: ${version%%.*}"
+
+fetch "$version" "pouchdb-${version}${infix}.js" "./pouchdb-$version-postfixed.js"
 if [[ "${version%%.*}" -ge 6 ]]; then
-  remoteFile="pouchdb.indexeddb${infix}.js"
-else
-  remoteFile="pouchdb-${version}${infix}.js"
+  fetch "$version" "pouchdb.indexeddb.js" "./pouchdb-$version.indexeddb-postfixed.js"
 fi
-
-target="./pouchdb-$version-postfixed.js"
-nodots="$(tr -d . <<<"$version")"
-tmp="$(mktemp)"
-
-log "Fetching minified pouch build..."
-wget "https://github.com/pouchdb/pouchdb/releases/download/$version/$remoteFile" --output-document="$tmp"
-
-log "Converting globals..."
-sed "s/PouchDB/PouchDBVersion$nodots/g" "$tmp" > "$target"
 
 log "Completed OK."
