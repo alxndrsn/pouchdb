@@ -57,9 +57,11 @@ describe('migration', function () {
           document.body.appendChild(script);
         }
 
-        includeDep('deps/pouchdb-' + match[1] + '-postfixed.js');
-        if (parseInt(match[1]) >= 6) {
-          includeDep('deps/pouchdb-' + match[1] + '.indexeddb-postfixed.js');
+        const version = match[1];
+
+        includeDep('deps/pouchdb-' + version + '-postfixed.js');
+        if (parseInt(version) >= 6) {
+          includeDep('deps/pouchdb-' + version + '.indexeddb-postfixed.js');
         }
       });
     }));
