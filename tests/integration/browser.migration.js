@@ -127,6 +127,7 @@ describe('migration', function () {
           'PouchDB v3.2.0': PouchDBVersion320,
           'PouchDB v3.6.0': PouchDBVersion360,
           'PouchDB v7.3.1': PouchDBVersion731,
+          'PouchDB v7.3.1 (indexeddb)': PouchDBVersion731indexeddb,
           'PouchDB v8.0.1': PouchDBVersion801,
           'PouchDB v8.0.1 (indexeddb)': PouchDBVersion801indexeddb,
           PouchDB: PouchDB
