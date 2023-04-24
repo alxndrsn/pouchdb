@@ -101,7 +101,7 @@ describe('migration', function () {
     const adapters = post600 && !(scenario in PouchDB.adapters) ? ['idb', 'indexeddb'] : ['idb'];
 
     it('should run adapters: ' + adapters, function () {
-      throw new Error('hi');
+      throw new Error('hi: adapters:' + adapters + '; scenario:' + scenario);
     });
 
     adapters.forEach(adapter => {
