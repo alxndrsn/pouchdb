@@ -58,7 +58,7 @@ describe('migration', function () {
         }
 
         includeDep('deps/pouchdb-' + match[1] + '-postfixed.js');
-        if(parseInt(match[1]) >= 6) {
+        if (parseInt(match[1]) >= 6) {
           includeDep('deps/pouchdb-' + match[1] + '.indexeddb-postfixed.js');
         }
       });
