@@ -100,6 +100,10 @@ describe('migration', function () {
     // Do NOT try to test websql -> indexeddb migration
     const adapters = post600 && !(scenario in PouchDB.adapters) ? ['idb', 'indexeddb'] : ['idb'];
 
+    it('should run adapters: ' + adapters, function () {
+      throw new Error('hi');
+    });
+
     adapters.forEach(adapter => {
 
       describe('with local adapter ' + adapter, function () {
