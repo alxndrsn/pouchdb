@@ -36,7 +36,7 @@ version="$1"
 
 fetch "$version" "pouchdb-${version}${infix}.js" "./pouchdb-$version-postfixed.js"
 if [[ "${version%%.*}" -ge 6 ]]; then
-  fetch "$version" "pouchdb.indexeddb.js" "./pouchdb-$version.indexeddb-postfixed.js"
+  fetch "$version" "pouchdb.indexeddb.min.js" "./pouchdb-$version.indexeddb-postfixed.js"
 fi
 
 log "Completed OK."
