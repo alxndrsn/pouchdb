@@ -19,10 +19,15 @@ describe('migration', function () {
 
   var scenarios = [
     'PouchDB v1.1.0',
+    'PouchDB v7.3.1',
     'PouchDB v2.0.0',
+    'PouchDB v7.3.1',
     'PouchDB v2.2.0',
+    'PouchDB v7.3.1',
     'PouchDB v3.0.6',
+    'PouchDB v7.3.1',
     'PouchDB v3.2.0',
+    'PouchDB v7.3.1',
     'PouchDB v3.6.0',
     'PouchDB v7.3.1',
     'PouchDB v8.0.1',
