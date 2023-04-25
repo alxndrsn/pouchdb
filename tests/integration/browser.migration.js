@@ -98,9 +98,13 @@ describe('migration', function () {
           'PouchDB v8.0.1',
         ].indexOf(scenario) !== -1;
 
+    it('should run at least one test for each scenario', function () {
+      throw new Error('hi: scenario:' + scenario);
+    });
+
     // Test indexeddb -> indexeddb migrations for all versions >= 6.0.0
     // Do NOT try to test websql -> indexeddb migration
-    const adapters = post600 && !(scenario in PouchDB.adapters) ? ['idb', 'indexeddb'] : ['idb'];
+    const adapters = (post600 && !(scenario in PouchDB.adapters)) ? ['idb', 'indexeddb'] : ['idb'];
 
     it('should run adapters: ' + adapters, function () {
       throw new Error('hi: adapters:' + adapters + '; scenario:' + scenario);
