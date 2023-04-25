@@ -98,13 +98,22 @@ describe('migration', function () {
           'PouchDB v8.0.1',
         ].indexOf(scenario) !== -1;
 
-    it('should run at least one test for each scenario', function () {
-      throw new Error('hi: scenario:' + scenario);
+    it('should run at least one test for each scenario (' + scenario + ')', function () {
+      throw new Error('hi: scenario:' + scenario + '. PouchDB.adapaters:' + PouchDB.adapaters);
     });
 
-    // Test indexeddb -> indexeddb migrations for all versions >= 6.0.0
-    // Do NOT try to test websql -> indexeddb migration
-    const adapters = (post600 && !(scenario in PouchDB.adapters)) ? ['idb', 'indexeddb'] : ['idb'];
+    let adapters;
+
+    try {
+
+      // Test indexeddb -> indexeddb migrations for all versions >= 6.0.0
+      // Do NOT try to test websql -> indexeddb migration
+      adapters = (post600 && !(scenario in PouchDB.adapters)) ? ['idb', 'indexeddb'] : ['idb'];
+    } catch (err) {
+      it('has failed to initialise', function () {
+        throw err;
+      });
+    }
 
     it('should run adapters: ' + adapters, function () {
       throw new Error('hi: adapters:' + adapters + '; scenario:' + scenario);
