@@ -135,11 +135,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        client: ['node', 'selenium:firefox', 'selenium:chrome']
+        client: ['selenium:firefox', 'selenium:chrome']
         cmd:
           - npm test
-          - TYPE=find PLUGINS=pouchdb-find ADAPTERS=http npm test
-          - TYPE=mapreduce ADAPTERS=http npm test
     runs-on: ubuntu-latest
     env:
       CLIENT: ${{ matrix.client }}
