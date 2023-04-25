@@ -4,10 +4,6 @@
 'use strict';
 
 describe('migration', function () {
-  it('should tell me which part of the matrix this runs on', () => {
-    throw new Error('hiiiiiiiii' + scenarios);
-  });
-
   function usingDefaultPreferredAdapters() {
     console.log('preferredAdapters: ' + PouchDB.preferredAdapters);
     return true;
