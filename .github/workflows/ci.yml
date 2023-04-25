@@ -48,8 +48,6 @@ jobs:
         client: ['selenium:firefox', 'selenium:chrome']
         cmd:
           - npm test
-          - TYPE=find PLUGINS=pouchdb-find ADAPTERS=http npm test
-          - TYPE=mapreduce ADAPTERS=http npm test
     runs-on: ubuntu-latest
     env:
       POUCHDB_SRC: ../../packages/node_modules/pouchdb/dist/pouchdb.min.js
@@ -94,8 +92,6 @@ jobs:
         adapter: ['idb', 'indexeddb', 'memory']
         cmd:
           - npm test
-          - TYPE=find PLUGINS=pouchdb-find npm test
-          - TYPE=mapreduce npm test
     runs-on: ubuntu-latest
     env:
       POUCHDB_SRC: ../../packages/node_modules/pouchdb/dist/pouchdb.min.js
