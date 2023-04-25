@@ -99,7 +99,7 @@ describe('migration', function () {
         ].indexOf(scenario) !== -1;
 
     it('should run at least one test for each scenario (' + scenario + ')', function () {
-      throw new Error('hi: scenario:' + scenario + '. PouchDB.adapaters:' + PouchDB.adapaters);
+      throw new Error('hi: scenario:' + scenario + '. PouchDB available? ' + !!PouchDB + '; PouchDB.adapters:' + (PouchDB && PouchDB.adapters));
     });
 
     let adapters;
