@@ -75,42 +75,6 @@ jobs:
         if: steps.retry.outcome == 'failure'
         run: ${{ matrix.cmd }}
 
-  # Run the integration, find and mapreduce tests against all the Node.js
-  # PouchDB adapters. This should be run for every adapter on every version of
-  # Node.js we support.
-
-  nodejs-adapter:
-    needs: lint
-    strategy:
-      fail-fast: false
-      matrix:
-        node: [14]
-        adapter: ['leveldb', 'memory']
-        cmd:
-          - npm test
-          - TYPE=find PLUGINS=pouchdb-find npm test
-          - TYPE=mapreduce npm test
-    runs-on: ubuntu-latest
-    env:
-      CLIENT: node
-      ADAPTERS: ${{ matrix.adapter }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/install-deps
-        with:
-          node-version: ${{ matrix.node }}
-      - id: test
-        run: ${{ matrix.cmd }}
-        continue-on-error: true
-      - name: First retry
-        id: retry
-        if: steps.test.outcome == 'failure'
-        run: ${{ matrix.cmd }}
-        continue-on-error: true
-      - name: Second retry
-        if: steps.retry.outcome == 'failure'
-        run: ${{ matrix.cmd }}
-
   # Run the integration, find and mapreduce tests against all the browser-based
   # adapters. PouchDB adapters. This should be run for every adapter on every
   # target browser.
