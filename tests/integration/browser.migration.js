@@ -1,6 +1,6 @@
 /* global PouchDBVersion110, PouchDBVersion200,
    PouchDBVersion220, PouchDBVersion306, PouchDBVersion320,
-   PouchDBVersion360, PouchDBVersion731, PouchDBVersion801 */
+   PouchDBVersion360 */
 'use strict';
 
 describe('migration', function () {
@@ -1231,7 +1231,7 @@ describe('migration', function () {
 });
 
 function deliberatelyThrowFor(version) {
-  return function() {
+  return function () {
     throw new Error('Legacy pouch version instantiation attempted: ' + version + '!');
   };
 }
