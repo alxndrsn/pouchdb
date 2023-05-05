@@ -119,8 +119,8 @@ describe('migration', function () {
           'PouchDB v3.0.6': PouchDBVersion306,
           'PouchDB v3.2.0': PouchDBVersion320,
           'PouchDB v3.6.0': PouchDBVersion360,
-          'PouchDB v7.3.1': PouchDBVersion731,
-          'PouchDB v8.0.1': PouchDBVersion801,
+          'PouchDB v7.3.1': deliberatelyThrowFor('7.3.1'),
+          'PouchDB v8.0.1': deliberatelyThrowFor('8.0.1'),
           PouchDB: PouchDB
         };
 
@@ -1229,3 +1229,9 @@ describe('migration', function () {
     });
   });
 });
+
+function deliberatelyThrowFor(version) {
+  return function() {
+    throw new Error('Legacy pouch version instantiation attempted: ' + version + '!');
+  };
+}
