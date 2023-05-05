@@ -1,11 +1,11 @@
 'use strict';
 
-const ALL_SUITES = [
-  'basics',
-  'views',
-  'find',
-  'attachments',
-];
+const ALL_SUITES = {
+  basics: './perf.basics',
+  views: './perf.views',
+  find: './perf.find',
+  attachments: './perf.attachments',
+};
 
 var commonUtils = require('../common-utils');
 
@@ -18,10 +18,7 @@ function runTestSuites(PouchDB) {
     (adapters.length > 0 ? (', using adapter(s): ' + adapters.join(', ')) : '') +
     '\n\n');
 
-  const suites = (commonUtils.params().suites && commonUtils.params().suites.split(',')) || ALL_SUITES;
-  if (suites.some(s => !ALL_SUITES.includes(s))) {
-    throw new Error(`Unrecongnised suite(s): '${suites}'`);
-  }
+  const suites = (commonUtils.params().suites && commonUtils.params().suites.split(',')) || Object.keys(ALL_SUITES);
 
   var theAdapterUsed;
   var count = 0;
@@ -32,10 +29,11 @@ function runTestSuites(PouchDB) {
     }
   }
 
-  if (suites.includes('basics')) { require('./perf.basics')(PouchDB, checkDone); }
-  if (suites.includes('views')) { require('./perf.views')(PouchDB, checkDone); }
-  if (suites.includes('find')) { require('./perf.find')(PouchDB, checkDone); }
-  if (suites.includes('attachments')) { require('./perf.attachments')(PouchDB, checkDone); }
+  for (const [name, filepath] of Object.entries(ALL_SUITES)) {
+    if (suites.includes(name)) {
+      require(filepath)(PouchDB, checkDone);
+    }
+  }
 }
 
 var PouchDB = commonUtils.loadPouchDB({ plugins: ['pouchdb-find'] });
