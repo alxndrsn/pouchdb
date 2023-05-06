@@ -16,7 +16,7 @@ function buildPackage(pkg) {
     if (!stat.isDirectory()) { // skip e.g. 'npm-debug.log'
       return;
     }
-    console.log('Building ' + pkg + 'with node version ' + process.version + '...');
+    console.log('Building ' + pkg + ' with node version ' + process.version + '...');
     if (pkg === 'pouchdb') {
       return buildPouchDB();
     } else {
