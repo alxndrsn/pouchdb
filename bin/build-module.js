@@ -36,7 +36,6 @@ var BROWSER_DEPENDENCY_ONLY_PACKAGES =
 
 function buildModule(filepath) {
   var pkg = require(path.resolve(filepath, 'package.json'));
-  var topPkg = require(path.resolve(filepath, '../../../package.json'));
   var pouchdbPackages = fs.readdirSync(path.resolve(filepath, '..'));
   // All external modules are assumed to be CommonJS, and therefore should
   // be skipped by Rollup. We may revisit this later.
