@@ -147,8 +147,7 @@ async function startTest() {
   new BenchmarkReporter(runner);
 
   const options = {
-    headless: false,
-    slowMo: 100,
+    headless: true,
   };
   const browser = await browserImpl.launch(options); // FIXME Or 'firefox' or 'webkit'.
   const page = await browser.newPage();

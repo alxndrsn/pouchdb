@@ -20,6 +20,13 @@ var builtInModules = require('builtin-modules');
 var fs = require('fs');
 var all = Promise.all.bind(Promise);
 
+// special case - pouchdb-for-coverage is heavily optimized because it's
+// simpler to run the coverage reports that way.
+// as for pouchdb-node/pouchdb-browser, these are heavily optimized
+// through aggressive bundling, ala pouchdb, because it's assumed that
+// for these packages bundle size is more important than modular deduping
+var AGGRESSIVELY_BUNDLED_PACKAGES =
+  ['pouchdb-for-coverage', 'pouchdb-node', 'pouchdb-browser'];
 // packages that only have a browser version
 var BROWSER_ONLY_PACKAGES =
   ['pouchdb-browser'];
@@ -36,8 +43,11 @@ function buildModule(filepath) {
     .readdirSync(path.resolve(filepath, '../../../node_modules'), { withFileTypes:true })
     .filter(it => it.isDirectory())
     .map(it => it.name)
-    .concat(builtInModules)
-    .concat(pouchdbPackages);
+    .concat(builtInModules);
+
+  if (AGGRESSIVELY_BUNDLED_PACKAGES.indexOf(pkg.name) === -1) {
+    depsToSkip = depsToSkip.concat(pouchdbPackages);
+  }
 
   // browser & node vs one single vanilla version
   var versions = pkg.browser ? [false, true] : [false];
