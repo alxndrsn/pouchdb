@@ -50,10 +50,10 @@ viewAdapters.forEach(viewAdapter => {
       let deleted = 0;
       for (let i=0; i<dbs.length; ++i) {
         const res = window.indexedDB.deleteDatabase(dbs[i]);
-        res.onsuccess = res.onerror = () => {
+        res.onsuccess = res.onerror = async () => {
           if (++deleted === dbs.length) {
             dbs.name = testUtils.adapterUrl('local', 'testdb');
-            localStorage.clear();
+            await localStorage.clear();
             done();
           }
         };
