@@ -96,17 +96,18 @@ viewAdapters.forEach(viewAdapter => {
             // Nothing is saved here
             viewRequest.result.objectStoreNames.length.should.equal(0);
             viewRequest.result.version.should.equal(1);
-          };
 
-          // check indexedDB for saved docs
-          const docRequest = indexedDB.open(docDbName, 5);
-          docRequest.onsuccess = function () {
-            // something is saved here
-            console.log('objectStoreNames 88:', docRequest.result.objectStoreNames);
-            docRequest.result.objectStoreNames.length.should.equal(7, 'line 88');
-            done();
+            // check indexedDB for saved docs
+            const docRequest = indexedDB.open(docDbName, 5);
+            docRequest.onsuccess = function () {
+              // something is saved here
+              console.log('objectStoreNames 88:', docRequest.result.objectStoreNames);
+              docRequest.result.objectStoreNames.length.should.equal(7, 'line 88');
+              done();
+            };
+            docRequest.onerror = done;
           };
-          docRequest.onerror = done;
+          viewRequest.onerror = done;
         }
       })();
     });
