@@ -106,6 +106,8 @@ viewAdapters.forEach(viewAdapter => {
         } else {
           const { viewDbName, docDbName } = getDBNames(localStorage);
 
+          console.log('DB NAMES:', dbs.name, getDBNames(localStorage), Object.keys(localStorage));
+
           // check indexedDB for saved views
           const viewRequest = indexedDB.open(viewDbName, 5);
           viewRequest.onsuccess = function () {
