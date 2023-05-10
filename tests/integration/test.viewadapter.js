@@ -139,8 +139,8 @@ viewAdapters.forEach(viewAdapter => {
               };
             };
           }
-        });
-      });
+        }).catch(done);
+      }).catch(done);
     });
   });
 });
