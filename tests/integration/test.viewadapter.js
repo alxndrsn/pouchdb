@@ -101,6 +101,7 @@ viewAdapters.forEach(viewAdapter => {
         const docRequest = indexedDB.open(docDbName, 5);
         docRequest.onsuccess = function () {
           // something is saved here
+          console.log('objectStoreNames 88:', docRequest.result.objectStoreNames);
           docRequest.result.objectStoreNames.length.should.equal(7, 'line 88');
         };
       }
@@ -126,10 +127,11 @@ viewAdapters.forEach(viewAdapter => {
 
           // check indexedDB for saved views
           const viewRequest = indexedDB.open(viewDbName, 5);
-          viewRequest.onsuccess = function () {
+          viewRequest.onsuccess = function (event) {
             // Something is saved here
             // This shows that without a view_adapter specified
             // the view query data is stored in the default adapter database.
+            console.log('objectStoreNames 112:', viewRequest.result.objectStoreNames);
             viewRequest.result.objectStoreNames.length.should.equal(7, 'line 112');
           };
 
@@ -137,7 +139,6 @@ viewAdapters.forEach(viewAdapter => {
           const docRequest = indexedDB.open(docDbName, 5);
           docRequest.onsuccess = function (event) {
             // something is saved here
-            console.log('objectStoreNames 118:', event.result.objectStoreNames);
             console.log('objectStoreNames 119:', docRequest.result.objectStoreNames);
             docRequest.result.objectStoreNames.length.should.equal(7, 'line 119');
           };
