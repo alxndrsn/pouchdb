@@ -7,7 +7,7 @@
 #
 
 npm run build
-npm install webpack-cli@5.1.1 # do this on-demand to avoid slow installs
+npm install webpack-cli@4.9.2 # do this on-demand to avoid slow installs
 node bin/update-package-json-for-publish.js
 npx webpack-cli
 BUILD_NODE_DONE=1 POUCHDB_SRC='../../pouchdb-webpack.js' npm test
