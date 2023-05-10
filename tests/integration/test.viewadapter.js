@@ -64,7 +64,7 @@ viewAdapters.forEach(viewAdapter => {
 //      }
 //    });
 
-    it('Create pouch with separate view adapters', async function () {
+    it('Create pouch with separate view adapters', async function (done) {
       const db = new PouchDB(dbs.name, {view_adapter: viewAdapter});
 
       if (db.adapter === viewAdapter) {
@@ -103,11 +103,13 @@ viewAdapters.forEach(viewAdapter => {
           // something is saved here
           console.log('objectStoreNames 88:', docRequest.result.objectStoreNames);
           docRequest.result.objectStoreNames.length.should.equal(7, 'line 88');
+          done();
         };
+        docRequest.onerror = done;
       }
     });
 
-    it('Create pouch with no view adapters', async function () {
+    it('Create pouch with no view adapters', async function (done) {
       try {
         const db = new PouchDB(dbs.name);
 
@@ -133,15 +135,18 @@ viewAdapters.forEach(viewAdapter => {
             // the view query data is stored in the default adapter database.
             console.log('objectStoreNames 112:', viewRequest.result.objectStoreNames);
             viewRequest.result.objectStoreNames.length.should.equal(7, 'line 112');
-          };
 
-          // check indexedDB for saved docs
-          const docRequest = indexedDB.open(docDbName, 5);
-          docRequest.onsuccess = function () {
-            // something is saved here
-            console.log('objectStoreNames 119:', docRequest.result.objectStoreNames);
-            docRequest.result.objectStoreNames.length.should.equal(7, 'line 119');
+            // check indexedDB for saved docs
+            const docRequest = indexedDB.open(docDbName, 5);
+            docRequest.onsuccess = function () {
+              // something is saved here
+              console.log('objectStoreNames 119:', docRequest.result.objectStoreNames);
+              docRequest.result.objectStoreNames.length.should.equal(7, 'line 119');
+              done();
+            };
+            docRequest.onerror = done;
           };
+          viewRequest.onerror = done;
         }
       } catch (err) {
         console.log('Caught err; re-throwing:', err);
