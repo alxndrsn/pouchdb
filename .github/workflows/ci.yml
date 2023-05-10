@@ -69,14 +69,7 @@ jobs:
       - uses: ./.github/actions/install-deps
         with:
           node-version: ${{ matrix.node }}
+      - id: show node version
+        run: node --version
       - id: test
-        run: ${{ matrix.cmd }}
-        continue-on-error: true
-      - name: First retry
-        id: retry
-        if: steps.test.outcome == 'failure'
-        run: ${{ matrix.cmd }}
-        continue-on-error: true
-      - name: Second retry
-        if: steps.retry.outcome == 'failure'
         run: ${{ matrix.cmd }}
