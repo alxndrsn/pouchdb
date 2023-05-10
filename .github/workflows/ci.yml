@@ -52,15 +52,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - id: test
         run: ${{ matrix.cmd }}
-        continue-on-error: true
-      - name: First retry
-        id: retry
-        if: steps.test.outcome == 'failure'
-        run: ${{ matrix.cmd }}
-        continue-on-error: true
-      - name: Second retry
-        if: steps.retry.outcome == 'failure'
-        run: ${{ matrix.cmd }}
 
 #  # Run all the other testing tasks -- unit tests, and so on. These should be
 #  # run on every version of Node.js that we support.
