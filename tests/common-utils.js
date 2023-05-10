@@ -7,7 +7,7 @@ commonUtils.isBrowser = function () {
 };
 
 commonUtils.isNode = function () {
-  return typeof process !== 'undefined' && !process.browser;
+  return !(window && window.indexedDB);
 };
 
 commonUtils.params = function () {
