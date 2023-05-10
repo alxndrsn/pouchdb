@@ -46,6 +46,7 @@ viewAdapters.forEach(viewAdapter => {
     }
 
     beforeEach(function () {
+      localStorage.clear();
       dbs.name = testUtils.adapterUrl('local', 'testdb');
     });
 
