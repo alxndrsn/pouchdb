@@ -99,6 +99,9 @@ viewAdapters.forEach(viewAdapter => {
         const res2 = await db.query('index', { key: 'abc', include_docs: true });
         console.log('res2:', res2);
 
+        // TODO delete this.  Checking if it's a race condition...
+        await new Promise(resolve => setTimeout(resolve, 500));
+
         if (testUtils.isNode()) {
           const dbs = getDbNamesFromLevelDBFolder(db.name);
           const expectedLength = db.adapter === 'memory' ? 0 : 2;
