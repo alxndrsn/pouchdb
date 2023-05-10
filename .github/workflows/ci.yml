@@ -69,7 +69,7 @@ jobs:
       - uses: ./.github/actions/install-deps
         with:
           node-version: ${{ matrix.node }}
-      - id: show node version
+      - id: show-node-version
         run: node --version
       - id: test
         run: ${{ matrix.cmd }}
