@@ -107,7 +107,7 @@ viewAdapters.forEach(viewAdapter => {
         db.query('index', {
           key: 'abc',
           include_docs: true
-        }).then(function () {
+        }).then(async function () {
 
           if (testUtils.isNode()) {
             const dbs = getDbNamesFromLevelDBFolder(db.name);
@@ -116,6 +116,9 @@ viewAdapters.forEach(viewAdapter => {
             done();
           } else {
             const { viewDbName, docDbName } = getDBNames(localStorage);
+
+            // TODO is it a race condition??
+            await new Promise(resolve => setTimeout(resolve, 100));
 
             // check indexedDB for saved views
             const viewRequest = indexedDB.open(viewDbName, 5);
