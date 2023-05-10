@@ -1,4 +1,4 @@
-#!/bin/bash -eux
+#!/usr/bin/env bash
 
 #
 # Build PouchDB with Webpack instead of Browserify, and test that.
@@ -7,7 +7,7 @@
 #
 
 npm run build
-npm install webpack-cli@4.9.2 # do this on-demand to avoid slow installs
+npm i webpack@5.66.0 -D webpack-cli@4.9.2 # do this on-demand to avoid slow installs
 node bin/update-package-json-for-publish.js
-npx webpack-cli
-BUILD_NODE_DONE=1 POUCHDB_SRC='../../pouchdb-webpack.js' npm test
+./node_modules/.bin/webpack
+BUILD_NODE_DONE=0 POUCHDB_SRC='../../pouchdb-webpack.js' npm test
