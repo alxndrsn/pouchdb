@@ -49,7 +49,7 @@ viewAdapters.forEach(viewAdapter => {
       const dbs = Object.keys(localStorage);
       let deleted = 0;
       for (let i=0; i<dbs.length; ++i) {
-        const res = window.indexedDB.deleteDatabase(dbs[i].name);
+        const res = window.indexedDB.deleteDatabase(dbs[i]);
         res.onsuccess = res.onerror = () => {
           if (++deleted === dbs.length) {
             dbs.name = testUtils.adapterUrl('local', 'testdb');
