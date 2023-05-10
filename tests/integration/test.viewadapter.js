@@ -45,9 +45,20 @@ viewAdapters.forEach(viewAdapter => {
       return dbs.filter((dbName => dbName.includes(name)));
     }
 
-    beforeEach(function () {
+    beforeEach(function (done) {
       localStorage.clear();
-      dbs.name = testUtils.adapterUrl('local', 'testdb');
+      window.indexedDB.databases().then((dbs) => {
+        let deleted = 0;
+        for (let i=0; i<dbs.length; ++i) {
+          const res = window.indexedDB.deleteDatabase(dbs[i].name);
+          res.onsuccess = () => {
+            if (++deleted === dbs.length) {
+              dbs.name = testUtils.adapterUrl('local', 'testdb');
+              done();
+            }
+          };
+        }
+      });
     });
 
     it('Create pouch with separate view adapters', async function () {
