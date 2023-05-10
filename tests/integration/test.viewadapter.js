@@ -24,6 +24,7 @@ viewAdapters.forEach(viewAdapter => {
     ];
 
     function getDBNames(localStorage) {
+      console.log('getDBNames()', 'dbs.name=', dbs.name);
       const savedDbNames = Object.keys(localStorage).filter(function (key) {
         return key.includes(dbs.name);
       });
