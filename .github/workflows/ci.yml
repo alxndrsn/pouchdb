@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        client: ['firefox', 'chrome']
+        client: ['firefox', 'chromium']
         adapter: ['memory']
         cmd:
           - npm test
