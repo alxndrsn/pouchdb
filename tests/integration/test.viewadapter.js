@@ -131,8 +131,10 @@ viewAdapters.forEach(viewAdapter => {
 
           // check indexedDB for saved docs
           const docRequest = indexedDB.open(docDbName, 5);
-          docRequest.onsuccess = function () {
+          docRequest.onsuccess = function (event) {
             // something is saved here
+            console.log('objectStoreNames 118:', event.result.objectStoreNames);
+            console.log('objectStoreNames 119:', docRequest.result.objectStoreNames);
             docRequest.result.objectStoreNames.length.should.equal(7, 'line 119');
           };
         }
