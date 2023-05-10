@@ -48,7 +48,6 @@ viewAdapters.forEach(viewAdapter => {
     beforeEach(async function () {
       await localStorage.clear();
       dbs.name = testUtils.adapterUrl('local', 'testdb');
-      done();
     });
 //    beforeEach(function (done) {
 //      const dbs = Object.keys(localStorage);
