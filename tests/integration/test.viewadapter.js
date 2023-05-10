@@ -64,94 +64,98 @@ viewAdapters.forEach(viewAdapter => {
 //      }
 //    });
 
-    it('Create pouch with separate view adapters', async function (done) {
-      const db = new PouchDB(dbs.name, {view_adapter: viewAdapter});
+    it('Create pouch with separate view adapters', function (done) {
+      (async function () {
+        const db = new PouchDB(dbs.name, {view_adapter: viewAdapter});
 
-      if (db.adapter === viewAdapter) {
-        return;
-      }
+        if (db.adapter === viewAdapter) {
+          return;
+        }
 
-      await db.bulkDocs(docs);
-      await db.query('index', { key: 'abc', include_docs: true });
-
-      if (testUtils.isNode()) {
-        const dbs = getDbNamesFromLevelDBFolder(db.name);
-        dbs.length.should.equal(1); // only one db created on disk, no dependent db created
-      } else {
-        const { viewDbName, docDbName } = getDBNames(localStorage);
-        // check indexedDB for saved views
-        // need to add '_pouch_' because views are saved in memory
-        const viewRequest = indexedDB.open('_pouch_' + viewDbName, 1);
-        viewRequest.onupgradeneeded = function (event) {
-          // The version of the view database created is 1 which shows that this
-          // database was newly created in IndexedDB and did not exist there
-          // before. So the view database was created in the database specified in
-          // the view_adapter and not in the default `idb`adapter.
-          event.oldVersion.should.equal(0);
-          event.newVersion.should.equal(1);
-        };
-
-        viewRequest.onsuccess = function () {
-          // Nothing is saved here
-          viewRequest.result.objectStoreNames.length.should.equal(0);
-          viewRequest.result.version.should.equal(1);
-        };
-
-        // check indexedDB for saved docs
-        const docRequest = indexedDB.open(docDbName, 5);
-        docRequest.onsuccess = function () {
-          // something is saved here
-          console.log('objectStoreNames 88:', docRequest.result.objectStoreNames);
-          docRequest.result.objectStoreNames.length.should.equal(7, 'line 88');
-          done();
-        };
-        docRequest.onerror = done;
-      }
-    });
-
-    it('Create pouch with no view adapters', async function (done) {
-      try {
-        const db = new PouchDB(dbs.name);
-
-        const res1 = await db.bulkDocs(docs);
-        console.log('res1:', res1);
-        const res2 = await db.query('index', { key: 'abc', include_docs: true });
-        console.log('res2:', res2);
+        await db.bulkDocs(docs);
+        await db.query('index', { key: 'abc', include_docs: true });
 
         if (testUtils.isNode()) {
           const dbs = getDbNamesFromLevelDBFolder(db.name);
-          const expectedLength = db.adapter === 'memory' ? 0 : 2;
-          dbs.length.should.equal(expectedLength);
+          dbs.length.should.equal(1); // only one db created on disk, no dependent db created
         } else {
           const { viewDbName, docDbName } = getDBNames(localStorage);
-
-          console.log('DB NAMES:', dbs.name, getDBNames(localStorage), Object.keys(localStorage));
-
           // check indexedDB for saved views
-          const viewRequest = indexedDB.open(viewDbName, 5);
-          viewRequest.onsuccess = function () {
-            // Something is saved here
-            // This shows that without a view_adapter specified
-            // the view query data is stored in the default adapter database.
-            console.log('objectStoreNames 112:', viewRequest.result.objectStoreNames);
-            viewRequest.result.objectStoreNames.length.should.equal(7, 'line 112');
-
-            // check indexedDB for saved docs
-            const docRequest = indexedDB.open(docDbName, 5);
-            docRequest.onsuccess = function () {
-              // something is saved here
-              console.log('objectStoreNames 119:', docRequest.result.objectStoreNames);
-              docRequest.result.objectStoreNames.length.should.equal(7, 'line 119');
-              done();
-            };
-            docRequest.onerror = done;
+          // need to add '_pouch_' because views are saved in memory
+          const viewRequest = indexedDB.open('_pouch_' + viewDbName, 1);
+          viewRequest.onupgradeneeded = function (event) {
+            // The version of the view database created is 1 which shows that this
+            // database was newly created in IndexedDB and did not exist there
+            // before. So the view database was created in the database specified in
+            // the view_adapter and not in the default `idb`adapter.
+            event.oldVersion.should.equal(0);
+            event.newVersion.should.equal(1);
           };
-          viewRequest.onerror = done;
+
+          viewRequest.onsuccess = function () {
+            // Nothing is saved here
+            viewRequest.result.objectStoreNames.length.should.equal(0);
+            viewRequest.result.version.should.equal(1);
+          };
+
+          // check indexedDB for saved docs
+          const docRequest = indexedDB.open(docDbName, 5);
+          docRequest.onsuccess = function () {
+            // something is saved here
+            console.log('objectStoreNames 88:', docRequest.result.objectStoreNames);
+            docRequest.result.objectStoreNames.length.should.equal(7, 'line 88');
+            done();
+          };
+          docRequest.onerror = done;
         }
-      } catch (err) {
-        console.log('Caught err; re-throwing:', err);
-        throw err;
-      }
+      })();
+    });
+
+    it('Create pouch with no view adapters', function (done) {
+      (async function () {
+        try {
+          const db = new PouchDB(dbs.name);
+
+          const res1 = await db.bulkDocs(docs);
+          console.log('res1:', res1);
+          const res2 = await db.query('index', { key: 'abc', include_docs: true });
+          console.log('res2:', res2);
+
+          if (testUtils.isNode()) {
+            const dbs = getDbNamesFromLevelDBFolder(db.name);
+            const expectedLength = db.adapter === 'memory' ? 0 : 2;
+            dbs.length.should.equal(expectedLength);
+          } else {
+            const { viewDbName, docDbName } = getDBNames(localStorage);
+
+            console.log('DB NAMES:', dbs.name, getDBNames(localStorage), Object.keys(localStorage));
+
+            // check indexedDB for saved views
+            const viewRequest = indexedDB.open(viewDbName, 5);
+            viewRequest.onsuccess = function () {
+              // Something is saved here
+              // This shows that without a view_adapter specified
+              // the view query data is stored in the default adapter database.
+              console.log('objectStoreNames 112:', viewRequest.result.objectStoreNames);
+              viewRequest.result.objectStoreNames.length.should.equal(7, 'line 112');
+
+              // check indexedDB for saved docs
+              const docRequest = indexedDB.open(docDbName, 5);
+              docRequest.onsuccess = function () {
+                // something is saved here
+                console.log('objectStoreNames 119:', docRequest.result.objectStoreNames);
+                docRequest.result.objectStoreNames.length.should.equal(7, 'line 119');
+                done();
+              };
+              docRequest.onerror = done;
+            };
+            viewRequest.onerror = done;
+          }
+        } catch (err) {
+          console.log('Caught err; re-throwing:', err);
+          done(err);
+        }
+      })();
     });
   });
 });
