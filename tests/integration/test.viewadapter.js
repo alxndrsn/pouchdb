@@ -85,39 +85,46 @@ viewAdapters.forEach(viewAdapter => {
         const docRequest = indexedDB.open(docDbName, 5);
         docRequest.onsuccess = function () {
           // something is saved here
-          docRequest.result.objectStoreNames.length.should.equal(7);
+          docRequest.result.objectStoreNames.length.should.equal(7, 'line 88');
         };
       }
     });
 
     it('Create pouch with no view adapters', async function () {
-      const db = new PouchDB(dbs.name);
+      try {
+        const db = new PouchDB(dbs.name);
 
-      await db.bulkDocs(docs);
-      await db.query('index', { key: 'abc', include_docs: true });
+        const res1 = await db.bulkDocs(docs);
+        console.log('res1:', res1);
+        const res2 = await db.query('index', { key: 'abc', include_docs: true });
+        console.log('res2:', res2);
 
-      if (testUtils.isNode()) {
-        const dbs = getDbNamesFromLevelDBFolder(db.name);
-        const expectedLength = db.adapter === 'memory' ? 0 : 2;
-        dbs.length.should.equal(expectedLength);
-      } else {
-        const { viewDbName, docDbName } = getDBNames(localStorage);
+        if (testUtils.isNode()) {
+          const dbs = getDbNamesFromLevelDBFolder(db.name);
+          const expectedLength = db.adapter === 'memory' ? 0 : 2;
+          dbs.length.should.equal(expectedLength);
+        } else {
+          const { viewDbName, docDbName } = getDBNames(localStorage);
 
-        // check indexedDB for saved views
-        const viewRequest = indexedDB.open(viewDbName, 5);
-        viewRequest.onsuccess = function () {
-          // Something is saved here
-          // This shows that without a view_adapter specified
-          // the view query data is stored in the default adapter database.
-          viewRequest.result.objectStoreNames.length.should.equal(7);
-        };
+          // check indexedDB for saved views
+          const viewRequest = indexedDB.open(viewDbName, 5);
+          viewRequest.onsuccess = function () {
+            // Something is saved here
+            // This shows that without a view_adapter specified
+            // the view query data is stored in the default adapter database.
+            viewRequest.result.objectStoreNames.length.should.equal(7, 'line 112');
+          };
 
-        // check indexedDB for saved docs
-        const docRequest = indexedDB.open(docDbName, 5);
-        docRequest.onsuccess = function () {
-          // something is saved here
-          docRequest.result.objectStoreNames.length.should.equal(7);
-        };
+          // check indexedDB for saved docs
+          const docRequest = indexedDB.open(docDbName, 5);
+          docRequest.onsuccess = function () {
+            // something is saved here
+            docRequest.result.objectStoreNames.length.should.equal(7, 'line 119');
+          };
+        }
+      } catch (err) {
+        console.log('Caught err; re-throwing:', err);
+        throw err;
       }
     });
   });
