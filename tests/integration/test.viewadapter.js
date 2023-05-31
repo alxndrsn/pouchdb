@@ -52,6 +52,7 @@ viewAdapters.forEach(viewAdapter => {
       const db = new PouchDB(dbs.name, {view_adapter: viewAdapter});
 
       if (db.adapter === viewAdapter) {
+        done();
         return;
       }
 
