@@ -52,20 +52,22 @@ viewAdapters.forEach(viewAdapter => {
       const db = new PouchDB(dbs.name, {view_adapter: viewAdapter});
 
       if (db.adapter === viewAdapter) {
-        done();
-        return;
+        return done();
       }
 
-      db.bulkDocs(docs).then(function () {
+      db.bulkDocs(docs).then(function (err) {
         db.query('index', {
           key: 'abc',
           include_docs: true
         }).then(function () {
+          if (err) {
+            return done(err);
+          }
 
           if (testUtils.isNode()) {
             const dbs = getDbNamesFromLevelDBFolder(db.name);
             dbs.length.should.equal(1); // only one db created on disk, no dependent db created
-            done();
+            return done();
           } else {
             const { viewDbName, docDbName } = getDBNames(localStorage);
 
@@ -108,7 +110,11 @@ viewAdapters.forEach(viewAdapter => {
     it('Create pouch with no view adapters', function (done) {
       const db = new PouchDB(dbs.name);
 
-      db.bulkDocs(docs).then(function () {
+      db.bulkDocs(docs).then(function (err) {
+        if (err) {
+          return done(err);
+        }
+
         db.query('index', {
           key: 'abc',
           include_docs: true
