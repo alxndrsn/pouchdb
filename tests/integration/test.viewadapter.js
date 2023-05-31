@@ -72,7 +72,9 @@ viewAdapters.forEach(viewAdapter => {
             // check indexedDB for saved views
             // need to add '_pouch_' because views are saved in memory
             const viewRequest = indexedDB.open('_pouch_' + viewDbName, 1);
-            viewRequest.onerror = done;
+            viewRequest.onerror = function (event) {
+              done(new Error('Database error: ' + event.target.errorCode));
+            };
             viewRequest.onupgradeneeded = function (event) {
               // The version of the view database created is 1 which shows that this
               // database was newly created in IndexedDB and did not exist there
@@ -88,7 +90,9 @@ viewAdapters.forEach(viewAdapter => {
 
                 // check indexedDB for saved docs
                 const docRequest = indexedDB.open(docDbName, 5);
-                docRequest.onerror = done;
+                docRequest.onerror = function (event) {
+                  done(new Error('Database error: ' + event.target.errorCode));
+                };
                 docRequest.onsuccess = function () {
                   // something is saved here
                   docRequest.result.objectStoreNames.length.should.equal(7);
@@ -120,7 +124,9 @@ viewAdapters.forEach(viewAdapter => {
 
             // check indexedDB for saved views
             const viewRequest = indexedDB.open(viewDbName, 5);
-            viewRequest.onerror = done;
+            viewRequest.onerror = function (event) {
+              done(new Error('Database error: ' + event.target.errorCode));
+            };
             viewRequest.onsuccess = function () {
               // Something is saved here
               // This shows that without a view_adapter specified
@@ -129,7 +135,9 @@ viewAdapters.forEach(viewAdapter => {
 
               // check indexedDB for saved docs
               const docRequest = indexedDB.open(docDbName, 5);
-              docRequest.onerror = done;
+              docRequest.onerror = function (event) {
+                done(new Error('Database error: ' + event.target.errorCode));
+              };
               docRequest.onsuccess = function () {
                 // something is saved here
                 docRequest.result.objectStoreNames.length.should.equal(7);
