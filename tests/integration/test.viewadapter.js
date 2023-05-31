@@ -55,15 +55,11 @@ viewAdapters.forEach(viewAdapter => {
         return done();
       }
 
-      db.bulkDocs(docs).then(function (err) {
+      db.bulkDocs(docs).then(function () {
         db.query('index', {
           key: 'abc',
           include_docs: true
         }).then(function () {
-          if (err) {
-            return done(err);
-          }
-
           if (testUtils.isNode()) {
             const dbs = getDbNamesFromLevelDBFolder(db.name);
             dbs.length.should.equal(1); // only one db created on disk, no dependent db created
@@ -103,18 +99,14 @@ viewAdapters.forEach(viewAdapter => {
               };
             };
           }
-        });
-      });
+        }).catch(done);
+      }).catch(done);
     });
 
     it('Create pouch with no view adapters', function (done) {
       const db = new PouchDB(dbs.name);
 
-      db.bulkDocs(docs).then(function (err) {
-        if (err) {
-          return done(err);
-        }
-
+      db.bulkDocs(docs).then(function () {
         db.query('index', {
           key: 'abc',
           include_docs: true
@@ -151,8 +143,8 @@ viewAdapters.forEach(viewAdapter => {
               };
             };
           }
-        });
-      });
+        }).catch(done);
+      }).catch(done);
     });
   });
 });
