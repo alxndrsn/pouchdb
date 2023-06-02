@@ -89,7 +89,7 @@ viewAdapters.forEach(viewAdapter => {
                 // check indexedDB for saved docs
                 const docRequest = indexedDB.open(docDbName, 5);
                 docRequest.onerror = function (event) {
-                  done(new Error('Database error: ' + event.target.errorCode));
+                  done(new Error('Database error: ' + event));
                 };
                 docRequest.onsuccess = function () {
                   // something is saved here
@@ -123,7 +123,7 @@ viewAdapters.forEach(viewAdapter => {
             // check indexedDB for saved views
             const viewRequest = indexedDB.open(viewDbName, 5);
             viewRequest.onerror = function (event) {
-              done(new Error('Database error: ' + event.target.errorCode));
+              done(new Error('Database error: ' + event.target));
             };
             viewRequest.onsuccess = function () {
               // Something is saved here
