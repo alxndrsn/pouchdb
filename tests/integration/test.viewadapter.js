@@ -125,6 +125,9 @@ viewAdapters.forEach(viewAdapter => {
 
             // check indexedDB for saved views
             const viewRequest = indexedDB.open(viewDbName, 5);
+            viewRequest.onupgradeneeded = function (event) {
+              done(new Error('Database upgrade needed: ' + event));
+            };
             viewRequest.onerror = function (event) {
               done(new Error('Database error: ' + event.target));
             };
@@ -136,6 +139,9 @@ viewAdapters.forEach(viewAdapter => {
 
               // check indexedDB for saved docs
               const docRequest = indexedDB.open(docDbName, 5);
+              docRequest.onupgradeneeded = function (event) {
+                done(new Error('Database upgrade needed: ' + event));
+              };
               docRequest.onerror = function (event) {
                 done(new Error('Database error: ' + event.target.errorCode));
               };
