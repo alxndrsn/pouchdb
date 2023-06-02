@@ -88,6 +88,9 @@ viewAdapters.forEach(viewAdapter => {
 
                 // check indexedDB for saved docs
                 const docRequest = indexedDB.open(docDbName, 5);
+                docRequest.onupgradeneeded = function (event) {
+                  done(new Error('Database upgrade needed: ' + event));
+                };
                 docRequest.onerror = function (event) {
                   done(new Error('Database error: ' + event));
                 };
