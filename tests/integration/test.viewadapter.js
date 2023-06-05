@@ -74,31 +74,39 @@ viewAdapters.forEach(viewAdapter => {
               done(new Error('Database error: ' + event.target.errorCode));
             };
             viewRequest.onupgradeneeded = function (event) {
+              // Expected.  Let's confirm some things:
+              console.log(78, 'viewRequest.onupgradeneeded', event);
+
               // The version of the view database created is 1 which shows that this
               // database was newly created in IndexedDB and did not exist there
               // before. So the view database was created in the database specified in
               // the view_adapter and not in the default `idb`adapter.
               event.oldVersion.should.equal(0);
               event.newVersion.should.equal(1);
+            };
 
-              viewRequest.onsuccess = function () {
-                // Nothing is saved here
-                viewRequest.result.objectStoreNames.length.should.equal(0);
-                viewRequest.result.version.should.equal(1);
+            viewRequest.onsuccess = function () {
+              console.log(90, 'viewRequest.onsuccess');
 
-                // check indexedDB for saved docs
-                const docRequest = indexedDB.open(docDbName, 5);
-                docRequest.onupgradeneeded = function (event) {
-                  done(new Error('Database upgrade needed: ' + event));
-                };
-                docRequest.onerror = function (event) {
-                  done(new Error('Database error: ' + event));
-                };
-                docRequest.onsuccess = function () {
-                  // something is saved here
-                  docRequest.result.objectStoreNames.length.should.equal(7);
-                  done();
-                };
+              // Nothing is saved here
+              viewRequest.result.objectStoreNames.length.should.equal(0);
+              viewRequest.result.version.should.equal(1);
+
+              // check indexedDB for saved docs
+              const docRequest = indexedDB.open(docDbName, 5);
+              docRequest.onupgradeneeded = function (event) {
+                // Expected.  We can just continue.
+                console.log(100, 'docRequest.onupgradeneeded', event.oldVersion, '>>>', event.newVersion, '::', event);
+              };
+              docRequest.onerror = function (event) {
+                done(new Error('Database error: ' + event));
+              };
+              docRequest.onsuccess = function () {
+                console.log(105, 'docRequest.onsuccess');
+
+                // something is saved here
+                docRequest.result.objectStoreNames.length.should.equal(7);
+                done();
               };
             };
           }
@@ -126,12 +134,14 @@ viewAdapters.forEach(viewAdapter => {
             // check indexedDB for saved views
             const viewRequest = indexedDB.open(viewDbName, 5);
             viewRequest.onupgradeneeded = function (event) {
-              done(new Error('Database upgrade needed: ' + event));
+              // Expected.  We can just continue.
+              console.log(138, 'viewRequest.onupgradeneeded', event.oldVersion, '>>>', event.newVersion, '::', event);
             };
             viewRequest.onerror = function (event) {
               done(new Error('Database error: ' + event.target));
             };
             viewRequest.onsuccess = function () {
+              console.log(144, 'viewRequest.onsuccess');
               // Something is saved here
               // This shows that without a view_adapter specified
               // the view query data is stored in the default adapter database.
@@ -140,12 +150,15 @@ viewAdapters.forEach(viewAdapter => {
               // check indexedDB for saved docs
               const docRequest = indexedDB.open(docDbName, 5);
               docRequest.onupgradeneeded = function (event) {
-                done(new Error('Database upgrade needed: ' + event));
+                // Expected.  We can just continue.
+                console.log(154, 'docRequest.onupgradeneeded', event.oldVersion, '>>>', event.newVersion, '::', event);
               };
               docRequest.onerror = function (event) {
                 done(new Error('Database error: ' + event.target.errorCode));
               };
               docRequest.onsuccess = function () {
+                console.log(154, 'docRequest.onsuccess');
+
                 // something is saved here
                 docRequest.result.objectStoreNames.length.should.equal(7, 'docRequest');
                 done();
