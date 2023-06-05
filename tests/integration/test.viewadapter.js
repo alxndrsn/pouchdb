@@ -56,8 +56,8 @@ viewAdapters.forEach(viewAdapter => {
     });
 
     it('Create pouch with separate view adapters', function (done) {
-      global.__magic_number = Math.random();
-      console.log('Opening PouchDB with __magic_number:', global.__magic_number);
+      globalThis.__magic_number = Math.random();
+      console.log('Opening PouchDB with __magic_number:', globalThis.__magic_number);
 
       const db = new PouchDB(dbs.name, {view_adapter: viewAdapter});
 
