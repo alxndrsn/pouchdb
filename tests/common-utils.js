@@ -44,7 +44,10 @@ commonUtils.loadPouchDB = function (opts) {
   var adapters = commonUtils.adapters().concat(opts.adapters || []);
   var plugins = commonUtils.plugins().concat(opts.plugins || []);
 
-  if (!adapters.includes('memory')) adapters.push('memory');
+  if (!adapters.includes('memory')) {
+    // memory adapter is required for view_adapter tests
+    adapters.push('memory');
+  }
 
   for (let adapter of adapters) {
     if (adapter === 'websql') {
