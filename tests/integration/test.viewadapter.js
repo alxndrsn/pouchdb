@@ -121,7 +121,9 @@ viewAdapters.forEach(viewAdapter => {
         db.query('index', {
           key: 'abc',
           include_docs: true
-        }).then(function () {
+        }).then(function (res) {
+
+          console.log('query() res:', res);
 
           if (testUtils.isNode()) {
             const dbs = getDbNamesFromLevelDBFolder(db.name);
@@ -145,7 +147,7 @@ viewAdapters.forEach(viewAdapter => {
               // Something is saved here
               // This shows that without a view_adapter specified
               // the view query data is stored in the default adapter database.
-              viewRequest.result.objectStoreNames.length.should.equal(7, 'viewRequest');
+              viewRequest.result.objectStoreNames.length.should.equal(7, 'viewRequest 148');
 
               // check indexedDB for saved docs
               const docRequest = indexedDB.open(docDbName, 5);
