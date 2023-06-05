@@ -30,12 +30,6 @@ commonUtils.adapters = function () {
   return adapters ? adapters.split(',') : [];
 };
 
-commonUtils.viewAdapters = function () {
-  var viewAdapters = commonUtils.isNode() ? 
-    process.env.VIEW_ADAPTERS : commonUtils.params().viewAdapters;
-  return viewAdapters ? viewAdapters.split(',') : [];
-};
-
 commonUtils.plugins = function () {
   var plugins = commonUtils.isNode() ? process.env.PLUGINS : commonUtils.params().plugins;
   return plugins ? plugins.split(',') : [];
@@ -48,11 +42,9 @@ commonUtils.loadPouchDB = function (opts) {
 
   var params = commonUtils.params();
   var adapters = commonUtils.adapters().concat(opts.adapters || []);
-  var viewAdapters = commonUtils.viewAdapters().concat(opts.viewAdapters || []);
   var plugins = commonUtils.plugins().concat(opts.plugins || []);
 
-  const allAdapters = [...adapters, ...viewAdapters];
-  for (let adapter of allAdapters) {
+  for (let adapter of adapters) {
     if (adapter === 'websql') {
       adapter = 'node-websql';
     }
