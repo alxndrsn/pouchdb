@@ -44,6 +44,8 @@ commonUtils.loadPouchDB = function (opts) {
   var adapters = commonUtils.adapters().concat(opts.adapters || []);
   var plugins = commonUtils.plugins().concat(opts.plugins || []);
 
+  if (!adapters.includes('memory')) adapters.push('memory');
+
   for (let adapter of adapters) {
     if (adapter === 'websql') {
       adapter = 'node-websql';
