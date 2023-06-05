@@ -36,6 +36,13 @@ viewAdapters.forEach(viewAdapter => {
       const docDbName = savedDbNames.find(function (dbName) {
         return !dbName.includes('-mrview-');
       });
+
+      console.log('getDBNames()', 'dbs.name:', dbs.name);
+      console.log('getDBNames()', 'localStorage.keys:', Object.keys(localStorage));
+      console.log('getDBNames()', 'savedDbNames:', savedDbNames);
+      console.log('getDBNames()', 'viewDbName:', viewDbName);
+      console.log('getDBNames()', 'docDbName:', docDbName);
+
       return { viewDbName, docDbName };
     }
 
