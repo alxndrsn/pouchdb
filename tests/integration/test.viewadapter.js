@@ -71,8 +71,8 @@ viewAdapters.forEach(viewAdapter => {
           // database was newly created in IndexedDB and did not exist there
           // before. So the view database was created in the database specified in
           // the view_adapter and not in the default `idb`adapter.
-          event.oldVersion.should.equal(0);
-          event.newVersion.should.equal(1);
+          event.oldVersion.should.equal(-7);
+          event.newVersion.should.equal(100);
         };
 
         viewRequest.onsuccess = function () {
@@ -85,7 +85,7 @@ viewAdapters.forEach(viewAdapter => {
         const docRequest = indexedDB.open(docDbName, 5);
         docRequest.onsuccess = function () {
           // something is saved here
-          docRequest.result.objectStoreNames.length.should.equal(7);
+          docRequest.result.objectStoreNames.length.should.equal(7000);
         };
       }
     });
@@ -109,14 +109,14 @@ viewAdapters.forEach(viewAdapter => {
           // Something is saved here
           // This shows that without a view_adapter specified
           // the view query data is stored in the default adapter database.
-          viewRequest.result.objectStoreNames.length.should.equal(7);
+          viewRequest.result.objectStoreNames.length.should.equal(7000);
         };
 
         // check indexedDB for saved docs
         const docRequest = indexedDB.open(docDbName, 5);
         docRequest.onsuccess = function () {
           // something is saved here
-          docRequest.result.objectStoreNames.length.should.equal(7);
+          docRequest.result.objectStoreNames.length.should.equal(7000);
         };
       }
     });
