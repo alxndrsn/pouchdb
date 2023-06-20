@@ -16,21 +16,20 @@ if (!sourceFile) {
 var isNodeWebkit = typeof window !== 'undefined' &&
   typeof process !== 'undefined';
 
-console.log(`
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@
-@ browser.worker.js
-@
-@ Debugging why this doesn't always run...
-@
-@ process:          ${process}
-@ window:           ${window}
-@ window.Worker:    ${window.Worker}
-@ isNodeWebkit:     ${isNodeWebkit}
-@ testUtils.isIE(): ${testUtils.isIE()}
-@
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-`);
+
+console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`);
+console.log(`@`);
+console.log(`@ browser.worker.js`);
+console.log(`@`);
+console.log(`@ Debugging why this doesn't always run...`);
+console.log(`@`);
+console.log(`@ process:          ${process}`);
+console.log(`@ window:           ${window}`);
+console.log(`@ window.Worker:    ${window.Worker}`);
+console.log(`@ isNodeWebkit:     ${isNodeWebkit}`);
+console.log(`@ testUtils.isIE(): ${testUtils.isIE()}`);
+console.log(`@`);
+console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`);
 
 if (typeof window.Worker === 'function' &&
     !isNodeWebkit && !testUtils.isIE() &&
