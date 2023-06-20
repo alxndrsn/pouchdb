@@ -16,6 +16,22 @@ if (!sourceFile) {
 var isNodeWebkit = typeof window !== 'undefined' &&
   typeof process !== 'undefined';
 
+console.log(`
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@
+@ browser.worker.js
+@
+@ Debugging why this doesn't always run...
+@
+@ process:          ${process}
+@ window:           ${window}
+@ window.Worker:    ${window.Worker}
+@ isNodeWebkit:     ${isNodeWebkit}
+@ testUtils.isIE(): ${testUtils.isIE()}
+@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+`);
+
 if (typeof window.Worker === 'function' &&
     !isNodeWebkit && !testUtils.isIE() &&
     (window.chrome || /Firefox/.test(navigator.userAgent))) {
