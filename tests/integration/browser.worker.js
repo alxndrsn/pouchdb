@@ -61,6 +61,10 @@ function runTests() {
       testUtils.cleanup([dbs.name, dbs.remote], done);
     });
 
+    it('should run at some point!', function () {
+      true.should.equal(false, 'now we know where this runs');
+    });
+
     it('create it', function () {
       return workerPromise('ping').then(function (data) {
         data.should.equal('pong');
