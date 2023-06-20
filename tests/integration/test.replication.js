@@ -2147,7 +2147,6 @@ adapters.forEach(function (adapters) {
       if (testUtils.isIE()) {
         return done();
       }
-
       var db = new PouchDB(dbs.name);
       var remote = new PouchDB(dbs.remote);
       var docs = [];
