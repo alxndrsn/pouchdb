@@ -6,6 +6,11 @@
     <link rel="stylesheet" type="text/css" href="../../node_modules/mocha/mocha.css">
   </head>
   <body>
+    <script type="text/javascript">
+      window.onerror = (...args) => {
+        console.log('event:window.onerror', ...args);
+      };
+    </script>
     <div id="mocha"></div>
     <script src="../../node_modules/promise-polyfill/dist/polyfill.js"></script>
     <script src="../../node_modules/whatwg-fetch/fetch.js"></script>
