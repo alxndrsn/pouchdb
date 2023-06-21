@@ -97,7 +97,10 @@ function testError(e) {
 
 function startSelenium(callback) {
   // Start selenium
-  var opts = {version: SELENIUM_VERSION};
+  var opts = {
+    version: SELENIUM_VERSION,
+    spawnOptions: { stdio: 'inherit' },
+  };
   selenium.install(opts, function (err) {
     if (err) {
       console.error('Failed to install selenium');
