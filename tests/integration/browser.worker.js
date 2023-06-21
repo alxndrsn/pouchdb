@@ -1,5 +1,8 @@
 'use strict';
 
+throw new Error('_now_ we know where this is run!');
+
+/*
 var sourceFile = window.location.search.match(/[?&]sourceFile=([^&]+)/);
 
 if (!sourceFile) {
@@ -138,3 +141,4 @@ function runTests() {
     });
   });
 }
+*/
