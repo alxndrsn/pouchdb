@@ -136,6 +136,8 @@ class RemoteRunner {
     var handlers = this.handlers;
 
     events.forEach((event) => {
+      console.log('@@@ test-browser: processing event \'' + event.name + '\'');
+
       this.completed = this.completed || event.name === 'end';
       this.failed = this.failed || event.name === 'fail';
 
@@ -242,6 +244,7 @@ function startTest() {
                   if (runner.completed || (runner.failed && bail)) {
                     if (!runner.completed && runner.failed) {
                       try {
+                        console.log('@@@ test-browser: runner failed.  bailing on tests...');
                         runner.bail();
                       } catch (e) {
                         // Temporary debugging of bailing failure
