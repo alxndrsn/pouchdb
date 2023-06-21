@@ -1,6 +1,9 @@
 'use strict';
 
-var sourceFile = window.location.search.match(/[?&]sourceFile=([^&]+)/);
+var sourceFile = window &&
+    window.location &&
+    window.location.search &&
+    window.location.search.match(/[?&]sourceFile=([^&]+)/);
 
 if (!sourceFile) {
   sourceFile = '../../packages/node_modules/pouchdb/dist/pouchdb.js';
