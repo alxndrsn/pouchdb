@@ -1,5 +1,22 @@
 'use strict';
 
+
+console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`);
+console.log(`@`);
+console.log(`@ browser.worker.js`);
+console.log(`@`);
+console.log(`@ Debugging why this doesn't always run...`);
+console.log(`@`);
+console.log(`@ process:                ${process}`);
+console.log(`@ window:                 ${window}`);
+console.log(`@ window.Worker:          ${window.Worker}`);
+console.log(`@ isNodeWebkit:           ${isNodeWebkit}`);
+console.log(`@ testUtils.isIE():       ${testUtils.isIE()}`);
+console.log(`@ window.location:        ${window.location}`);
+console.log(`@ window.location.search: ${window.location.search}`);
+console.log(`@`);
+console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`);
+
 var sourceFile = window.location.search.match(/[?&]sourceFile=([^&]+)/);
 
 if (!sourceFile) {
