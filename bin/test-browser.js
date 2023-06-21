@@ -106,7 +106,9 @@ function startSelenium(callback) {
       console.error('Failed to install selenium');
       process.exit(1);
     }
-    selenium.start(opts, function () {
+    selenium.start(opts, function (err) {
+      console.error('Failed to start selenium');
+      process.exit(1);
       seleniumClient = wd.promiseChainRemote();
       callback();
     });
