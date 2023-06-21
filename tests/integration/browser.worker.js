@@ -5,14 +5,14 @@
 // Safari: doesn't have IndexedDB or WebSQL in a WW
 // NodeWebkit: not sure what the issue is
 
-var isNodeWebkit = typeof window !== 'undefined' &&
-  typeof process !== 'undefined';
+//var isNodeWebkit = typeof window !== 'undefined' &&
+//  typeof process !== 'undefined';
 
-if ((window && typeof window.Worker === 'function') &&
-    !isNodeWebkit && !testUtils.isIE() &&
-    ((window && window.chrome) || (navigator && /Firefox/.test(navigator.userAgent)))) {
+//if ((window && typeof window.Worker === 'function') &&
+//    !isNodeWebkit && !testUtils.isIE() &&
+//    ((window && window.chrome) || (navigator && /Firefox/.test(navigator.userAgent)))) {
   runTests();
-}
+//}
 
 function runTests() {
 
