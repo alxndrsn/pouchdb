@@ -6,7 +6,21 @@ describe('browser.worker.js', function () {
   var dbs = {};
 
   before(function () {
-    throw new Error('deliberately fail');
+    if (typeof process !== 'undefined' && process.env.SKIP_WORKER_TEST === '1') {
+      this.skip();
+    }
+
+    worker = new Worker('worker.js');
+
+    var sourceFile = window && window.location.search.match(/[?&]sourceFile=([^&]+)/);
+
+    if (!sourceFile) {
+      sourceFile = '../../packages/node_modules/pouchdb/dist/pouchdb.js';
+    } else {
+      sourceFile = '../../packages/node_modules/pouchdb/dist/' + sourceFile[1];
+    }
+
+    worker.postMessage(['source', sourceFile]);
   });
 
   after(function () {
