@@ -4,18 +4,6 @@ describe('browser.worker.js', function () {
   var worker;
   var dbs = {};
 
-  function workerPromise(message) {
-    return new Promise(function (resolve, reject) {
-      worker.onerror = function (e) {
-        reject(new Error(e.message + ": " + e.filename + ': ' + e.lineno));
-      };
-      worker.onmessage = function (e) {
-        resolve(e.data);
-      };
-      worker.postMessage(message);
-    });
-  }
-
   before(function () {
     if (process && process.env.SKIP_WORKER_TEST === '1') {
       this.skip();
@@ -37,6 +25,18 @@ describe('browser.worker.js', function () {
   after(function () {
     worker.terminate();
   });
+
+  function workerPromise(message) {
+    return new Promise(function (resolve, reject) {
+      worker.onerror = function (e) {
+        reject(new Error(e.message + ": " + e.filename + ': ' + e.lineno));
+      };
+      worker.onmessage = function (e) {
+        resolve(e.data);
+      };
+      worker.postMessage(message);
+    });
+  }
 
   beforeEach(function (done) {
     dbs.name = testUtils.adapterUrl('local', 'testdb');
