@@ -1,44 +1,42 @@
 'use strict';
 
-var worker;
-
-before(function () {
-  if (process && process.env.SKIP_WORKER_TEST === '1') {
-    this.skip();
-  }
-
-  worker = new Worker('worker.js');
-
-  var sourceFile = window && window.location.search.match(/[?&]sourceFile=([^&]+)/);
-
-  if (!sourceFile) {
-    sourceFile = '../../packages/node_modules/pouchdb/dist/pouchdb.js';
-  } else {
-    sourceFile = '../../packages/node_modules/pouchdb/dist/' + sourceFile[1];
-  }
-
-  worker.postMessage(['source', sourceFile]);
-});
-
-after(function () {
-  worker.terminate();
-});
-
-function workerPromise(message) {
-  return new Promise(function (resolve, reject) {
-    worker.onerror = function (e) {
-      reject(new Error(e.message + ": " + e.filename + ': ' + e.lineno));
-    };
-    worker.onmessage = function (e) {
-      resolve(e.data);
-    };
-    worker.postMessage(message);
-  });
-}
-
 describe('browser.worker.js', function () {
-
+  var worker;
   var dbs = {};
+
+  function workerPromise(message) {
+    return new Promise(function (resolve, reject) {
+      worker.onerror = function (e) {
+        reject(new Error(e.message + ": " + e.filename + ': ' + e.lineno));
+      };
+      worker.onmessage = function (e) {
+        resolve(e.data);
+      };
+      worker.postMessage(message);
+    });
+  }
+
+  before(function () {
+    if (process && process.env.SKIP_WORKER_TEST === '1') {
+      this.skip();
+    }
+
+    worker = new Worker('worker.js');
+
+    var sourceFile = window && window.location.search.match(/[?&]sourceFile=([^&]+)/);
+
+    if (!sourceFile) {
+      sourceFile = '../../packages/node_modules/pouchdb/dist/pouchdb.js';
+    } else {
+      sourceFile = '../../packages/node_modules/pouchdb/dist/' + sourceFile[1];
+    }
+
+    worker.postMessage(['source', sourceFile]);
+  });
+
+  after(function () {
+    worker.terminate();
+  });
 
   beforeEach(function (done) {
     dbs.name = testUtils.adapterUrl('local', 'testdb');
