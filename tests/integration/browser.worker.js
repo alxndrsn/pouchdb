@@ -74,6 +74,12 @@ function runTests() {
       });
     });
 
+    it('check adapters', function () {
+      return workerPromise('adapters').then(function (data) {
+        data.should.deep.equal(['']);
+      });
+    });
+
     it('create remote db', function () {
       return workerPromise(['create', dbs.remote]).then(function (data) {
         data.should.equal('lala');
