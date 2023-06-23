@@ -6,7 +6,12 @@ describe('browser.worker.js', function () {
   var dbs = {};
 
   before(function () {
-    if (typeof process !== 'undefined' && process.env.SKIP_WORKER_TEST === '1') {
+    var isNodeWebkit = typeof window !== 'undefined' &&
+      typeof process !== 'undefined';
+
+    if (!((window && typeof window.Worker === 'function') &&
+        !isNodeWebkit && !testUtils.isIE() &&
+        ((window && window.chrome) || (navigator && /Firefox/.test(navigator.userAgent))))) {
       this.skip();
     }
 

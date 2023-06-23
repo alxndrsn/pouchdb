@@ -29,4 +29,4 @@ node bin/update-package-json-for-publish.js
 # SKIP_WORKER_TEST because the webpack bundle includes leveldown, which breaks
 # inside web workers.  TODO document if this is expected behaviour, or if it's
 # an issue with the webpack config (it could exclude leveldown).
-BUILD_NODE_DONE=1 SKIP_WORKER_TEST=1 POUCHDB_SRC='../../pouchdb-webpack.js' npm test
+BUILD_NODE_DONE=1 POUCHDB_SRC='../../pouchdb-webpack.js' npm test
