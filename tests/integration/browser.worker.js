@@ -29,7 +29,7 @@ describe('browser.worker.js', function () {
   });
 
   after(function () {
-    worker.terminate();
+    if(worker) worker.terminate();
   });
 
   function workerPromise(message) {
