@@ -111,7 +111,7 @@ function runTests() {
       }
 
       // both threads agree the count is 0
-      return testUtils.Promise.all([
+      return Promise.all([
         db.allDocs().then(function (res) {
           res.total_rows.should.equal(0);
         }),
@@ -123,7 +123,7 @@ function runTests() {
         return db.post({});
       }).then(function () {
         // both threads agree the count is 1
-        return testUtils.Promise.all([
+        return Promise.all([
           db.allDocs().then(function (res) {
             res.total_rows.should.equal(1);
           }),
