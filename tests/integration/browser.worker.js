@@ -13,6 +13,12 @@ describe('browser.worker.js', function () {
         !isNodeWebkit && !testUtils.isIE() &&
         ((window && window.chrome) || (navigator && /Firefox/.test(navigator.userAgent))))) {
       throw new Error('Failed one of the checks for running tests.  Useragent:' + navigator.userAgent + '; typeof window.Worker:' + typeof window.Worker + '; window.chrome:' + window.chrome + '; isNodeWebkit:' + isNodeWebkit + '; testUtils.isIE()' + testUtils.isIE());
+    } else {
+      if (typeof navigator !== 'undefined') {
+        throw new Error('Tests will be run; user agent: \'' + navigator.userAgent + '\'');
+      } else {
+        throw new Error('No navigator');
+      }
     }
 
     worker = new Worker('worker.js');
