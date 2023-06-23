@@ -29,7 +29,9 @@ describe('browser.worker.js', function () {
   });
 
   after(function () {
-    if(worker) worker.terminate();
+    if (worker) {
+      worker.terminate();
+    }
   });
 
   function workerPromise(message) {
