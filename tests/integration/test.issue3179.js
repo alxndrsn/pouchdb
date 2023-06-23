@@ -66,36 +66,31 @@ adapters.forEach(function (adapters) {
       var local = new PouchDB(dbs.name);
       var remote = new PouchDB(dbs.remote);
 
-      return local.put({ _id: '1'}).then(function () {
-        return local.sync(remote);
-      }).then(function () {
-        return local.get('1').then(function (doc) {
-          doc.foo = Math.random();
-          return local.put(doc);
-        });
-      }).then(function () {
-        return remote.get('1').then(function (doc) {
-          doc.foo = Math.random();
-          return remote.put(doc);
-        });
-      }).then(function () {
-        return local.sync(remote);
-      }).then(function () {
-        return local.get('1', {conflicts: true}).then(function (doc) {
-          return local.remove(doc._id, doc._conflicts[0]);
-        });
-      }).then(function () {
-        return local.sync(remote);
-      }).then(function () {
-        return local.get('1', {conflicts: true, revs: true});
-      }).then(function (localDoc) {
-        return remote.get('1', {
-          conflicts: true,
-          revs: true
-        }).then(function (remoteDoc) {
-          remoteDoc.should.deep.equal(localDoc);
-        });
-      });
+      return local.put({ _id: '1'})
+          .then(() => local.sync(remote))
+          .then(() => local.get('1'))
+          .then((doc) => {
+            doc.foo = Math.random();
+            return local.put(doc);
+          })
+          .then(() => remote.get('1'))
+          .then((doc) => {
+            doc.foo = Math.random();
+            return remote.put(doc);
+          })
+          .then(() => local.sync(remote))
+          .then(() => local.get('1', {conflicts: true}))
+          .then((doc) => local.remove(doc._id, doc._conflicts[0]))
+          .then(() => local.sync(remote))
+          .then(() => local.get('1', {conflicts: true, revs: true}))
+          .then((localDoc) => {
+            return remote.get('1', {
+              conflicts: true,
+              revs: true
+            }).then(function (remoteDoc) {
+              remoteDoc.should.deep.equal(localDoc);
+            });
+          });
     });
 
     it('#3179 conflicts synced, live sync', function () {
