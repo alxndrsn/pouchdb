@@ -46,11 +46,3 @@ jobs:
       - id: test
         run: ${{ matrix.cmd }}
         continue-on-error: true
-      - name: First retry
-        id: retry
-        if: steps.test.outcome == 'failure'
-        run: git reset --hard && ${{ matrix.cmd }}
-        continue-on-error: true
-      - name: Second retry
-        if: steps.retry.outcome == 'failure'
-        run: git reset --hard && ${{ matrix.cmd }}
