@@ -653,24 +653,28 @@ adapters.forEach(function (adapter) {
       });
     });
 
-    it('Changes with invalid ddoc view name', function () {
-      return new testUtils.Promise(function (resolve, reject) {
-        var db = new PouchDB(dbs.name);
-        db.post({});
-        var changes = db.changes({live: true, filter: '_view', view: ''});
-        changes.on('error', resolve);
-        changes.on('change', reject);
+    it('Changes with invalid ddoc view name', function (done) {
+      var db = new PouchDB(dbs.name);
+      db.post({});
+      var changes = db.changes({live: true, filter: '_view', view: ''});
+      changes.on('error', (err) => {
+        err.should.be.an.instanceof(Error);
+        err.error.should.equal('bad_request');
+        done();
       });
+      changes.on('change', () => done(new Error('Unexpected change event.')));
     });
 
-    it('Changes with invalid ddoc view name 2', function () {
-      return new testUtils.Promise(function (resolve, reject) {
-        var db = new PouchDB(dbs.name);
-        db.post({});
-        var changes = db.changes({live: true, filter: '_view', view: 'a/b/c'});
-        changes.on('error', resolve);
-        changes.on('change', reject);
+    it('Changes with invalid ddoc view name 2', function (done) {
+      var db = new PouchDB(dbs.name);
+      db.post({});
+      var changes = db.changes({live: true, filter: '_view', view: 'a/b/c'});
+      changes.on('error', (err) => {
+        err.should.be.an.instanceof(Error);
+        err.error.should.equal('bad_request');
+        done();
       });
+      changes.on('change', () => done(new Error('Unexpected change event.')));
     });
 
     it('Changes with style = all_docs', function (done) {
