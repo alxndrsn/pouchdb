@@ -12,7 +12,7 @@ describe('browser.worker.js', function () {
     if (!((window && typeof window.Worker === 'function') &&
         !isNodeWebkit && !testUtils.isIE() &&
         ((window && window.chrome) || (navigator && /Firefox/.test(navigator.userAgent))))) {
-      this.skip();
+      throw new Error('Failed one of the checks for running tests.  Useragent:' + navigator.userAgent + '; typeof window.Worker:' + typeof window.Worker + '; window.chrome:' + window.chrome + '; isNodeWebkit:' + isNodeWebkit + '; testUtils.isIE()' + testUtils.isIE());
     }
 
     worker = new Worker('worker.js');
