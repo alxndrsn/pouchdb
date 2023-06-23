@@ -20,18 +20,6 @@ describe('browser.worker.js', function () {
         throw new Error('No navigator');
       }
     }
-
-    worker = new Worker('worker.js');
-
-    var sourceFile = window && window.location.search.match(/[?&]sourceFile=([^&]+)/);
-
-    if (!sourceFile) {
-      sourceFile = '../../packages/node_modules/pouchdb/dist/pouchdb.js';
-    } else {
-      sourceFile = '../../packages/node_modules/pouchdb/dist/' + sourceFile[1];
-    }
-
-    worker.postMessage(['source', sourceFile]);
   });
 
   after(function () {
