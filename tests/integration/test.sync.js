@@ -898,7 +898,7 @@ adapters.forEach(function (adapters) {
           remote.allDocs({include_docs: true})
         ]);
       }).then(function (res) {
-        res[0].should.deep.equal(res[1]);
+        res[0].should.deep.equal(res[1], 'Expected elements to be deeply equal: ' + JSON.stringify(res));
       });
     });
   });
