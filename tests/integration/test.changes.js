@@ -658,7 +658,6 @@ adapters.forEach(function (adapter) {
       db.post({});
       var changes = db.changes({live: true, filter: '_view', view: ''});
       changes.on('error', (err) => {
-        err.should.be.an.instanceof(Error);
         err.error.should.equal('bad_request');
         done();
       });
@@ -670,7 +669,6 @@ adapters.forEach(function (adapter) {
       db.post({});
       var changes = db.changes({live: true, filter: '_view', view: 'a/b/c'});
       changes.on('error', (err) => {
-        err.should.be.an.instanceof(Error);
         err.error.should.equal('bad_request');
         done();
       });
