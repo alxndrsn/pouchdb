@@ -36,12 +36,16 @@ adapters.forEach(function (adapters) {
           done();
         });
 
+        repl.on('error', function (err) {
+          done(err);
+        });
+
         repl.on('active', function () {
           counter++;
           if (counter === 1) {
             // We are good, initial replication
           } else if (counter === 3) {
-            remote.bulkDocs([{_id: 'e'}, {_id: 'f'}]);
+            remote.bulkDocs([{_id: 'e'}, {_id: 'f'}]).catch(done);
           }
         });
 
@@ -52,12 +56,12 @@ adapters.forEach(function (adapters) {
             // call active first
             counter--;
           } if (counter === 2) {
-            db.bulkDocs([{_id: 'c'}, {_id: 'd'}]);
+            db.bulkDocs([{_id: 'c'}, {_id: 'd'}]).catch(done);
           } else if (counter === 4) {
             repl.cancel();
           }
         });
-      });
+      }).catch(done);
 
     });
 
@@ -88,6 +92,10 @@ adapters.forEach(function (adapters) {
               pendingSum += info.change.docs.length;
             }
           }
+        });
+
+        repl.on('error', function (err) {
+          done(err);
         });
 
         repl.on('complete', function () {
