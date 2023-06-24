@@ -3775,6 +3775,11 @@ function tests(suiteName, dbName, dbType, viewType) {
         }).then(function () {
           return db.query(queryFun);
         }).then(function (res) {
+          // TODO work out what to do about https://github.com/alxndrsn/pouchdb/actions/runs/5364333402/jobs/9732481664:
+          // * is this a persisted view, or a one-off request?
+          // * if important, why doesn't the test make it clear?
+          // * is this issue specific to the http adapter?
+          // * is this a race condition, or just something we should be waiting for?  if the latter, is there some signal to imply the viewis ready?
           var values = res.rows.map(function (x) { return x.value; });
           values.should.have.length(docs.length);
           values[0].should.equal(2);
