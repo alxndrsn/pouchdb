@@ -23,6 +23,7 @@ adapters.forEach(function (adapters) {
     });
 
     it('#4251 Should fire paused and active on sync', function (done) {
+      this.timeout(1000);
       try {
         var db = new PouchDB(dbs.name);
         var remote = new PouchDB(dbs.remote);
