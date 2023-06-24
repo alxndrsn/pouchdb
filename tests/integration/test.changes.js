@@ -661,7 +661,7 @@ adapters.forEach(function (adapter) {
         try {
           err.error.should.equal('bad_request');
           done();
-        } catch(error) {
+        } catch (error) {
           done(error);
         }
       });
@@ -677,7 +677,7 @@ adapters.forEach(function (adapter) {
           err.should.be.an.instanceof(Error);
           err.error.should.equal('bad_request');
           done();
-        } catch(error) {
+        } catch (error) {
           done(error);
         }
       });
