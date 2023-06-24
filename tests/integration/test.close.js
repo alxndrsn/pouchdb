@@ -93,34 +93,42 @@ adapters.forEach(function (adapter) {
       } catch (err) {
         // It looks like levelup constructor may sometimes fail(?)
         // see: https://github.com/alxndrsn/pouchdb/actions/runs/5363951603/jobs/9731869199
-        done(err);
+        done(new Error(err.message)); // instantiate new Error to avoid circular ref - see: https://github.com/alxndrsn/pouchdb/actions/runs/5364087925/jobs/9732178246
       }
     });
 
     it('test double unref for coverage', function () {
       this.timeout(1000);
-      var db1 = new PouchDB('testdb');
-      var db2 = new PouchDB('testdb');
-
       return new testUtils.Promise(function (resolve, reject) {
-        var need = 2;
         function checkDone() {
           if (--need === 0) {
             resolve();
           }
         }
-        PouchDB.on('unref', checkDone);
-        db1.info()
-        .then( function () {
-          return db2.info();
-        }).then( function () {
-          return db2.close();
-        }).then( function () {
-          return db1.close();
-        }).catch( function (err) {
-          console.log(err.stack || err.toString());
-          reject(err);
-        });
+
+        try {
+          var db1 = new PouchDB('testdb');
+          var db2 = new PouchDB('testdb');
+
+          var need = 2;
+          PouchDB.on('unref', checkDone);
+          db1.info()
+          .then( function () {
+            return db2.info();
+          }).then( function () {
+            return db2.close();
+          }).then( function () {
+            return db1.close();
+          }).catch( function (err) {
+            console.log(err.stack || err.toString());
+            reject(err);
+          });
+        } catch (err) {
+          // It looks like levelup constructor may sometimes fail(?)
+          // see: https://github.com/alxndrsn/pouchdb/actions/runs/5363951603/jobs/9731869199
+          // actually this is just copied from above
+          reject(new Error(err.message)); // instantiate new Error to avoid circular ref - see: https://github.com/alxndrsn/pouchdb/actions/runs/5364087925/jobs/9732178246
+        }
       });
     });
 
