@@ -67,7 +67,9 @@ adapters.forEach(function (adapters) {
       var remote = new PouchDB(dbs.remote);
 
       return local.put({ _id: '1'})
-          .then(() => local.sync(remote))
+          .then(() => new Promise((resolve, reject) => {
+            local.sync(remote).on('complete', resolve).on('error', reject);
+          })
           .then(() => local.get('1'))
           .then((doc) => {
             doc.foo = Math.random();
