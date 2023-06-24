@@ -85,6 +85,7 @@ adapters.forEach(function (adapter) {
     });
 
     it('test unref for coverage', function () {
+      this.timeout(1000);
       var db1 = new PouchDB('testdb');
       return new testUtils.Promise(function (resolve) {
         PouchDB.once('unref', resolve);
