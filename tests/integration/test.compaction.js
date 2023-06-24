@@ -2014,6 +2014,19 @@ adapters.forEach(function (adapter) {
       return db.bulkDocs(docs, {new_edits: false}).then(function () {
         return getRevisions(db, 'foo');
       }).then(function (docsAndRevs) {
+        // This will sometimes fail
+        // see: https://github.com/alxndrsn/pouchdb/actions/runs/5364684807/jobs/9733048490
+        // Could there be a race condition?
+        // * per https://pouchdb.com/api.html#create_database:
+        //   > auto_compaction: This turns on auto compaction, which means compact() is called after every change to the database. Defaults to false.
+        // * per https://pouchdb.com/api.html#compaction:
+        //   > For remote databases, PouchDB checks the compaction status at regular intervals and fires the callback (or resolves the promise) upon completion.
+        //   > ...
+        //   > Defaults to 200.
+        // TODO remove all this debug once the test is fixed
+        console.log('test.compaction', 'db.adapter:', db.adapter);
+        console.log('test.compaction', 'docsAndRevs:', JSON.stringify(docsAndRevs));
+        // TODO we may need a sleep if the adapter is "remote"
         docsAndRevs.should.have.length(4);
         var asMap = {};
         docsAndRevs.forEach(function (docAndRev) {
