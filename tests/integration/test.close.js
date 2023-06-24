@@ -88,7 +88,7 @@ adapters.forEach(function (adapter) {
       this.timeout(1000);
       try {
         var db1 = new PouchDB('testdb');
-        PouchDB.once('unref', done);
+        PouchDB.once('unref', () => done());
         db1.close();
       } catch (err) {
         // It looks like levelup constructor may sometimes fail(?)
