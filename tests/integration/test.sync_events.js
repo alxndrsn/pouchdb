@@ -23,46 +23,48 @@ adapters.forEach(function (adapters) {
     });
 
     it('#4251 Should fire paused and active on sync', function (done) {
+      try {
+        var db = new PouchDB(dbs.name);
+        var remote = new PouchDB(dbs.remote);
 
-      var db = new PouchDB(dbs.name);
-      var remote = new PouchDB(dbs.remote);
+        db.bulkDocs([{_id: 'a'}, {_id: 'b'}]).then(function () {
 
-      db.bulkDocs([{_id: 'a'}, {_id: 'b'}]).then(function () {
+          var repl = db.sync(remote, {retry: true, live: true});
+          var counter = 0;
 
-        var repl = db.sync(remote, {retry: true, live: true});
-        var counter = 0;
+          repl.on('complete', function () {
+            done();
+          });
 
-        repl.on('complete', function () {
-          done();
-        });
+          repl.on('error', function (err) {
+            done(err);
+          });
 
-        repl.on('error', function (err) {
-          done(err);
-        });
+          repl.on('active', function () {
+            counter++;
+            if (counter === 1) {
+              // We are good, initial replication
+            } else if (counter === 3) {
+              remote.bulkDocs([{_id: 'e'}, {_id: 'f'}]).catch(done);
+            }
+          });
 
-        repl.on('active', function () {
-          counter++;
-          if (counter === 1) {
-            // We are good, initial replication
-          } else if (counter === 3) {
-            remote.bulkDocs([{_id: 'e'}, {_id: 'f'}]).catch(done);
-          }
-        });
-
-        repl.on('paused', function () {
-          counter++;
-          if (counter === 1) {
-            // Maybe a bug, if we have data should probably
-            // call active first
-            counter--;
-          } if (counter === 2) {
-            db.bulkDocs([{_id: 'c'}, {_id: 'd'}]).catch(done);
-          } else if (counter === 4) {
-            repl.cancel();
-          }
-        });
-      }).catch(done);
-
+          repl.on('paused', function () {
+            counter++;
+            if (counter === 1) {
+              // Maybe a bug, if we have data should probably
+              // call active first
+              counter--;
+            } else if (counter === 2) {
+              db.bulkDocs([{_id: 'c'}, {_id: 'd'}]).catch(done);
+            } else if (counter === 4) {
+              repl.cancel();
+            }
+          });
+        }).catch(done);
+      } catch (err) {
+        done(err);
+      }
     });
 
     it('#5710 Test pending property support', function (done) {
