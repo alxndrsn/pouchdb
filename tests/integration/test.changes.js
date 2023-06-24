@@ -655,7 +655,7 @@ adapters.forEach(function (adapter) {
 
     it('Changes with invalid ddoc view name', function (done) {
       var db = new PouchDB(dbs.name);
-      db.post({});
+      db.post({}).catch(done);
       var changes = db.changes({live: true, filter: '_view', view: ''});
       changes.on('error', (err) => {
         try {
