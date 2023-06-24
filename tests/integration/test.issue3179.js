@@ -78,10 +78,14 @@ adapters.forEach(function (adapters) {
             doc.foo = Math.random();
             return remote.put(doc);
           })
-          .then(() => local.sync(remote))
+          .then(() => new Promise((resolve, reject) => {
+            local.sync(remote).on('complete', resolve).on('error', reject);
+          }))
           .then(() => local.get('1', {conflicts: true}))
           .then((doc) => local.remove(doc._id, doc._conflicts[0]))
-          .then(() => local.sync(remote))
+          .then(() => new Promise((resolve, reject) => {
+            local.sync(remote).on('complete', resolve).on('error', reject);
+          }))
           .then(() => local.get('1', {conflicts: true, revs: true}))
           .then((localDoc) => {
             return remote.get('1', {
