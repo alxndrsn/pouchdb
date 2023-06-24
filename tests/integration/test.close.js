@@ -84,13 +84,17 @@ adapters.forEach(function (adapter) {
       });
     });
 
-    it('test unref for coverage', function () {
+    it('test unref for coverage', function (done) {
       this.timeout(1000);
-      var db1 = new PouchDB('testdb');
-      return new testUtils.Promise(function (resolve) {
-        PouchDB.once('unref', resolve);
+      try {
+        var db1 = new PouchDB('testdb');
+        PouchDB.once('unref', done);
         db1.close();
-      });
+      } catch (err) {
+        // It looks like levelup constructor may sometimes fail(?)
+        // see: https://github.com/alxndrsn/pouchdb/actions/runs/5363951603/jobs/9731869199
+        done(err);
+      }
     });
 
     it('test double unref for coverage', function () {
@@ -98,7 +102,7 @@ adapters.forEach(function (adapter) {
       var db1 = new PouchDB('testdb');
       var db2 = new PouchDB('testdb');
 
-      return new testUtils.Promise(function (resolve) {
+      return new testUtils.Promise(function (resolve, reject) {
         var need = 2;
         function checkDone() {
           if (--need === 0) {
@@ -115,6 +119,7 @@ adapters.forEach(function (adapter) {
           return db1.close();
         }).catch( function (err) {
           console.log(err.stack || err.toString());
+          reject(err);
         });
       });
     });
