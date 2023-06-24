@@ -658,8 +658,12 @@ adapters.forEach(function (adapter) {
       db.post({});
       var changes = db.changes({live: true, filter: '_view', view: ''});
       changes.on('error', (err) => {
-        err.error.should.equal('bad_request');
-        done();
+        try {
+          err.error.should.equal('bad_request');
+          done();
+        } catch(error) {
+          done(error);
+        }
       });
       changes.on('change', () => done(new Error('Unexpected change event.')));
     });
@@ -669,8 +673,13 @@ adapters.forEach(function (adapter) {
       db.post({});
       var changes = db.changes({live: true, filter: '_view', view: 'a/b/c'});
       changes.on('error', (err) => {
-        err.error.should.equal('bad_request');
-        done();
+        try {
+          err.should.be.an.instanceof(Error);
+          err.error.should.equal('bad_request');
+          done();
+        } catch(error) {
+          done(error);
+        }
       });
       changes.on('change', () => done(new Error('Unexpected change event.')));
     });
