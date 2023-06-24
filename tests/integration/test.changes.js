@@ -662,10 +662,12 @@ adapters.forEach(function (adapter) {
           err.name.should.equal('bad_request');
           done();
         } catch (error) {
+          console.log('Calling done() with:', error); // TODO just for debugging?
           done(error);
         }
       });
-      changes.on('change', () => done(new Error('Unexpected change event.')));
+      changes.on('complete', () => done(new Error('Unexpected event: "complete"')));
+      changes.on('change', () => done(new Error('Unexpected event: "change"')));
     });
 
     it('Changes with invalid ddoc view name 2', function (done) {
@@ -677,10 +679,12 @@ adapters.forEach(function (adapter) {
           err.name.should.equal('bad_request');
           done();
         } catch (error) {
+          console.log('Calling done() with:', error); // TODO just for debugging?
           done(error);
         }
       });
-      changes.on('change', () => done(new Error('Unexpected change event.')));
+      changes.on('complete', () => done(new Error('Unexpected event: "complete"')));
+      changes.on('change', () => done(new Error('Unexpected event: "change"')));
     });
 
     it('Changes with style = all_docs', function (done) {
