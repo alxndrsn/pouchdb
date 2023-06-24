@@ -1456,17 +1456,17 @@ adapters.forEach(function (adapter) {
         return liveChangesPromise({attachments: true});
       }).then(function (res) {
         res.results.should.have.length(5);
-        for (let row of res.results) {
+        res.results.forEach(function (row) {
           should.not.exist(row.doc,
             'no doc when attachments=true but include_docs=false');
-        }
+        });
         return liveChangesPromise({});
       }).then(function (res) {
         res.results.should.have.length(5);
-        for (let row of res.results) {
+        res.results.forEach(function (row) {
           should.not.exist(row.doc,
             'no doc when attachments=false and include_docs=false');
-        }
+        });
       });
     });
 
