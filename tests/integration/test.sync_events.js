@@ -34,15 +34,18 @@ adapters.forEach(function (adapters) {
           var counter = 0;
 
           repl.on('complete', function () {
+            console.log('sync_events.complete', counter);
             done();
           });
 
           repl.on('error', function (err) {
+            console.log('sync_events.error', counter);
             done(err);
           });
 
           repl.on('active', function () {
             counter++;
+            console.log('sync_events.active', counter);
             if (counter === 1) {
               // We are good, initial replication
             } else if (counter === 3) {
@@ -52,6 +55,7 @@ adapters.forEach(function (adapters) {
 
           repl.on('paused', function () {
             counter++;
+            console.log('sync_events.paused', counter);
             if (counter === 1) {
               // Maybe a bug, if we have data should probably
               // call active first
