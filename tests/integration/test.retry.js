@@ -271,7 +271,8 @@ adapters.forEach(function (adapters) {
             }
 
             try {
-              var numListeners = remote.listeners('destroyed').length;
+              const listeners = remote.listeners('destroyed');
+              var numListeners = listeners.length;
               if (typeof originalNumListeners !== 'number') {
                 originalNumListeners = numListeners;
               } else {
@@ -283,7 +284,7 @@ adapters.forEach(function (adapters) {
                 numListeners.should.be.within(
                   originalNumListeners - 1,
                   originalNumListeners + 1,
-                  'numListeners should never increase by +1/-1');
+                  'numListeners should never increase by +1/-1, but got:' + listeners.map(l => l.toString()).join(';'));
               }
             } catch (err) {
               cleanup(err);
