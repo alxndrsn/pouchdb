@@ -659,7 +659,7 @@ adapters.forEach(function (adapter) {
       var changes = db.changes({live: true, filter: '_view', view: ''});
       changes.on('error', (err) => {
         try {
-          err.error.should.equal('bad_request');
+          err.name.should.equal('bad_request');
           done();
         } catch (error) {
           done(error);
@@ -674,7 +674,7 @@ adapters.forEach(function (adapter) {
       var changes = db.changes({live: true, filter: '_view', view: 'a/b/c'});
       changes.on('error', (err) => {
         try {
-          err.error.should.equal('bad_request');
+          err.name.should.equal('bad_request');
           done();
         } catch (error) {
           done(error);
