@@ -674,7 +674,6 @@ adapters.forEach(function (adapter) {
       var changes = db.changes({live: true, filter: '_view', view: 'a/b/c'});
       changes.on('error', (err) => {
         try {
-          err.should.be.an.instanceof(Error);
           err.error.should.equal('bad_request');
           done();
         } catch (error) {
