@@ -1045,7 +1045,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Built in _stats reduce function", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: "function(doc){emit(doc.val, 1);}",
+        map: function (doc) {emit(doc.val, 1);},
         reduce: "_stats"
       }).then(function (queryFun) {
         return db.bulkDocs({
@@ -1072,7 +1072,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: "function(doc){emit(doc.val, 'lala');}",
+        map: function (doc) {emit(doc.val, 'lala');},
         reduce: "_stats"
       }).then(function (queryFun) {
         return db.bulkDocs({
@@ -1091,7 +1091,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: "function(doc){emit(null, doc.val);}",
+        map: function (doc) {emit(null, doc.val);},
         reduce: "_sum"
       }).then(function (queryFun) {
         return db.bulkDocs({
@@ -1110,7 +1110,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: "function(doc){emit(null, doc.val);}",
+        map: function (doc) {emit(null, doc.val);},
         reduce: "_sum"
       }).then(function (queryFun) {
         return db.bulkDocs({
@@ -1128,7 +1128,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Built in _sum can be used with lists of numbers", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: "function(doc){emit(null, doc.val);}",
+        map: function (doc) {emit(null, doc.val);},
         reduce: "_sum"
       }).then(function (queryFun) {
         return db.bulkDocs({
@@ -1177,7 +1177,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: "function(doc){emit(null, doc.val);}",
+        map: function (doc) {emit(null, doc.val);},
         reduce: "_product"
       }).then(function (queryFun) {
         return db.bulkDocs({
@@ -3651,7 +3651,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("should accept trailing ';' in a map definition (#178)", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: "function(doc){};\n"
+        map: function () {},
       }).then(function (queryFun) {
         return db.query(queryFun);
       }).should.become({
@@ -3757,7 +3757,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       }
 
       return createView(db, {
-        map: "function(doc){emit(doc.name, doc.count);};\n"
+        map: function (doc) { emit(doc.name, doc.count); },
       }).then(function (queryFun) {
         return db.bulkDocs({docs: docs}).then(function (res) {
           for (var i = 0; i < res.length; i++) {
@@ -3792,7 +3792,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         });
       }
       return createView(db, {
-        map: "function(doc){emit(doc.name);};\n"
+        map: function (doc) {emit(doc.name);},
       }).then(function (queryFun) {
         return db.bulkDocs({ docs: docs }).then(function () {
           return db.query(queryFun, { update_seq: false });
@@ -3817,7 +3817,7 @@ function tests(suiteName, dbName, dbType, viewType) {
 
       return db.bulkDocs({ docs: docs }).then(function () {
         return createView(db, {
-          map: "function(doc){emit(doc.name);};\n"
+          map: function (doc) {emit(doc.name);},
         });
       }).then(function (queryFun) {
         return db.query(queryFun, { update_seq: true });
@@ -3857,7 +3857,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         });
       }
       return createView(db, {
-        map: "function(doc){emit(doc.name);};\n"
+        map: function (doc) {emit(doc.name);},
       }).then(function (queryFun) {
         return db.bulkDocs({ docs: docs }).then(function () {
           return db.query(queryFun);
