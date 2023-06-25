@@ -771,6 +771,9 @@ adapters.forEach(function (adapters) {
           var changes = 0;
           var onChange = function (c) {
             changes += c.change.docs.length;
+            // Adding debug for random test failures.
+            // See: https://github.com/alxndrsn/pouchdb/actions/runs/5369034069/jobs/9740181685
+            console.log('test.sync', 'onChange()', changes, c);
             if (changes === 2) {
               sync.cancel();
             }
