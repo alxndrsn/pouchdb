@@ -1,5 +1,7 @@
 'use strict';
 
+var should = require("chai").should();
+
 var adapters = [
   ['http', 'http'],
   ['http', 'local'],
@@ -44,6 +46,7 @@ adapters.forEach(function (adapters) {
         });
       }).then(function () {
         return local.get('1', {conflicts: true}).then(function (doc) {
+          should.exist(doc._conflicts);
           return local.remove(doc._id, doc._conflicts[0]);
         });
       }).then(function () {
@@ -80,7 +83,10 @@ adapters.forEach(function (adapters) {
           })
           .then(() => local.sync(remote))
           .then(() => local.get('1', {conflicts: true}))
-          .then((doc) => local.remove(doc._id, doc._conflicts[0]))
+          .then((doc) => {
+            should.exist(doc._conflicts);
+            return local.remove(doc._id, doc._conflicts[0]);
+          })
           .then(() => local.sync(remote))
           .then(() => local.get('1', {conflicts: true, revs: true}))
           .then((localDoc) => {
@@ -175,6 +181,7 @@ adapters.forEach(function (adapters) {
         return waitForUptodate();
       }).then(function () {
         return local.get('1', {conflicts: true}).then(function (doc) {
+          should.exist(doc._conflicts);
           return local.remove(doc._id, doc._conflicts[0]);
         });
       }).then(function () {
@@ -295,6 +302,7 @@ adapters.forEach(function (adapters) {
         return waitForUptodate();
       }).then(function () {
         return local.get('1', {conflicts: true}).then(function (doc) {
+          should.exist(doc._conflicts);
           return local.remove(doc._id, doc._conflicts[0]);
         });
       }).then(function () {
