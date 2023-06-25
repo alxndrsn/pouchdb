@@ -33,13 +33,13 @@ adapters.forEach(function (adapters) {
           var repl = db.sync(remote, {retry: true, live: true});
           var counter = 0;
 
-          repl.on('complete', function () {
-            console.log('sync_events.complete', counter);
+          repl.on('complete', function (info) {
+            console.log('sync_events.complete', counter, info);
             done();
           });
 
           repl.on('error', function (err) {
-            console.log('sync_events.error', counter);
+            console.log('sync_events.error', counter, err);
             done(err);
           });
 
@@ -57,7 +57,7 @@ adapters.forEach(function (adapters) {
             // sometimes we see multiple paused events:
             // see: https://github.com/alxndrsn/pouchdb/actions/runs/5369034069/jobs/9740180435
             counter++;
-            console.log('sync_events.paused', counter, err);
+            console.log('sync_events.paused', counter, typeof err, err);
             if (counter === 1) {
               // Maybe a bug, if we have data should probably
               // call active first
