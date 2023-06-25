@@ -285,7 +285,7 @@ adapters.forEach(function (adapters) {
                 numListeners.should.be.within(
                   originalNumListeners - 1,
                   originalNumListeners + 1,
-                  'numListeners should never increase by +1/-1, but got:' + listeners.map(l => l.toString()).join(';'));
+                  'numListeners should never increase by +1/-1, but for remote "' + remote.adapter + '" got:' + listeners.map(l => l.toString()).join(';'));
               }
             } catch (err) {
               cleanup(err);
