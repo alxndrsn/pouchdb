@@ -1383,7 +1383,9 @@ adapters.forEach(function (adapter) {
       });
     });
 
-    it('#3074 live changes()', function () {
+    it('#3074 live changes()', function (done) {
+      // this test can timeout: https://github.com/alxndrsn/pouchdb/actions/runs/5369034069/jobs/9740180878
+
       var db = new PouchDB(dbs.name);
 
       function liveChangesPromise(opts) {
@@ -1413,7 +1415,7 @@ adapters.forEach(function (adapter) {
           }
         });
       }
-      return db.bulkDocs(docs).then(function () {
+      db.bulkDocs(docs).then(function () {
         return liveChangesPromise({
           return_docs: true,
           include_docs: true,
@@ -1467,7 +1469,8 @@ adapters.forEach(function (adapter) {
           should.not.exist(row.doc,
             'no doc when attachments=false and include_docs=false');
         });
-      });
+        done();
+      }).catch(done);
     });
 
     it('#3074 non-live changes(), no attachments', function () {
