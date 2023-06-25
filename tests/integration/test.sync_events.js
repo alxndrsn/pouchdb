@@ -67,6 +67,8 @@ adapters.forEach(function (adapters) {
               db.bulkDocs([{_id: 'c'}, {_id: 'd'}]).catch(done);
             } else if (counter === 4) {
               repl.cancel();
+            } else {
+              done(new Error('Unexpected counter value '+counter+'.  Either the tests are wrong or there\'s a bug'));
             }
           });
         }).catch(done);
