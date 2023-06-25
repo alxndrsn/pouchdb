@@ -56,6 +56,7 @@ adapters.forEach(function (adapters) {
           repl.on('paused', function (err) {
             // sometimes we see multiple paused events:
             // see: https://github.com/alxndrsn/pouchdb/actions/runs/5369034069/jobs/9740180435
+            // see: https://github.com/alxndrsn/pouchdb/actions/runs/5370708031/jobs/9742997418
             counter++;
             console.log('sync_events.paused', counter, typeof err, err);
             if (counter === 1) {
