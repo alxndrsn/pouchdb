@@ -854,6 +854,8 @@ adapters.forEach(function (adapters) {
     });
 
     it('5782 sync rev-1 conflicts', function () {
+      // TODO this test needs attention - it sometimes fails
+      // See: https://github.com/alxndrsn/pouchdb/actions/runs/5370708031/jobs/9742996909
       var local = new PouchDB(dbs.name);
       var remote = new PouchDB(dbs.remote);
 
