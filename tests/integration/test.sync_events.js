@@ -53,9 +53,9 @@ adapters.forEach(function (adapters) {
             }
           });
 
-          repl.on('paused', function () {
+          repl.on('paused', function (err) {
             counter++;
-            console.log('sync_events.paused', counter);
+            console.log('sync_events.paused', counter, err);
             if (counter === 1) {
               // Maybe a bug, if we have data should probably
               // call active first
