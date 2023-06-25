@@ -28,16 +28,16 @@ adapters.forEach(function (adapters) {
         return local.replicate.to(remote).then(function () {
           return remote.replicate.to(local);
         });
-      }).then(function () {
-        return local.get('1').then(function (doc) {
-          doc.foo = Math.random();
-          return local.put(doc);
-        });
-      }).then(function () {
-        return remote.get('1').then(function (doc) {
-          doc.foo = Math.random();
-          return remote.put(doc);
-        });
+      }).then(() => Promise.all([
+        local.get('1'),
+        remote.get('1'),
+      ])).then(([ localDoc, remoteDoc ]) => {
+        localDoc.foo = Math.random();
+        remoteDoc.foo = Math.random();
+        return Promise.all([
+          local.put(localDoc),
+          remote.put(remoteDoc),
+        ]);
       }).then(function () {
         return local.replicate.to(remote).then(function () {
           return remote.replicate.to(local);
