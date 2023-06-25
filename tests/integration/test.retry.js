@@ -240,6 +240,7 @@ adapters.forEach(function (adapters) {
 
       return remote.post({}).then(function () {
         var originalNumListeners;
+        let originalListeners;
         var posted = 0;
 
         return new Promise(function (resolve, reject) {
@@ -275,6 +276,7 @@ adapters.forEach(function (adapters) {
               const listeners = remote.listeners('destroyed');
               var numListeners = listeners.length;
               if (typeof originalNumListeners !== 'number') {
+                originalListeners = listeners.map(l => l.toString()).join(';');
                 originalNumListeners = numListeners;
               } else {
                 // special case for "destroy" - because there are
@@ -282,10 +284,11 @@ adapters.forEach(function (adapters) {
                 // there can briefly be one extra listener or one
                 // fewer listener. The point of this test is to ensure
                 // that the listeners don't grow out of control.
+                const finalListeners = listeners.map(l => l.toString()).join(';');
                 numListeners.should.be.within(
                   originalNumListeners - 1,
                   originalNumListeners + 1,
-                  'numListeners should never increase by +1/-1, but for remote "' + remote.adapter + '" got:' + listeners.map(l => l.toString()).join(';'));
+                  'numListeners should never increase by more than +1/-1, but for remote "' + remote.adapter + '" got finalListeners:' + finalListeners + '; originalListeners was:' + originalListeners);
               }
             } catch (err) {
               cleanup(err);
