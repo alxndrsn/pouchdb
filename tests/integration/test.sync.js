@@ -816,13 +816,15 @@ adapters.forEach(function (adapters) {
     });
 
     it('5007 sync 2 databases', function (done) {
+      this.timeout(5000);
+      // can fail - see: https://github.com/alxndrsn/pouchdb/actions/runs/5369034069/jobs/9740180666
       var db = new PouchDB(dbs.name);
 
       var remote1 = new PouchDB(dbs.remote);
       var remote2 = new PouchDB(dbs.remote + '_2');
 
-      var sync1 = db.sync(remote1, {live: true});
-      var sync2 = db.sync(remote2, {live: true});
+      var sync1 = db.sync(remote1, {live: true}).on('error', done);
+      var sync2 = db.sync(remote2, {live: true}).on('error', done);
 
       var numChanges = 0;
       function onChange() {
@@ -831,8 +833,8 @@ adapters.forEach(function (adapters) {
         }
       }
 
-      var changes1 = remote1.changes({live: true}).on('change', onChange);
-      var changes2 = remote2.changes({live: true}).on('change', onChange);
+      var changes1 = remote1.changes({live: true}).on('change', onChange).on('error', done);
+      var changes2 = remote2.changes({live: true}).on('change', onChange).on('error', done);
 
       db.post({foo: 'bar'});
       var toCancel = [changes1, changes2, sync1, sync2];
