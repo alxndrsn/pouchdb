@@ -374,7 +374,8 @@ describe('test.persisted.js', function () {
       return pouch.bulkDocs(docs).then(function () {
         return pouch.query(queryFun, {stale: 'update_after'});
       }).then(function (res) {
-        res.rows.should.have.length(0, 'query() returned immediately');
+        // TODO consider removing this assertion
+        res.rows.should.have.length(0, 'this assertion relies on a race condition, so this failure can be ignored');
         return setTimeoutPromise(1000);
       }).then(function () {
         return pouch.query(queryFun, {stale: 'ok'});
