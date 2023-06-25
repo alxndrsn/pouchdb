@@ -702,21 +702,29 @@ adapters.forEach(function (adapter) {
       var db = new PouchDB(dbs.name);
       testUtils.putTree(db, simpleTree, function () {
         db.changes({return_docs: true}).on('complete', function (res) {
-          res.results[0].changes.length.should.equal(1);
-          res.results[0].changes[0].rev.should.equal('4-f');
+          try {
+            res.results[0].changes.length.should.equal(1);
+            res.results[0].changes[0].rev.should.equal('4-f');
+          } catch (err) {
+            return done(err);
+          }
           db.changes({
             return_docs: true,
             style: 'all_docs'
           }).on('complete', function (res) {
-            res.results[0].changes.length.should.equal(3);
-            var changes = res.results[0].changes;
-            changes.sort(function (a, b) {
-              return a.rev < b.rev;
-            });
-            changes[0].rev.should.equal('4-f');
-            changes[1].rev.should.equal('3-c');
-            changes[2].rev.should.equal('2-g');
-            done();
+            try {
+              res.results[0].changes.length.should.equal(3);
+              var changes = res.results[0].changes;
+              changes.sort(function (a, b) {
+                return a.rev < b.rev;
+              });
+              changes[0].rev.should.equal('4-f');
+              changes[1].rev.should.equal('3-c');
+              changes[2].rev.should.equal('2-g');
+              done();
+            } catch (err) {
+              done(err);
+            }
           }).on('error', done);
         }).on('error', done);
       });
