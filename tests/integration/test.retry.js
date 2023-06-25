@@ -271,6 +271,7 @@ adapters.forEach(function (adapters) {
             }
 
             try {
+              // TODO This looks racy.
               const listeners = remote.listeners('destroyed');
               var numListeners = listeners.length;
               if (typeof originalNumListeners !== 'number') {
