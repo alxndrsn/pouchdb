@@ -28,16 +28,16 @@ adapters.forEach(function (adapters) {
         return local.replicate.to(remote).then(function () {
           return remote.replicate.to(local);
         });
-      }).then(() => Promise.all([
-        local.get('1'),
-        remote.get('1'),
-      ])).then(([ localDoc, remoteDoc ]) => {
-        localDoc.foo = Math.random();
-        remoteDoc.foo = Math.random();
-        return Promise.all([
-          local.put(localDoc),
-          remote.put(remoteDoc),
-        ]);
+      }).then(function () {
+        return local.get('1').then(function (doc) {
+          doc.foo = Math.random();
+          return local.put(doc);
+        });
+      }).then(function () {
+        return remote.get('1').then(function (doc) {
+          doc.foo = Math.random();
+          return remote.put(doc);
+        });
       }).then(function () {
         return local.replicate.to(remote).then(function () {
           return remote.replicate.to(local);
@@ -67,9 +67,7 @@ adapters.forEach(function (adapters) {
       var remote = new PouchDB(dbs.remote);
 
       return local.put({ _id: '1'})
-          .then(() => new Promise((resolve, reject) => {
-            local.sync(remote).on('complete', resolve).on('error', reject);
-          }))
+          .then(() => local.sync(remote))
           .then(() => local.get('1'))
           .then((doc) => {
             doc.foo = Math.random();
@@ -80,14 +78,10 @@ adapters.forEach(function (adapters) {
             doc.foo = Math.random();
             return remote.put(doc);
           })
-          .then(() => new Promise((resolve, reject) => {
-            local.sync(remote).on('complete', resolve).on('error', reject);
-          }))
+          .then(() => local.sync(remote))
           .then(() => local.get('1', {conflicts: true}))
           .then((doc) => local.remove(doc._id, doc._conflicts[0]))
-          .then(() => new Promise((resolve, reject) => {
-            local.sync(remote).on('complete', resolve).on('error', reject);
-          }))
+          .then(() => local.sync(remote))
           .then(() => local.get('1', {conflicts: true, revs: true}))
           .then((localDoc) => {
             return remote.get('1', {
