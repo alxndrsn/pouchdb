@@ -653,9 +653,18 @@ adapters.forEach(function (adapter) {
       });
     });
 
-    it('Changes with invalid ddoc view name', function (done) {
+    it('Changes with invalid ddoc view name', async function (done) {
       var db = new PouchDB(dbs.name);
-      db.post({}).catch(done);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      // TODO add sleep because below will sometimes fail with 'Database does not exist':
+      // see: https://github.com/alxndrsn/pouchdb/actions/runs/5370708031/jobs/9742995589
+      // Perhaps it's a race condition?
+
+      db.post({}).catch(err => {
+        err.message = 'db.post() failed; db.name='+db.name+'; ' + err.message;
+        done(err);
+      });
       var changes = db.changes({live: true, filter: '_view', view: ''});
       changes.on('error', (err) => {
         try {
