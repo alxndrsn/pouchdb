@@ -656,29 +656,29 @@ adapters.forEach(function (adapter) {
     it('Changes with invalid ddoc view name', function (done) {
       var db = new PouchDB(dbs.name);
 
-      new Promise(resolve => setTimeout(resolve, 100))
-        .then(() => {
-          // TODO add sleep because below will sometimes fail with 'Database does not exist':
-          // see: https://github.com/alxndrsn/pouchdb/actions/runs/5370708031/jobs/9742995589
-          // Perhaps it's a race condition?
+      // TODO add sleep because below will sometimes fail with 'Database does not exist':
+      // see: https://github.com/alxndrsn/pouchdb/actions/runs/5370708031/jobs/9742995589
+      // Perhaps it's a race condition?
+      setTimeout(runTest, 100);
 
-          db.post({}).catch(err => {
-            err.message = 'db.post() failed; db.name='+db.name+'; ' + err.message;
-            done(err);
-          });
-          var changes = db.changes({live: true, filter: '_view', view: ''});
-          changes.on('error', (err) => {
-            try {
-              err.name.should.equal('bad_request');
-              done();
-            } catch (error) {
-              console.log('Calling done() with:', error); // TODO just for debugging?
-              done(error);
-            }
-          });
-          changes.on('complete', () => done(new Error('Unexpected event: "complete"')));
-          changes.on('change', () => done(new Error('Unexpected event: "change"')));
+      function runTest() {
+        db.post({}).catch(err => {
+          err.message = 'db.post() failed; db.name='+db.name+'; ' + err.message;
+          done(err);
         });
+        var changes = db.changes({live: true, filter: '_view', view: ''});
+        changes.on('error', (err) => {
+          try {
+            err.name.should.equal('bad_request');
+            done();
+          } catch (error) {
+            console.log('Calling done() with:', error); // TODO just for debugging?
+            done(error);
+          }
+        });
+        changes.on('complete', () => done(new Error('Unexpected event: "complete"')));
+        changes.on('change', () => done(new Error('Unexpected event: "change"')));
+      }
     });
 
     it('Changes with invalid ddoc view name 2', function (done) {
