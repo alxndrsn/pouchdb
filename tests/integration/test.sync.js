@@ -883,16 +883,16 @@ adapters.forEach(function (adapters) {
       };
 
       return conflict(doc2)
-      .then(function () { return local.replicate.to(remote); })
-      .then(function () { return update(local, doc2._id); })
-      .then(function () { return remove(local, doc2._id); })
-      .then(function () { return local.replicate.to(remote); })
-      .then(function () { return conflict(doc1); })
-      .then(function () { return update(remote, doc2._id); })
-      .then(function () { return local.replicate.to(remote); })
-      .then(function () { return remove(local, doc1._id); })
-      .then(function () { return local.sync (remote); })
-      .then(function () {
+      .then(() => local.replicate.to(remote))
+      .then(() => update(local, doc2._id))
+      .then(() => remove(local, doc2._id))
+      .then(() => local.replicate.to(remote))
+      .then(() => conflict(doc1))
+      .then(() => update(remote, doc2._id))
+      .then(() => local.replicate.to(remote))
+      .then(() => remove(local, doc1._id))
+      .then(() => local.sync(remote))
+      .then(() => {
         return testUtils.Promise.all([
           local.allDocs({include_docs: true}),
           remote.allDocs({include_docs: true})
