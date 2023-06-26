@@ -276,7 +276,7 @@ adapters.forEach(function (adapters) {
               const listeners = remote.listeners('destroyed');
               var numListeners = listeners.length;
               if (typeof originalNumListeners !== 'number') {
-                originalListeners = listeners.map(l => l.toString()).join(';');
+                originalListeners = listeners && listeners.map(l => l.toString()).join(';');
                 originalNumListeners = numListeners;
               } else {
                 // special case for "destroy" - because there are
@@ -284,7 +284,7 @@ adapters.forEach(function (adapters) {
                 // there can briefly be one extra listener or one
                 // fewer listener. The point of this test is to ensure
                 // that the listeners don't grow out of control.
-                const finalListeners = listeners.map(l => l.toString()).join(';');
+                const finalListeners = listeners && listeners.map(l => l.toString()).join(';');
                 numListeners.should.be.within(
                   originalNumListeners - 1,
                   originalNumListeners + 1,
