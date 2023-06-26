@@ -34,7 +34,6 @@ jobs:
   # Node.js we support.
 
   couchdb-nodejs:
-    needs: lint
     strategy:
       fail-fast: false
       matrix:
