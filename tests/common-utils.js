@@ -176,4 +176,6 @@ commonUtils.createDocId = function (i) {
   return 'doc_' + intString;
 };
 
+require('../packages/node_modules/pouchdb-for-coverage');
+
 module.exports = commonUtils;
