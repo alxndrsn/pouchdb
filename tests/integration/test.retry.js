@@ -90,7 +90,7 @@ adapters.forEach(function (adapters) {
               } catch (err) {
                 cleanup(err);
               }
-            }, 1000);
+            }, 100);
           });
         });
       });
