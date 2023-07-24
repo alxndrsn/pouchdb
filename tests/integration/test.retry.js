@@ -75,8 +75,15 @@ adapters.forEach(function (adapters) {
               reject(err);
             }
           });
+          rep.on('change', () => {
+            db.info()
+              .then(info => {
+                if (info.doc_count === numDocsToWrite) { cleanup(); }
+              })
+              .catch(cleanup);
+          });
 
-          if (++posted < numDocsToWrite) {
+          while (++posted < numDocsToWrite) {
             remote.post({}).catch(cleanup);
           }
         });
