@@ -46,12 +46,12 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - run: npm test
-      - run: node ./bin/test-browser.js
-      - run: node ./bin/test-browser.js
-      - run: node ./bin/test-browser.js
-      - run: node ./bin/test-browser.js
-      - run: node ./bin/test-browser.js
-      - run: node ./bin/test-browser.js
-      - run: node ./bin/test-browser.js
-      - run: node ./bin/test-browser.js
-      - run: node ./bin/test-browser.js
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
