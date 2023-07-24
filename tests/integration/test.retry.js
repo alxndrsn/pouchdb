@@ -31,7 +31,7 @@ adapters.forEach(function (adapters) {
       var remoteBulkGet = remote.bulkGet;
       var i = 0;
       remote.bulkGet = function () {
-        console.log('remote.bulkGet() called by', new Error().stack.split('\n').filter((_,i)=>i).join('\n').replace('at','by'));
+        console.log('remote.bulkGet() called by', new Error().stack.split('\n').filter((_,i)=>i).join('\n').replace('at','').trim());
         // Reject every 5th time
         if (++i % 5 === 0) {
           console.log('remote.bulkGet()', i, 'flunking');
