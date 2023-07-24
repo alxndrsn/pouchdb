@@ -32,8 +32,8 @@ adapters.forEach(function (adapters) {
       var i = 0;
       remote.bulkGet = function () {
         console.log('remote.bulkGet() called by', new Error().stack.split('\n').filter((_,i)=>i).join('\n').replace('at','by'));
-        // Reject three times, every 5th time
-        if ((++i % 5 === 0) && i <= 15) {
+        // Reject every 5th time
+        if (++i % 5 === 0) {
           console.log('remote.bulkGet()', i, 'flunking');
           return Promise.reject(new Error('flunking you'));
         }
@@ -56,10 +56,7 @@ adapters.forEach(function (adapters) {
             if (err) { error = err; }
             rep.cancel();
           }
-          function finish() {
-            if (error) { reject(error); }
-            else       { resolve(); }
-          }
+          const finish = () => error ? reject(error) : resolve();
 
           rep.on('complete', finish);
           rep.on('error', cleanup);
