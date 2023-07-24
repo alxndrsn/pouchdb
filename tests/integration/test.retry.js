@@ -271,19 +271,28 @@ adapters.forEach(function (adapters) {
             }
 
             try {
-              var numListeners = remote.listeners('destroyed').length;
+              const listeners = remote.listeners('destroyed');
+              var numListeners = listeners.length;
               if (typeof originalNumListeners !== 'number') {
                 originalNumListeners = numListeners;
               } else {
-                // special case for "destroy" - because there are
-                // two Changes() objects for local databases,
-                // there can briefly be one extra listener or one
-                // fewer listener. The point of this test is to ensure
-                // that the listeners don't grow out of control.
-                numListeners.should.be.within(
-                  originalNumListeners - 1,
-                  originalNumListeners + 1,
-                  'numListeners should never increase by +1/-1');
+                try {
+                  // special case for "destroy" - because there are
+                  // two Changes() objects for local databases,
+                  // there can briefly be one extra listener or one
+                  // fewer listener. The point of this test is to ensure
+                  // that the listeners don't grow out of control.
+                  numListeners.should.be.within(
+                    originalNumListeners - 1,
+                    originalNumListeners + 1,
+                    'numListeners should never increase by +1/-1');
+                } catch (err) {
+                  console.log('Check failed:', { numListeners, originalNumListeners });
+                  listers.forEach((l,i) => {
+                    console.log(`  listener ${i}: ${l.toString()}`);
+                  });
+                  throw err;
+                }
               }
             } catch (err) {
               cleanup(err);
