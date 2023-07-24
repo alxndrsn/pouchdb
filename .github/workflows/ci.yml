@@ -45,5 +45,13 @@ jobs:
       - uses: ./.github/actions/install-deps
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - id: test
-        run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
+      - run: npm test
