@@ -1,0 +1,19 @@
+Checking: {"posted":8,"numListeners":3,"originalNumListeners":3}
+changes.complete - removing listener
+changes.complete - removing listener
+changes.complete - removing listener
+changes.complete - removing listener
+remote.bulkGet() called by     by remote.bulkGet (http://127.0.0.1:8000/tests/integration/test.retry.js:34:51)
+    at http://127.0.0.1:8000/packages/node_modules/pouchdb/dist/pouchdb.min.js:7:128236
+remote.bulkGet() 10 flunking
+changes.event::cancel - removing listener
+changes.complete - removing listener
+changes.complete - removing listener
+changes.complete - removing listener
+changes.complete - removing listener
+changes.complete - removing listener
+changes.complete - removing listener
+remote.bulkGet() called by     by remote.bulkGet (http://127.0.0.1:8000/tests/integration/test.retry.js:34:51)
+    at http://127.0.0.1:8000/packages/node_modules/pouchdb/dist/pouchdb.min.js:7:128236
+remote.bulkGet() 11 passing
+Checking: {"posted":9,"numListeners":3,"originalNumListeners":3}
