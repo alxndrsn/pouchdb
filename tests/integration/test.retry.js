@@ -230,11 +230,7 @@ adapters.forEach(function (adapters) {
         return remoteBulkGet.apply(remote, arguments);
       };
 
-      var rep = db.replicate.from(remote, {
-        live: true,
-        retry: true,
-        back_off_function: function () { return 0; }
-      });
+      var rep = db.replicate.from(remote, { live:true, retry:true, back_off_function:() => 0 });
 
       var numDocsToWrite = 10;
 
@@ -246,28 +242,25 @@ adapters.forEach(function (adapters) {
 
           var error;
           function cleanup(err) {
-            if (err) {
-              error = err;
-            }
+            if (err) error = err;
             rep.cancel();
           }
           function finish() {
-            if (error) {
-              return reject(error);
-            }
-            resolve();
+            if (error) reject(error);
+            else       resolve();
           }
 
-          rep.on('complete', finish).on('error', cleanup);
+          rep.on('complete', finish);
+          rep.on('error', cleanup);
           rep.on('change', function () {
             if (++posted < numDocsToWrite) {
               remote.post({}).catch(cleanup);
             } else {
-              db.info().then(function (info) {
-                if (info.doc_count === numDocsToWrite) {
-                  cleanup();
-                }
-              }).catch(cleanup);
+              db.info()
+                .then(info => {
+                  if (info.doc_count === numDocsToWrite) cleanup();
+                })
+                .catch(cleanup);
             }
 
             try {
@@ -288,7 +281,7 @@ adapters.forEach(function (adapters) {
                     'numListeners should never increase by +1/-1');
                 } catch (err) {
                   console.log('Check failed:', { numListeners, originalNumListeners });
-                  listers.forEach((l,i) => {
+                  listeners.forEach((l,i) => {
                     console.log(`  listener ${i}: ${l.toString()}`);
                   });
                   throw err;
