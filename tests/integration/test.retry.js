@@ -242,12 +242,12 @@ adapters.forEach(function (adapters) {
 
           var error;
           function cleanup(err) {
-            if (err) error = err;
+            if (err) { error = err; }
             rep.cancel();
           }
           function finish() {
-            if (error) reject(error);
-            else       resolve();
+            if (error) { reject(error); }
+            else       { resolve(); }
           }
 
           rep.on('complete', finish);
@@ -258,7 +258,7 @@ adapters.forEach(function (adapters) {
             } else {
               db.info()
                 .then(info => {
-                  if (info.doc_count === numDocsToWrite) cleanup();
+                  if (info.doc_count === numDocsToWrite) { cleanup(); }
                 })
                 .catch(cleanup);
             }
