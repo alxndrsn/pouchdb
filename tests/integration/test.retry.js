@@ -269,6 +269,7 @@ adapters.forEach(function (adapters) {
               if (typeof originalNumListeners !== 'number') {
                 originalNumListeners = numListeners;
               } else {
+                console.log('Checking:', { posted, numListeners, originalNumListeners });
                 try {
                   numListeners.should.be.within(originalNumListeners - 1, originalNumListeners + 1, 'numListeners should never increase by +1/-1');
                 } catch (err) {
