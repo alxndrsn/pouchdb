@@ -232,7 +232,7 @@ adapters.forEach(function (adapters) {
 
       var rep = db.replicate.from(remote, { live:true, retry:true, back_off_function:() => 0 });
 
-      var numDocsToWrite = 10;
+      var numDocsToWrite = 50;
 
       return remote.post({}).then(function () {
         var originalNumListeners;
@@ -270,20 +270,10 @@ adapters.forEach(function (adapters) {
                 originalNumListeners = numListeners;
               } else {
                 try {
-                  // special case for "destroy" - because there are
-                  // two Changes() objects for local databases,
-                  // there can briefly be one extra listener or one
-                  // fewer listener. The point of this test is to ensure
-                  // that the listeners don't grow out of control.
-                  numListeners.should.be.within(
-                    originalNumListeners - 1,
-                    originalNumListeners + 1,
-                    'numListeners should never increase by +1/-1');
+                  numListeners.should.be.within(originalNumListeners - 1, originalNumListeners + 1, 'numListeners should never increase by +1/-1');
                 } catch (err) {
                   console.log('Check failed:', { numListeners, originalNumListeners });
-                  listeners.forEach((l,i) => {
-                    console.log(`  listener ${i}: ${l.toString()}`);
-                  });
+                  listeners.forEach((l,i) => console.log(`  listener ${i}: ${l.toString()}`));
                   throw err;
                 }
               }
