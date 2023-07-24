@@ -225,8 +225,10 @@ adapters.forEach(function (adapters) {
       remote.bulkGet = function () {
         // Reject three times, every 5th time
         if ((++i % 5 === 0) && i <= 15) {
+          console.log('remote.bulkGet() :: flunking');
           return Promise.reject(new Error('flunking you'));
         }
+        console.log('remote.bulkGet() :: passing');
         return remoteBulkGet.apply(remote, arguments);
       };
 
