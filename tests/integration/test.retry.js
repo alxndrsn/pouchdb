@@ -42,11 +42,11 @@ adapters.forEach(function (adapters) {
       };
 
       var rep = db.replicate.from(remote, { live:true, retry:true, back_off_function:() => 0 });
+      const originalNumListeners = remote.listeners('destroyed').length;
 
       var numDocsToWrite = 50;
 
       return remote.post({}).then(function () {
-        var originalNumListeners;
         var posted = 0;
 
         return new Promise(function (resolve, reject) {
@@ -56,42 +56,29 @@ adapters.forEach(function (adapters) {
             if (err) { error = err; }
             rep.cancel();
           }
-          const finish = () => error ? reject(error) : resolve();
 
-          rep.on('complete', finish);
           rep.on('error', cleanup);
-          rep.on('change', function () {
-            setTimeout(() => {
-              if (++posted < numDocsToWrite) {
-                remote.post({}).catch(cleanup);
-              } else {
-                db.info()
-                  .then(info => {
-                    if (info.doc_count === numDocsToWrite) { cleanup(); }
-                  })
-                  .catch(cleanup);
-              }
+          rep.on('complete', () => {
+            if (error) {
+              return reject(error);
+            }
 
-              try {
-                const listeners = remote.listeners('destroyed');
-                var numListeners = listeners.length;
-                if (typeof originalNumListeners !== 'number') {
-                  originalNumListeners = numListeners;
-                } else {
-                  console.log('Checking:', { posted, numListeners, originalNumListeners });
-                  try {
-                    numListeners.should.be.within(originalNumListeners - 1, originalNumListeners + 1, 'numListeners should never increase by +1/-1');
-                  } catch (err) {
-                    console.log('Check failed:', { numListeners, originalNumListeners });
-                    listeners.forEach((l,i) => console.log(`  listener ${i}: ${l.toString()}`));
-                    throw err;
-                  }
-                }
-              } catch (err) {
-                cleanup(err);
-              }
-            });
+            const listeners = remote.listeners('destroyed');
+            var numListeners = listeners.length;
+            try {
+              console.log('Checking:', { posted, numListeners, originalNumListeners });
+              numListeners.should.equal(originalNumListeners, 'numListeners should settle to original number');
+              resolve();
+            } catch (err) {
+              console.log('Check failed:', { numListeners, originalNumListeners });
+              listeners.forEach((l,i) => console.log(`  listener ${i}: ${l.toString()}`));
+              reject(err);
+            }
           });
+
+          if (++posted < numDocsToWrite) {
+            remote.post({}).catch(cleanup);
+          }
         });
       });
     });
