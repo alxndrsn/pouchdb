@@ -14,7 +14,7 @@ pouchdb-setup-server() {
   # modules to the current implementations
   if [ -d "pouchdb-server-install" ]; then
     # pouchdb server already running
-    exit 0
+    return
   fi
   mkdir pouchdb-server-install
   cd pouchdb-server-install
