@@ -1,4 +1,4 @@
-name: GitHub Pages Deploy
+name: GitHub Pages Deploy (please show me the manual trigger button)
 
 # Only run workflow when triggered manually from Actions tab
 on: workflow_dispatch
