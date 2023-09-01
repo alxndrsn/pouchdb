@@ -4251,6 +4251,10 @@ describe('suite2 test.replication.js-down-test', function () {
   it('should inform where down-server test is run', () => {
     throw new Error('DOWN SERVER TEST RUNNING HERE');
   });
+
+  it('can load http module', () => {
+    require('http');
+  });
 });
 
 function interceptChanges(source, interceptFunction) {
