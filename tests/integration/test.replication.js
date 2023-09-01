@@ -4248,27 +4248,8 @@ adapters.forEach(function (adapters) {
 // This test only needs to run for one configuration, and it slows stuff
 // down
 describe('suite2 test.replication.js-down-test', function () {
-  let dbs = {};
-
-  beforeEach(function (done) {
-    dbs.name = testUtils.adapterUrl('local', 'testdb');
-    testUtils.cleanup([dbs.name], done);
-  });
-
-  afterEach(function (done) {
-    testUtils.cleanup([dbs.name], done);
-  });
-
-  it('replicate from down server test', async () => {
-    const source = new PouchDB('http://127.0.0.1:3010', {
-      ajax: {timeout: 10}
-    });
-    const target = new PouchDB(dbs.name);
-    try {
-      await source.replicate.to(target);
-    } catch (error) {
-      should.exist(error);
-    }
+  it('should inform where down-server test is run', () => {
+    throw new Error('DOWN SERVER TEST RUNNING HERE');
   });
 });
 
