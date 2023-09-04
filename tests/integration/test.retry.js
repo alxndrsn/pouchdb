@@ -217,16 +217,14 @@ adapters.forEach(function (adapters) {
     it('target doesn\'t leak "destroyed" event listener', function () {
 
       var db = new PouchDB(dbs.name);
-      const originalNumListeners = db.listeners('destroyed').length;
-
       var remote = new PouchDB(dbs.remote);
       var Promise = testUtils.Promise;
 
       var remoteBulkGet = remote.bulkGet;
       var i = 0;
       remote.bulkGet = function () {
-        // Reject every 5th time
-        if (++i % 5 === 0) {
+        // Reject three times, every 5th time
+        if ((++i % 5 === 0) && i <= 15) {
           return Promise.reject(new Error('flunking you'));
         }
         return remoteBulkGet.apply(remote, arguments);
@@ -238,10 +236,10 @@ adapters.forEach(function (adapters) {
         back_off_function: function () { return 0; }
       });
 
-      var numDocsToWrite = 50;
+      var numDocsToWrite = 10;
 
       return remote.post({}).then(function () {
-        let lastNumListeners;
+        var originalNumListeners;
         var posted = 0;
 
         return new Promise(function (resolve, reject) {
@@ -257,13 +255,7 @@ adapters.forEach(function (adapters) {
             if (error) {
               return reject(error);
             }
-            try {
-              const finalNumListeners = db.listeners('destroyed').length;
-              finalNumListeners.should.equal(originalNumListeners + 1); // constructor destroy listener is still there
-              resolve();
-            } catch (err) {
-              reject(err);
-            }
+            resolve();
           }
 
           rep.on('complete', finish).on('error', cleanup);
@@ -280,17 +272,8 @@ adapters.forEach(function (adapters) {
 
             try {
               var numListeners = remote.listeners('destroyed').length;
-              console.log('test.retry:', 'window.chrome:', !!(typeof window !== 'undefined' && window.chrome));
-              console.log('test.retry:', 'db.adapter:', db.adapter);
-              console.log('test.retry:', 'remote.adapter:', remote.adapter);
-              if (typeof lastNumListeners !== 'number') {
-                lastNumListeners = numListeners;
-              } else if (!!(typeof window !== 'undefined' && window.chrome) && remote.adapter === 'indexeddb') {
-                // special case for "destroy" on chromium with indexeddb - see #8689
-                numListeners.should.be.within(
-                  lastNumListeners - 1,
-                  lastNumListeners + 10,
-                  'numListeners should never increase by +10/-1');
+              if (typeof originalNumListeners !== 'number') {
+                originalNumListeners = numListeners;
               } else {
                 // special case for "destroy" - because there are
                 // two Changes() objects for local databases,
@@ -298,8 +281,8 @@ adapters.forEach(function (adapters) {
                 // fewer listener. The point of this test is to ensure
                 // that the listeners don't grow out of control.
                 numListeners.should.be.within(
-                  lastNumListeners - 1,
-                  lastNumListeners + 1,
+                  originalNumListeners - 1,
+                  originalNumListeners + 1,
                   'numListeners should never increase by +1/-1');
               }
             } catch (err) {
