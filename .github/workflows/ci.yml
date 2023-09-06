@@ -252,3 +252,29 @@ jobs:
       - name: Second retry
         if: steps.retry.outcome == 'failure'
         run: git reset --hard && ${{ matrix.cmd }}
+
+  # This job is used to allow branch protection rules to depend on a single outcome
+  # rather than needing to be modified every time the build matrix changes.
+  # See: https://github.com/orgs/community/discussions/26733
+  # See: https://github.com/marketplace/actions/alls-green
+  all-green:
+    if: always()
+
+    needs:
+      - lint
+      - couchdb-nodejs
+      - couchdb-browser
+      - nodejs-adapter
+      - browser-adapter
+      - pouchdb-server
+      - nodejs
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check that all other jobs pass
+      uses: re-actors/alls-green@release/v1
+      with:
+        allowed-failures: docs, linters
+        allowed-skips: non-voting-flaky-job
+        jobs: ${{ toJSON(needs) }}
