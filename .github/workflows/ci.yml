@@ -257,7 +257,7 @@ jobs:
   # rather than needing to be modified every time the build matrix changes.
   # See: https://github.com/orgs/community/discussions/26733
   # See: https://github.com/marketplace/actions/alls-green
-  all-green:
+  all-actions-green:
     if: always()
 
     needs:
