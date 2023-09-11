@@ -57,3 +57,25 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
+
+  # This job is used to allow branch protection rules to depend on a single outcome
+  # rather than needing to be modified every time the build matrix changes.
+  #
+  # It is duplicated in both ci.yml and docs.yml to allow for a single github
+  # branch protection rule to be fulfilled by either workflow.
+  #
+  # See: https://github.com/orgs/community/discussions/26733
+  # See: https://github.com/marketplace/actions/alls-green
+  all-actions-green:
+    if: always()
+
+    needs:
+      - test-docs
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check that all other jobs pass
+      uses: re-actors/alls-green@release/v1
+      with:
+        jobs: ${{ toJSON(needs) }}

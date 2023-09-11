@@ -255,6 +255,10 @@ jobs:
 
   # This job is used to allow branch protection rules to depend on a single outcome
   # rather than needing to be modified every time the build matrix changes.
+  #
+  # It is duplicated in both ci.yml and docs.yml to allow for a single github
+  # branch protection rule to be fulfilled by either workflow.
+  #
   # See: https://github.com/orgs/community/discussions/26733
   # See: https://github.com/marketplace/actions/alls-green
   all-actions-green:
@@ -275,6 +279,4 @@ jobs:
     - name: Check that all other jobs pass
       uses: re-actors/alls-green@release/v1
       with:
-        allowed-failures: docs, linters
-        allowed-skips: non-voting-flaky-job
         jobs: ${{ toJSON(needs) }}
