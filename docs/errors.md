@@ -12,7 +12,7 @@ If you see the error:
 > No 'Access-Control-Allow-Origin' header is present on the requested resource.
 > Origin [...] is therefore not allowed access.
 
-or this one:
+or this:
 
 > Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at http://[couchDBIP]:[couchDBPort]/[dbname]/?_nonce=[request hash]. This can be fixed by moving the resource to the same domain or enabling CORS
 
