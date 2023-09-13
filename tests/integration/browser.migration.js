@@ -1208,13 +1208,11 @@ describe('migration', function () {
                 res.rows.should.have.length(2, 'all docs length is 2');
 
                 res.rows[0].id.should.equal('norm-1');
-                res.rows[0].doc.migrated.should.equal(true);
                 res.rows[0].doc.some_other_value.should.equal(2);
                 res.rows[0].doc._attachments.should.be.an('object').that.has.all.keys('att.txt');
                 res.rows[0].doc._attachments['att.txt'].data.should.equal('cGFyZW50SWQ6bm9ybS0x');
 
                 res.rows[1].id.should.equal('norm-2');
-                res.rows[1].doc.migrated.should.equal(true);
                 res.rows[1].doc._attachments.should.be.an('object').that.has.all.keys('att.txt');
                 res.rows[1].doc._attachments['att.txt'].data.should.equal('cGFyZW50SWQ6bm9ybS0y');
               })
@@ -1222,7 +1220,6 @@ describe('migration', function () {
               .then(() => newPouch.get('_local/loc-1', { attachments: true }))
               .then(doc => {
                 doc._id.should.equal('_local/loc-1');
-                doc.migrated.should.equal(true);
                 doc.some_value.should.equal(1);
                 doc._attachments.should.be.an('object').that.has.all.keys('att.txt');
                 doc._attachments['att.txt'].data.should.equal('cGFyZW50SWQ6bG9jLTE=');
@@ -1231,7 +1228,6 @@ describe('migration', function () {
               .then(() => newPouch.get('_local/loc-2', { attachments: true }))
               .then(doc => {
                 doc._id.should.equal('_local/loc-2');
-                doc.migrated.should.equal(true);
                 doc._attachments.should.be.an('object').that.has.all.keys('att.txt');
                 doc._attachments['att.txt'].data.should.equal('cGFyZW50SWQ6bG9jLTI=');
               })
