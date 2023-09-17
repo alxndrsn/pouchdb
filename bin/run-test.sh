@@ -3,7 +3,7 @@ shopt -s nullglob
 
 cleanup() {
   if [[ -n $SERVER_PID ]]; then
-    kill "$SERVER_PID"
+    kill $SERVER_PID
   fi
 }
 trap cleanup EXIT
