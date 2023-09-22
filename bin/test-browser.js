@@ -136,9 +136,32 @@ class RemoteRunner {
   }
 }
 
-function BenchmarkReporter(runner) {
+function BenchmarkConsoleReporter(runner) {
   runner.on('benchmark:result', function (obj) {
     console.log('      ', obj);
+  });
+}
+
+function BenchmarkJsonReporter(runner) {
+  runner.on('end', results => {
+    if (runner.completed) {
+      const { execSync } = require('child_process');
+      const { mkdirSync, writeFileSync } = require('fs');
+
+      const exec = cmd => execSync(cmd, { encoding:'utf-8' }).trim();
+
+      results.gitDescription = exec('git rev-parse HEAD');
+      results.gitDiff = exec('git diff');
+
+      const resultsDir = 'perf-test-results';
+      mkdirSync(resultsDir, { recursive: true });
+
+      const jsonPath = `${resultsDir}/${new Date().toISOString()}.json`;
+      writeFileSync(jsonPath, JSON.stringify(results, null, 2));
+      console.log('Wrote JSON results to:', jsonPath);
+    } else {
+      console.log('Runner failed; JSON will not be writted.');
+    }
   });
 }
 
@@ -148,7 +171,15 @@ async function startTest() {
 
   const runner = new RemoteRunner();
   new MochaSpecReporter(runner);
-  new BenchmarkReporter(runner);
+  new BenchmarkConsoleReporter(runner); // TODO this doesn't need setting if !process.env.PERF
+
+  if (process.env.JSON_REPORTER) {
+    if (!process.env.PERF) {
+      console.log('!!! JSON_REPORTER should only be set if PERF is also set.');
+      process.exit(1);
+    }
+    new BenchmarkJsonReporter(runner);
+  }
 
   const options = {
     headless: true,
