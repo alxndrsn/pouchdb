@@ -9,6 +9,9 @@ module.exports = function (PouchDB, callback) {
   var oneGen = new RepTest();
   var twoGen = new RepTest();
 
+  // TODO document or remove
+  let buwa_allDocs;
+
   var testCases = [
     {
       name: 'basic-inserts',
@@ -96,6 +99,32 @@ module.exports = function (PouchDB, callback) {
       },
       test: function (db, itr, docs, done) {
         db.bulkDocs(docs, done);
+      }
+    },
+    {
+      name: 'basic-updates-without-alldocs',
+      assertions: 1,
+      iterations: 100,
+      setup: function (db, callback) {
+        var docs = [];
+        for (var i = 0; i < 100; i++) {
+          docs.push({});
+        }
+        db.bulkDocs(docs, (err) => {
+          if (err) {
+            return callback(err);
+          }
+          db.allDocs({include_docs: true}, function (err, res) {
+            if (err) {
+              return callback(err);
+            }
+            buwa_allDocs = res.rows.map(function (x) { return x.doc; });
+            callback();
+          });
+        });
+      },
+      test: function (db, itr, _, done) {
+        db.bulkDocs(buwa_allDocs, done);
       }
     },
     {
