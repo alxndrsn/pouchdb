@@ -10,10 +10,14 @@ const testSuites = {};
 const resultsByAdapter = {};
 
 const adapterFilter = process.env.ADAPTERS?.split(',');
+const gitFilter     = process.env.COMMITS ?.split(',')?.map(commit => commit.substring(0, 7));
 
 rawResults.forEach(({ adapter, results }) => {
   if(adapterFilter) {
     if(!adapterFilter.includes(adapter.split(':')[0])) return;
+  }
+  if(gitFilter) {
+    if(!gitFilter.includes(adapter.split(':')[1])) return;
   }
 
   if(!adapters.includes(adapter)) {
