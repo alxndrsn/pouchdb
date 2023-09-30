@@ -117,11 +117,6 @@ describe('migration', function () {
       });
 
       describe('idb', () => {
-        before(function () {
-          if (!usingIdb()) {
-            return this.skip();
-          }
-        });
 
         var origDocs = [
           {_id: '0', a: 1, b: 1},
