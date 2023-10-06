@@ -121,18 +121,19 @@ adapters.forEach(function (adapters) {
 
       remote.bulkDocs({ docs: docs }, {}, function (err) {
         should.not.exist(err);
-        PouchDB.replicate(
-          dbs.remote, dbs.name).on('complete', function (result) {
-          result.ok.should.equal(true);
-          result.docs_written.should.equal(docs.length);
-          new PouchDB(dbs.name).info(function (err, info) {
-            verifyInfo(info, {
-              update_seq: numDocs,
-              doc_count: numDocs
+        PouchDB.replicate(dbs.remote, dbs.name)
+          .on('complete', function (result) {
+            result.ok.should.equal(true);
+            result.docs_written.should.equal(docs.length);
+            new PouchDB(dbs.name).info(function (err, info) {
+              verifyInfo(info, {
+                update_seq: numDocs,
+                doc_count: numDocs
+              });
+              done();
             });
-            done();
-          });
-        });
+          })
+          .on('error', done);
       });
     });
 
