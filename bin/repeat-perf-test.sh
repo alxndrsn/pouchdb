@@ -28,22 +28,29 @@ log "Press <enter> to continue."
 echo
 read -r
 
+test_with_adapter() {
+  adapter="$1"
+  log "Using adapter: $adapter"
+  set -x
+  ADAPTERS="$adapter" \
+  CLIENT="${CLIENT:-firefox}" \
+  COUCH_HOST="${COUCH_HOST:-http://admin:password@127.0.0.1:5984}" \
+  JSON_REPORTER=1 \
+  PERF=1 \
+  npm run test
+  set +x
+  sleep 1
+}
+
 while true; do
   for commit in "$@"; do
     log "Checking out $commit..."
     git checkout "$commit"
 
     log "Running perf tests on $commit..."
-    set -x
-    ADAPTERS="${ADAPTERS:-idb}" \
-    CLIENT="${CLIENT:-firefox}" \
-    COUCH_HOST="${COUCH_HOST:-http://admin:password@127.0.0.1:5984}" \
-    JSON_REPORTER=1 \
-    PERF=1 \
-    npm run test
-    set +x
 
-    sleep 1
+    test_with_adapter idb
+    test_with_adapter indexeddb
   done
 done
 
