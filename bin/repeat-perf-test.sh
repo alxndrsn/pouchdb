@@ -1,5 +1,8 @@
 #!/bin/bash -eu
 
+flagFileDevServerRunning=./.dev-server-started
+rm "$flagFileDevServerRunning" || true
+
 scriptName="$(basename "$0")"
 log() { echo "[$scriptName] $*"; }
 
@@ -72,7 +75,17 @@ iterate_tests() {
 }
 
 log "Starting dev server..."
-NO_WATCH=1 node bin/dev-server.js
+node -e "
+const { start } = require('bin/dev-server.js');
+start(() => require('fs').writeFileSync('$flagFileDevServerRunning');
+" &
+
+until [[ -f "$flagFileDevServerRunning" ]]; do
+  echo -n .
+  sleep 1
+done
+
+exit 77
 
 if [[ -z "${TEST_ITERATIONS-}" ]]; then
   while true; do
