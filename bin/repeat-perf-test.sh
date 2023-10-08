@@ -76,7 +76,7 @@ iterate_tests() {
 
 log "Starting dev server..."
 node -e "
-const { start } = require('bin/dev-server.js');
+const { start } = require('./bin/dev-server.js');
 start(() => require('fs').writeFileSync('$flagFileDevServerRunning'));
 " &
 
