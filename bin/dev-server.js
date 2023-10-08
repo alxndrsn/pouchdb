@@ -131,7 +131,7 @@ function checkReady() {
 
 if (require.main === module) {
   startServers();
-  watchAll();
+  if (!process.env.NO_WATCH) watchAll();
 } else {
   module.exports.start = startServers;
 }

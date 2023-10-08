@@ -63,12 +63,16 @@ iterate_tests() {
     JSON_REPORTER=1 \
     PERF=1 \
     USE_MINIFIED=1 \
+    MANUAL_DEV_SERVER=1 \
     node ./bin/test-browser.js
     set +x
 
     sleep 1
   done
 }
+
+log "Starting dev server..."
+NO_WATCH=1 node bin/dev-server.js
 
 if [[ -z "${TEST_ITERATIONS-}" ]]; then
   while true; do
