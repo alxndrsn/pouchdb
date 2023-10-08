@@ -81,9 +81,9 @@ start(() => require('fs').writeFileSync('$flagFileDevServerRunning', ''));
 " &
 
 until [[ -f "$flagFileDevServerRunning" ]]; do sleep 1; done
+log "Dev server started OK!"
 
-exit 77
-
+log "Running tests..."
 if [[ -z "${TEST_ITERATIONS-}" ]]; then
   while true; do
     iterate_tests
