@@ -6,6 +6,7 @@ log() { echo "[$scriptName] $*"; }
 flagFileDevServerRunning=./.dev-server-started
 cleanup() {
   if [[ -n $SERVER_PID ]]; then
+    log "Shutting down dev server..."
     kill "$SERVER_PID"
     rm "$flagFileDevServerRunning"
   fi
@@ -54,15 +55,19 @@ mkdir -p dist-bundles
 
 log "Building bundles..."
 for commit in "${commits[@]}"; do
-  log "Checking out $commit..."
-  git checkout "$commit"
-  npm run build
-
   targetDir="dist-bundles/$commit"
-  mkdir -p "$targetDir"
-  cp -r packages/node_modules/pouchdb/dist/. "$targetDir/"
+  if [[ -d "$targetDir" ]]; then
+    log "Skipping build for $commit - dist files already found at $targetDir."
+  else
+    log "Building commit $commit..."
+    git checkout "$commit"
+    npm run build
 
-  git checkout -
+    mkdir -p "$targetDir"
+    cp -r packages/node_modules/pouchdb/dist/. "$targetDir/"
+
+    git checkout -
+  fi
 done
 
 log "Building tests..."
