@@ -1,10 +1,23 @@
 #!/bin/bash -eu
 
-flagFileDevServerRunning=./.dev-server-started
-rm "$flagFileDevServerRunning" || true
-
 scriptName="$(basename "$0")"
 log() { echo "[$scriptName] $*"; }
+
+flagFileDevServerRunning=./.dev-server-started
+cleanup() {
+  if [[ -n $SERVER_PID ]]; then
+    kill "$SERVER_PID"
+    rm "$flagFileDevServerRunning"
+  fi
+}
+trap cleanup EXIT
+
+if [[ -f "$flagFileDevServerRunning" ]]; then
+  log "!!! Cannot start tests - flag file already exists at $flagFileDevServerRunning"
+  log "!!! Are tests running in another process?"
+  log "!!!"
+  exit 1
+fi
 
 if [[ "$#" -lt 1 ]]; then
   cat <<EOF
@@ -79,6 +92,7 @@ NO_REBUILD=1 node -e "
 const { start } = require('./bin/dev-server.js');
 start(() => require('fs').writeFileSync('$flagFileDevServerRunning', ''));
 " &
+SERVER_PID=$!
 
 until [[ -f "$flagFileDevServerRunning" ]]; do sleep 1; done
 log "Dev server started OK!"
