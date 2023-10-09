@@ -95,7 +95,10 @@ iterate_tests() {
 log "Starting dev server..."
 NO_REBUILD=1 node -e "
 const { start } = require('./bin/dev-server.js');
-start(() => require('fs').writeFileSync('$flagFileDevServerRunning', ''));
+start(() => {
+  require('fs').writeFileSync('$flagFileDevServerRunning', '');
+  console.log('[$scriptName] Dev server ready.');
+});
 " &
 SERVER_PID=$!
 
