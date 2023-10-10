@@ -85,7 +85,7 @@ commonUtils.loadPouchDBForNode = function (plugins) {
   var params = commonUtils.params();
   var scriptPath = '../packages/node_modules';
 
-  var pouchdbSrc = params.COVERAGE
+  const pouchdbSrc = params.COVERAGE
     ? `${scriptPath}/pouchdb-for-coverage`
     : `${scriptPath}/pouchdb`;
 
