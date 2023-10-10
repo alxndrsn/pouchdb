@@ -16,6 +16,7 @@ cleanup() {
 trap cleanup EXIT
 
 if [[ -f "$flagFileDevServerRunning" ]]; then
+  log "!!!"
   log "!!! Cannot start tests - flag file already exists at $flagFileDevServerRunning"
   log "!!! Are tests running in another process?"
   log "!!!"
