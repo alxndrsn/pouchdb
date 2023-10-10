@@ -5,7 +5,7 @@ log() { echo "[$scriptName] $*"; }
 
 flagFileDevServerRunning=./.dev-server-started
 cleanup() {
-  if [[ -n $SERVER_PID ]]; then
+  if [[ -n ${SERVER_PID-} ]]; then
     log "Shutting down dev server..."
     kill "$SERVER_PID"
     rm "$flagFileDevServerRunning"
