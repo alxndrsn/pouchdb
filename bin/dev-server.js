@@ -36,7 +36,7 @@ if (process.env.ITERATIONS) {
 var rebuildPromise = Promise.resolve();
 
 function rebuildPouch() {
-  if (process.env.NO_REBUILD) {
+  if (process.env.NO_REBUILD_POUCHDB) {
     return Promise.resolve();
   }
 
