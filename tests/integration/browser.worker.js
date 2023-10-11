@@ -1,15 +1,10 @@
 'use strict';
 
-// Historically:
 // only running in Chrome and Firefox due to various bugs.
 // IE: https://connect.microsoft.com/IE/feedback/details/866495
 // Safari: doesn't have IndexedDB or WebSQL in a WW
 // NodeWebkit: not sure what the issue is
-// Now:
-// skipped everywhere, as they weren't being run anyway.
-// See: https://github.com/pouchdb/pouchdb/issues/8680
-// TODO re-introduce these tests in environments where they are appropriate.
-describe.skip('browser.worker.js', function () {
+describe('browser.worker.js', function () {
 
   var worker;
   var dbs = {};
