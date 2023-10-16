@@ -41,14 +41,14 @@ describe('test.http.js', function () {
       });
     }
     var db = new PouchDB(dbs.name, {
-      fetch: function (url, opts) {
+      fetch(url, opts) {
         if (/_changes/.test(url)) {
           callCount++;
         }
         return PouchDB.fetch(url, opts);
       }
     });
-    db.bulkDocs({ docs: docs }, function () {
+    db.bulkDocs({ docs }, function () {
       db.info(function (err, info) {
         var update_seq = info.update_seq;
         db.changes({
@@ -78,7 +78,7 @@ describe('test.http.js', function () {
 
   it('Properly escape url params #4008', function () {
     var db = new PouchDB(dbs.name, {
-      fetch: function (url, opts) {
+      fetch(url, opts) {
         url.should.not.contain('[');
         return PouchDB.fetch(url, opts);
       }
@@ -171,7 +171,7 @@ describe('test.http.js', function () {
   it('5814 Ensure prefix has trailing /', function () {
     var index = testUtils.adapterUrl('http', '').lastIndexOf('/');
     var prefix = testUtils.adapterUrl('http', '').substring(0, index);
-    var db = new PouchDB('test', {prefix: prefix});
+    var db = new PouchDB('test', {prefix});
     return db.info().then(function () {
       return db.destroy();
     });

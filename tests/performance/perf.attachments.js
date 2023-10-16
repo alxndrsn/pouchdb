@@ -39,13 +39,13 @@ module.exports = function (PouchDB, callback) {
       name: 'basic-attachments',
       assertions: 1,
       iterations: 1000,
-      setup: function (db, callback) {
+      setup(db, callback) {
 
         var blob = randomBlob(50000);
         db._blob = blob;
         callback();
       },
-      test: function (db, itr, doc, done) {
+      test(db, itr, doc, done) {
         db.putAttachment(Math.random().toString(), 'foo.txt', db._blob,
           MIME_OCTET).then(function () {
           done();
@@ -56,7 +56,7 @@ module.exports = function (PouchDB, callback) {
       name: 'many-attachments-base64',
       assertions: 1,
       iterations: 100,
-      setup: function (db, callback) {
+      setup(db, callback) {
         const doc = {
           _id: 'doc1',
           _attachments: {},
@@ -69,7 +69,7 @@ module.exports = function (PouchDB, callback) {
         }
         db.put(doc).then(() => callback()).catch(callback);
       },
-      test: function (db, itr, doc, done) {
+      test(db, itr, doc, done) {
         db.get('doc1', {attachments: true}).then(() => done()).catch(done);
       }
     },
@@ -77,7 +77,7 @@ module.exports = function (PouchDB, callback) {
       name: 'many-attachments-binary',
       assertions: 1,
       iterations: 100,
-      setup: function (db, callback) {
+      setup(db, callback) {
         const doc = {
           _id: 'doc1',
           _attachments: {},
@@ -90,7 +90,7 @@ module.exports = function (PouchDB, callback) {
         }
         db.put(doc).then(() => callback()).catch(callback);
       },
-      test: function (db, itr, doc, done) {
+      test(db, itr, doc, done) {
         db.get('doc1', {attachments: true, binary: true}).then(() => done()).catch(done);
       }
     },

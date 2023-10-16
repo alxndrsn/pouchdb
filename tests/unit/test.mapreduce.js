@@ -9,7 +9,7 @@ var Promise = PouchDB.utils.Promise;
 describe('test.mapreduce.js-upsert', function () {
   it('should throw an error if the doc errors', function () {
     return upsert({
-      get: function () {
+      get() {
         return Promise.reject(new Error('a fake error!'));
       }
     }, 'foo')
@@ -22,7 +22,7 @@ describe('test.mapreduce.js-upsert', function () {
   });
   it('should fulfill if the diff returns false', function () {
     return upsert({
-      get: function () {
+      get() {
         return Promise.resolve({ _rev: 'xyz' });
       }
     }, 'foo', function () {
@@ -34,10 +34,10 @@ describe('test.mapreduce.js-upsert', function () {
   });
   it('should put if get throws 404', function () {
     return upsert({
-      get: function () {
+      get() {
         return Promise.reject({ status: 404 });
       },
-      put: function () {
+      put() {
         return Promise.resolve({ rev: 'abc' });
       }
     }, 'foo', function () {
@@ -49,10 +49,10 @@ describe('test.mapreduce.js-upsert', function () {
   });
   it('should error if it can\'t put', function () {
     return upsert({
-      get: function () {
+      get() {
         return Promise.resolve({ _rev: 'xyz' });
       },
-      put: function () {
+      put() {
         return Promise.reject(new Error('falala'));
       }
     }, 'foo', function () {

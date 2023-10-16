@@ -628,7 +628,7 @@ adapters.forEach(function (adapter) {
         if (++sent === TO_SEND) {
           clearInterval(timer);
         }
-        db.bulkDocs({docs: docs}, bulkCallback);
+        db.bulkDocs({docs}, bulkCallback);
       };
 
       timer = setInterval(save, 10);
@@ -935,7 +935,7 @@ adapters.forEach(function (adapter) {
       var db = new PouchDB(dbs.name);
       var called = 0;
       var plugin = {
-        initPull: function () {
+        initPull() {
           this.oldPut = this.put;
           this.put = function () {
             if (typeof arguments[arguments.length - 1] === 'function') {
@@ -944,7 +944,7 @@ adapters.forEach(function (adapter) {
             return this.oldPut.apply(this, arguments);
           };
         },
-        cleanupPut: function () {
+        cleanupPut() {
           this.put = this.oldPut;
         }
       };
@@ -1199,7 +1199,7 @@ adapters.forEach(function (adapter) {
 
       it('6053, PouchDB.plugin() resets defaults', function () {
         var PouchDB1 = PouchDB.defaults({foo: 'bar'});
-        var PouchDB2 = PouchDB1.plugin({foo: function () {}});
+        var PouchDB2 = PouchDB1.plugin({foo() {}});
         should.exist(PouchDB2.__defaults);
         PouchDB1.__defaults.should.deep.equal(PouchDB2.__defaults);
        });

@@ -22,13 +22,13 @@ module.exports = function (PouchDB, callback) {
       name: 'create-index',
       assertions: 1,
       iterations: 1,
-      setup: function (db, callback) {
+      setup(db, callback) {
         db.bulkDocs(makeTestDocs())
           .then(function () {
             callback();
           }, callback);
       },
-      test: function (db, itr, doc, done) {
+      test(db, itr, doc, done) {
         db.createIndex({
           index: {
             fields: ['key']
@@ -42,7 +42,7 @@ module.exports = function (PouchDB, callback) {
       name: 'simple-find-query',
       assertions: 1,
       iterations: 5,
-      setup: function (db, callback) {
+      setup(db, callback) {
         db.bulkDocs(makeTestDocs())
           .then(function () {
             return db.createIndex({
@@ -54,7 +54,7 @@ module.exports = function (PouchDB, callback) {
             callback();
           }, callback);
       },
-      test: function (db, itr, doc, done) {
+      test(db, itr, doc, done) {
         db.find({
           selector: { key: 'foo'}
         }).then(function () {
@@ -66,13 +66,13 @@ module.exports = function (PouchDB, callback) {
       name: 'simple-find-query-no-index',
       assertions: 1,
       iterations: 5,
-      setup: function (db, callback) {
+      setup(db, callback) {
         db.bulkDocs(makeTestDocs())
           .then(function () {
             callback();
           }, callback);
       },
-      test: function (db, itr, doc, done) {
+      test(db, itr, doc, done) {
         db.find({
           selector: { key: 'foo'}
         }).then(function () {
@@ -84,7 +84,7 @@ module.exports = function (PouchDB, callback) {
       name: 'complex-find-query',
       assertions: 1,
       iterations: 5,
-      setup: function (db, callback) {
+      setup(db, callback) {
         db.bulkDocs(makeTestDocs())
           .then(function () {
             return db.createIndex({
@@ -96,7 +96,7 @@ module.exports = function (PouchDB, callback) {
             callback();
           }, callback);
       },
-      test: function (db, itr, doc, done) {
+      test(db, itr, doc, done) {
         db.find({
           selector: {
             $and: [
@@ -113,13 +113,13 @@ module.exports = function (PouchDB, callback) {
       name: 'complex-find-query-no-index',
       assertions: 1,
       iterations: 5,
-      setup: function (db, callback) {
+      setup(db, callback) {
         db.bulkDocs(makeTestDocs())
           .then(function () {
             callback();
           }, callback);
       },
-      test: function (db, itr, doc, done) {
+      test(db, itr, doc, done) {
         db.find({
           selector: {
             $and: [
@@ -136,7 +136,7 @@ module.exports = function (PouchDB, callback) {
       name: 'multi-field-query',
       assertions: 1,
       iterations: 5,
-      setup: function (db, callback) {
+      setup(db, callback) {
         db.bulkDocs(makeTestDocs())
           .then(function () {
             return db.createIndex({
@@ -148,7 +148,7 @@ module.exports = function (PouchDB, callback) {
             callback();
           }, callback);
       },
-      test: function (db, itr, doc, done) {
+      test(db, itr, doc, done) {
         db.find({
           selector: {
             key: { $gt: 5 },

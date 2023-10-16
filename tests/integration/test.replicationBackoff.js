@@ -22,7 +22,7 @@ adapters.forEach(function (adapters) {
     it('Issue 5402 should not keep adding event listeners when backoff is firing', function (done) {
       this.timeout(1500);
       var remote = new PouchDB(dbs.remote, {
-        fetch: function () {
+        fetch() {
           throw new Error('flunking you');
         }
       });
@@ -35,7 +35,7 @@ adapters.forEach(function (adapters) {
         retry: true,
         heartbeat: 1,
         timeout: 1,
-        back_off_function: function () {
+        back_off_function() {
           numberOfActiveListeners = replication.pull.listeners("active").length;
           ++backOffCount;
           if (backOffCount > 15 || numberOfActiveListeners > 3) {

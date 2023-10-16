@@ -299,7 +299,7 @@ describe('test.persisted.js', function () {
   it('should query correctly when stale', function () {
     var db = new PouchDB(dbName);
     return createView(db, {
-      map : function (doc) {
+      map(doc) {
         emit(doc.name);
       }
     }).then(function (queryFun) {
@@ -362,7 +362,7 @@ describe('test.persisted.js', function () {
   it('should query correctly with stale update_after', function () {
     var pouch = new PouchDB(dbName);
 
-    return createView(pouch, {map: function (doc) {
+    return createView(pouch, {map(doc) {
       emit(doc.foo);
     }}).then(function (queryFun) {
       var docs = [];
@@ -399,7 +399,7 @@ describe('test.persisted.js', function () {
       );
     }
     var db = new PouchDB(dbName);
-    return db.bulkDocs({docs : docs}).then(function (responses) {
+    return db.bulkDocs({docs}).then(function (responses) {
       var tasks = [];
       for (var i = 0; i < docs.length; i++) {
         docs[i]._rev = responses[i].rev;
@@ -410,7 +410,7 @@ describe('test.persisted.js', function () {
       docs.forEach(function (doc) {
         doc._deleted = true;
       });
-      return db.bulkDocs({docs : docs});
+      return db.bulkDocs({docs});
     }).then(function () {
       return db.viewCleanup();
     });
@@ -635,7 +635,7 @@ describe('test.persisted.js', function () {
   it('test 304s in Safari (issue 69)', function () {
     var db = new PouchDB(dbName);
     return createView(db, {
-      map : function (doc) {
+      map(doc) {
         emit(doc.name);
       }
     }).then(function (queryFun) {
@@ -666,7 +666,7 @@ describe('test.persisted.js', function () {
       // make sure prefixed DBs are tied to regular DBs
       var db = new PouchDB(dbName, {db: require('memdown')});
       return testUtils.fin(createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.name);
         }
       }).then(function (queryFun) {
@@ -715,7 +715,7 @@ describe('test.persisted.js', function () {
       require('mkdirp').sync('./myprefix_./tmp/'); // TODO: bit hacky
       var db = new PouchDB(dbName, {prefix: './myprefix_'});
       return testUtils.fin(createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.name);
         }
       }).then(function (queryFun) {

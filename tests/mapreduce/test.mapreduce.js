@@ -68,7 +68,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test basic view", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo, doc);
         }
       }).then(function (view) {
@@ -99,7 +99,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test basic view, no emitted value", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo);
         }
       }).then(function (view) {
@@ -203,7 +203,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test opts.startkey/opts.endkey", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.key, doc);
         }
       }).then(function (queryFun) {
@@ -241,7 +241,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("#4154 opts.start_key/opts.end_key are synonyms", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.key, doc);
         }
       }).then(function (queryFun) {
@@ -280,7 +280,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test opts.inclusive_end = false", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.key, doc);
         }
       }).then(function (queryFun) {
@@ -334,7 +334,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test opts.key", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.key, doc);
         }
       }).then(function (queryFun) {
@@ -402,7 +402,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       values.push({b: 2, c: 2});
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo);
         }
       }).then(function (queryFun) {
@@ -410,7 +410,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         var docs = values.map(function (x, i) {
           return {_id: (i).toString(), foo: x};
         });
-        return db.bulkDocs({docs: docs}).then(function () {
+        return db.bulkDocs({docs}).then(function () {
           return db.query(queryFun, {reduce: false});
         }).then(function (res) {
           res.rows.forEach(function (x, i) {
@@ -460,7 +460,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '1' },
         { _id: '2' }
       ]).then(function () {
-        return createView(db, { map: map });
+        return createView(db, { map });
       }).then(function (queryFun) {
         return db.query(queryFun).then(function (res) {
           var rows = res.rows.map(function (x) {
@@ -531,7 +531,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit({ a: 'a' }, { b: 'b' });
             emit({ a: 'a' }, { b: 'b' });
           }
@@ -562,7 +562,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit();
             emit(null);
           }
@@ -593,7 +593,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit(null);
             emit();
           }
@@ -624,7 +624,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit(null);
             emit(null);
           }
@@ -655,7 +655,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit(true);
             emit(true);
           }
@@ -686,7 +686,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit({ a: 'b' }, { a: 'a' });
             emit({ a: 'a' }, { b: 'b' });
           }
@@ -717,7 +717,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit({ a: 'b', b: 'c' }, { a: 'a' });
             emit({ a: 'a' }, { b: 'b' });
           }
@@ -748,7 +748,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit({ a: 'a' }, { b: 'b' });
             emit({ a: 'b'}, { a: 'a' });
           }
@@ -779,7 +779,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit({ a: 'a'});
             emit({ b: 'b'});
           }
@@ -810,7 +810,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit({ a: 'a'});
             emit({ a: 'a', b: 'b'});
           }
@@ -841,7 +841,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit({ a: 'a'});
             emit({ a: 'a', b: 'b'});
           }
@@ -872,7 +872,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit(true);
             emit(false);
           }
@@ -903,7 +903,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         { _id: '2' }
       ]).then(function () {
         return createView(db, {
-          map: function () {
+          map() {
             emit(false);
             emit(true);
           }
@@ -930,7 +930,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test joins", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           if (doc.doc_id) {
             emit(doc._id, {_id: doc.doc_id});
           }
@@ -951,7 +951,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("No reduce function", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function () {
+        map() {
           emit('key', 'val');
         }
       }).then(function (queryFun) {
@@ -964,7 +964,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Query after db.close", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo, 'val');
         }
       }).then(function (queryFun) {
@@ -997,7 +997,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Built in _sum reduce function", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.val, 1);
         },
         reduce: "_sum"
@@ -1021,7 +1021,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Built in _count reduce function", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.val, doc.val);
         },
         reduce: "_count"
@@ -1152,7 +1152,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("#6364 Recognize built in reduce functions with trailing garbage", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.val, 1);
         },
         reduce: "_sum\n \r\nandothergarbage"
@@ -1280,7 +1280,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       }
       return db.bulkDocs(docs).then(function () {
         return createView(db, {
-          map: function (doc) {
+          map(doc) {
             emit(doc._id);
           }
         });
@@ -1334,7 +1334,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       // Need to avoid the cache to workaround
       // https://issues.apache.org/jira/browse/COUCHDB-2880
       var db = new PouchDB(dbName, {
-        fetch: function (url, opts) {
+        fetch(url, opts) {
           opts.cache = 'no-store';
           return PouchDB.fetch(url, opts);
         }
@@ -1353,7 +1353,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       }
       return db.bulkDocs(docs).then(function () {
         return createView(db, {
-          map: function (doc) {
+          map(doc) {
             emit(doc._id);
           }
         });
@@ -1380,7 +1380,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       // Need to avoid the cache to workaround
       // https://issues.apache.org/jira/browse/COUCHDB-2880
       var db = new PouchDB(dbName, {
-        fetch: function (url, opts) {
+        fetch(url, opts) {
           opts.cache = 'no-store';
           return PouchDB.fetch(url, opts);
         }
@@ -1393,7 +1393,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       }
       return db.bulkDocs(docs).then(function () {
         return createView(db, {
-          map: function (doc) {
+          map(doc) {
             emit(doc._id);
           }
         });
@@ -1423,7 +1423,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         }
       ], {new_edits: false}).then(function () {
         return createView(db, {
-          map: function (doc) {
+          map(doc) {
             emit(doc.foo);
           }
         }).then(function (queryFun) {
@@ -1479,7 +1479,7 @@ function tests(suiteName, dbName, dbType, viewType) {
 
       ], {new_edits: false}).then(function () {
         return createView(db, {
-          map: function (doc) {
+          map(doc) {
             emit(doc.foo);
           }
         }).then(function (queryFun) {
@@ -1526,7 +1526,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         var remote = new PouchDB(db2name);
         return remote.info().then(function () {
           return createView(db, {
-            map : function (doc) {
+            map(doc) {
               emit(doc._id, !!doc._conflicts);
             }
           }).then(function (queryFun) {
@@ -1551,7 +1551,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test view querying with limit option", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           if (doc.foo === 'bar') {
             emit(doc.foo);
           }
@@ -1575,10 +1575,10 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test view querying with custom reduce function", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo);
         },
-        reduce: function (keys, values) {
+        reduce(keys, values) {
           if (keys) {
             return keys.map(function (keyId) {
               var key = keyId[0];
@@ -1640,7 +1640,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test view querying with group_level option and reduce", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo);
         },
         reduce: '_count'
@@ -1682,7 +1682,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test view querying with invalid group_level options", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo);
         },
         reduce: '_count'
@@ -1705,7 +1705,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test view querying with limit option and reduce", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo);
         },
         reduce: '_count'
@@ -1735,7 +1735,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test view querying with invalid limit option and reduce", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo);
         },
         reduce: '_count'
@@ -1770,7 +1770,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       ]).then(function (res) {
         var rev = res[0].rev;
         return createView(db, {
-          map: function (doc) {
+          map(doc) {
             emit(doc._id);
           }
         }).then(function (queryFun) {
@@ -1821,7 +1821,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       var qf;
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo);
         },
         reduce: '_count'
@@ -1852,7 +1852,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("Test view querying with invalid skip option and reduce", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo);
         },
         reduce: '_count'
@@ -1884,7 +1884,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           if (doc.foo === 'bar') {
             emit(doc.foo);
           }
@@ -1936,13 +1936,13 @@ function tests(suiteName, dbName, dbType, viewType) {
           for (var i = 0; i < numAttempts; i++) {
             keys.push('_design/test' + i);
           }
-          return db.allDocs({keys : keys, include_docs : true});
+          return db.allDocs({keys, include_docs : true});
         }).then(function (res) {
           var docs = res.rows.map(function (row) {
             row.doc._deleted = true;
             return row.doc;
           });
-          return db.bulkDocs({docs : docs});
+          return db.bulkDocs({docs});
         }).then(function () {
           return db.viewCleanup();
         }).then(function (res) {
@@ -1958,10 +1958,10 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('If reduce function returns 0, resulting value should not be null', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo);
         },
-        reduce: function () {
+        reduce() {
           return 0;
         }
       }).then(function (queryFun) {
@@ -1980,7 +1980,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('Testing skip with a view', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.foo);
         }
       }).then(function (queryFun) {
@@ -2003,7 +2003,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('Map documents on 0/null/undefined/empty string', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.num);
         }
       }).then(function (mapFunction) {
@@ -2017,7 +2017,7 @@ function tests(suiteName, dbName, dbType, viewType) {
           {_id: 'inf', num: Infinity},
           {_id: 'neginf', num: -Infinity}
         ];
-        return db.bulkDocs({docs: docs}).then(function () {
+        return db.bulkDocs({docs}).then(function () {
           return db.query(mapFunction, {key: 0});
         }).then(function (data) {
           data.rows.should.have.length(1);
@@ -2048,7 +2048,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('Testing query with keys', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.field);
         }
       }).then(function (queryFun) {
@@ -2151,7 +2151,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       var spec;
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.field1);
           emit(doc.field2);
         }
@@ -2185,7 +2185,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('Testing multiple emissions (issue #14)', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.foo);
           emit(doc.bar);
           emit(doc.foo);
@@ -2241,7 +2241,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('Testing multiple emissions (complex keys)', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function () {
+        map() {
           emit(['a'], 1);
           emit(['b'], 3);
           emit(['a'], 2);
@@ -2273,7 +2273,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       var spec;
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.field);
         }
       }).then(function (mapFunction) {
@@ -2315,7 +2315,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       var db = new PouchDB(dbName);
 
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.name);
         }
       }).then(function (mapFun) {
@@ -2356,7 +2356,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       var db = new PouchDB(dbName);
 
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.name);
         }
       }).then(function (mapFun) {
@@ -2398,7 +2398,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       var db = new PouchDB(dbName);
 
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.name);
         }
       }).then(function (mapFun) {
@@ -2464,7 +2464,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       var spec;
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.field, null);
         }
       }).then(function (mapFunction) {
@@ -2509,7 +2509,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('opts.keys should work with complex keys', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo, doc.foo);
         }
       }).then(function (mapFunction) {
@@ -2529,7 +2529,7 @@ function tests(suiteName, dbName, dbType, viewType) {
             {foo: [0, false]}
           ]
         }).then(function () {
-          var opts = {keys: keys};
+          var opts = {keys};
           return db.query(mapFunction, opts);
         }).then(function (data) {
           data.rows.should.have.length(3);
@@ -2546,7 +2546,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       }
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.date, null);
         }
       }).then(function (mapFunction) {
@@ -2572,7 +2572,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       }
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           if (doc.join) {
             emit(doc.color, {_id : doc.join});
           }
@@ -2618,7 +2618,7 @@ function tests(suiteName, dbName, dbType, viewType) {
           {_id : '8'},
           {_id : '9'}
         ];
-        return db.bulkDocs({docs : docs}).then(function (res) {
+        return db.bulkDocs({docs}).then(function (res) {
           docs[3]._deleted = true;
           docs[7]._deleted = true;
           docs[3]._rev = res[3].rev;
@@ -2724,7 +2724,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       };
 
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.foo, 'fooValue');
           emit(doc.foo);
           emit(doc.bar);
@@ -2812,7 +2812,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         ]
       };
       return createView(db, {
-        map : function () {
+        map() {
           emit();
         }
       }).then(function (mapFun) {
@@ -2839,7 +2839,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('should query correctly with no docs', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function () {
+        map() {
           emit();
         }
       }).then(function (queryFun) {
@@ -2854,7 +2854,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('should query correctly with no emits', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function () {
+        map() {
         }
       }).then(function (queryFun) {
         return db.bulkDocs({docs : [
@@ -2886,7 +2886,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       }
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.name);
         },
         reduce : '_count'
@@ -2984,7 +2984,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       var db = new PouchDB(dbName);
       var db2 = new PouchDB(testUtils.adapterUrl(dbType, 'local-other'));
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.name);
         }
       }).then(function (queryFun) {
@@ -3035,7 +3035,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('should query correctly after many edits', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.name, doc.likes);
         }
       }).then(function (queryFun) {
@@ -3078,9 +3078,9 @@ function tests(suiteName, dbName, dbType, viewType) {
             doc._rev = res[i].rev;
             docFun(doc);
           }
-          return db.bulkDocs({docs : docs});
+          return db.bulkDocs({docs});
         }
-        return db.bulkDocs({docs : docs}).then(function (res) {
+        return db.bulkDocs({docs}).then(function (res) {
           return update(res, function (doc) { doc.likes = 'pizza'; });
         }).then(function (res) {
           return update(res, function (doc) { doc.knows = 'kung fu'; });
@@ -3124,7 +3124,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('should query correctly with staggered seqs', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.name);
         }
       }).then(function (queryFun) {
@@ -3136,20 +3136,20 @@ function tests(suiteName, dbName, dbType, viewType) {
             name: 'gen1'
           });
         }
-        return db.bulkDocs({docs: docs}).then(function (infos) {
+        return db.bulkDocs({docs}).then(function (infos) {
           docs.forEach(function (doc) {
             doc._rev = infos.find((info) => info.id === doc._id).rev;
             doc.name = 'gen2';
           });
           docs.reverse();
-          return db.bulkDocs({docs: docs});
+          return db.bulkDocs({docs});
         }).then(function (infos) {
           docs.forEach(function (doc) {
             doc._rev = infos.find((info) => info.id === doc._id).rev;
             doc.name = 'gen-3';
           });
           docs.reverse();
-          return db.bulkDocs({docs: docs});
+          return db.bulkDocs({docs});
         }).then(function (infos) {
           docs.forEach(function (doc) {
             doc._rev = infos.find((info) => info.id === doc._id).rev;
@@ -3165,7 +3165,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         }).then(function (res) {
           var expected = docs.map(function (doc, i) {
             var key = i % 2 === 1 ? 'gen-4-odd' : 'gen-3';
-            return {key: key, id: doc._id, value: null};
+            return {key, id: doc._id, value: null};
           });
           expected.sort(function (a, b) {
             if (a.key !== b.key) {
@@ -3183,7 +3183,7 @@ function tests(suiteName, dbName, dbType, viewType) {
 
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.name);
         }
       }).then(function (queryFun) {
@@ -3229,26 +3229,26 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('should return error when multi-key fetch & group=false', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) { emit(doc._id); },
+        map(doc) { emit(doc._id); },
         reduce: '_sum'
       }).then(function (queryFun) {
         var keys = ['1', '2'];
         var opts = {
-          keys: keys,
+          keys,
           group: false
         };
         return db.query(queryFun, opts).then(function (res) {
           should.not.exist(res);
         }).catch(function (err) {
           err.status.should.be.oneOf([400, 500]);
-          opts = {keys: keys};
+          opts = {keys};
           return db.query(queryFun, opts).then(function (res) {
             should.not.exist(res);
           }).catch(function (err) {
             err.status.should.be.oneOf([400, 500]);
-            opts = {keys: keys, reduce : false};
+            opts = {keys, reduce : false};
             return db.query(queryFun, opts).then(function () {
-              opts = {keys: keys, group: true};
+              opts = {keys, group: true};
               return db.query(queryFun, opts);
             });
           });
@@ -3261,7 +3261,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       var err;
       db.on('error', function (e) { err = e; });
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.nonexistent.foo);
         }
       }).then(function (queryFun) {
@@ -3281,10 +3281,10 @@ function tests(suiteName, dbName, dbType, viewType) {
       var err;
       db.on('error', function (e) { err = e; });
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.name);
         },
-        reduce : function (keys) {
+        reduce(keys) {
           return keys[0].foo.bar;
         }
       }).then(function (queryFun) {
@@ -3307,10 +3307,10 @@ function tests(suiteName, dbName, dbType, viewType) {
       var err;
       db.on('error', function (e) { err = e; });
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.name);
         },
-        reduce : function () {
+        reduce() {
         }
       }).then(function (queryFun) {
         return db.put({name : 'bar', _id : '1'}).then(function () {
@@ -3328,10 +3328,10 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('should properly query custom reduce functions', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           emit(doc.name, doc.count);
         },
-        reduce : function (keys, values, rereduce) {
+        reduce(keys, values, rereduce) {
           // calculate the average count per name
           if (!rereduce) {
             var result = {
@@ -3519,13 +3519,13 @@ function tests(suiteName, dbName, dbType, viewType) {
 
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           doc.keys.forEach(function (key) {
             emit(key);
           });
         }
       }).then(function (mapFun) {
-        return db.bulkDocs({docs : docs}).then(function () {
+        return db.bulkDocs({docs}).then(function () {
           var tasks = keySets.map(function (keys, i) {
             return function () {
               var expectedResponseKeys = [];
@@ -3541,7 +3541,7 @@ function tests(suiteName, dbName, dbType, viewType) {
                   });
                 });
                 expectedResponseKeys.sort();
-                return db.bulkDocs({docs: docs});
+                return db.bulkDocs({docs});
               }).then(function () {
                 return db.query(mapFun);
               }).then(function (res) {
@@ -3584,13 +3584,13 @@ function tests(suiteName, dbName, dbType, viewType) {
 
       var db = new PouchDB(dbName);
       return createView(db, {
-        map : function (doc) {
+        map(doc) {
           doc.keys.forEach(function (key) {
             emit(key);
           });
         }
       }).then(function (mapFun) {
-        return db.bulkDocs({docs : docs}).then(function () {
+        return db.bulkDocs({docs}).then(function () {
           var tasks = keySets.map(function (keys, i) {
             return function () {
               var expectedResponseKeys = [];
@@ -3608,7 +3608,7 @@ function tests(suiteName, dbName, dbType, viewType) {
                 expectedResponseKeys.sort(function (a, b) {
                   return a - b;
                 });
-                return db.bulkDocs({docs: docs});
+                return db.bulkDocs({docs});
               }).then(function () {
                 return db.query(mapFun);
               }).then(function (res) {
@@ -3633,11 +3633,11 @@ function tests(suiteName, dbName, dbType, viewType) {
     it('should work with post', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) { emit(doc._id); }
+        map(doc) { emit(doc._id); }
       }).then(async function (mapFun) {
         return db.bulkDocs({docs: [{_id : 'bazbazbazb'}]}).then(function () {
           var keys = ['bazbazbazb'];
-          return db.query(mapFun, {keys: keys}).then(function (resp) {
+          return db.query(mapFun, {keys}).then(function (resp) {
             resp.total_rows.should.equal(1);
             resp.rows.should.have.length(1);
             return resp.rows.every(function (row) {
@@ -3682,7 +3682,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         err = e;
       });
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo.bar, doc);
         }
       }).then(function (view) {
@@ -3717,7 +3717,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         'even without a listener (#214)', function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo.bar, doc);
         }
       }).then(function (view) {
@@ -3759,7 +3759,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       return createView(db, {
         map: "function(doc){emit(doc.name, doc.count);};\n"
       }).then(function (queryFun) {
-        return db.bulkDocs({docs: docs}).then(function (res) {
+        return db.bulkDocs({docs}).then(function (res) {
           for (var i = 0; i < res.length; i++) {
             docs[i]._rev = res[i].rev;
           }
@@ -3771,7 +3771,7 @@ function tests(suiteName, dbName, dbType, viewType) {
           docs.forEach(function (doc) {
             doc.count = 2;
           });
-          return db.bulkDocs({docs: docs});
+          return db.bulkDocs({docs});
         }).then(function () {
           return db.query(queryFun);
         }).then(function (res) {
@@ -3794,7 +3794,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       return createView(db, {
         map: "function(doc){emit(doc.name);};\n"
       }).then(function (queryFun) {
-        return db.bulkDocs({ docs: docs }).then(function () {
+        return db.bulkDocs({ docs }).then(function () {
           return db.query(queryFun, { update_seq: false });
         }).then(function (result) {
           result.rows.should.have.length(4);
@@ -3815,7 +3815,7 @@ function tests(suiteName, dbName, dbType, viewType) {
         });
       }
 
-      return db.bulkDocs({ docs: docs }).then(function () {
+      return db.bulkDocs({ docs }).then(function () {
         return createView(db, {
           map: "function(doc){emit(doc.name);};\n"
         });
@@ -3859,7 +3859,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       return createView(db, {
         map: "function(doc){emit(doc.name);};\n"
       }).then(function (queryFun) {
-        return db.bulkDocs({ docs: docs }).then(function () {
+        return db.bulkDocs({ docs }).then(function () {
           return db.query(queryFun);
         }).then(function (result) {
           result.rows.should.have.length(4);
@@ -3871,7 +3871,7 @@ function tests(suiteName, dbName, dbType, viewType) {
     it("#8370 keys queries should support skip and limit", function () {
       var db = new PouchDB(dbName);
       return createView(db, {
-        map: function (doc) {
+        map(doc) {
           emit(doc.field);
         }
       }).then(function (queryFun) {

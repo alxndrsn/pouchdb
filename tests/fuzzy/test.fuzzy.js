@@ -24,12 +24,12 @@ var actionCount = 100;
 var actions = {
 
   // Create a random document
-  'create': function (a) {
+  'create'(a) {
     return a.post({'a': 'newdoc'});
   },
 
   // Pick from an existing document and updated it
-  'update': function (a) {
+  'update'(a) {
     return randomDoc(a).then(function (doc) {
       if (doc) {
         doc.updated = Date.now();
@@ -39,7 +39,7 @@ var actions = {
   },
 
   // Remove a random document
-  'remove': function (a) {
+  'remove'(a) {
     return randomDoc(a).then(function (doc) {
       if (doc) {
         return a.remove(doc);
@@ -49,7 +49,7 @@ var actions = {
 
   // Generate a conflict by writing a document with the same id to
   // both databases
-  'conflict': function (a, b) {
+  'conflict'(a, b) {
     var doc = {
       _id: 'random-' + Date.now(),
       foo: 'bar'
@@ -61,7 +61,7 @@ var actions = {
   },
 
   // Perform a one off replication
-  'replicate': function (a, b) {
+  'replicate'(a, b) {
     return a.replicate.to(b);
   }
 };

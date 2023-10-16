@@ -137,7 +137,7 @@ adapters.forEach(function (adapters) {
 
       var db = new PouchDB(dbs.name);
       var remote = new PouchDB(dbs.remote, {
-        fetch: function (url, opts) {
+        fetch(url, opts) {
           if (rejectAjax) {
             throw new Error('flunking you');
           } else {
@@ -152,7 +152,7 @@ adapters.forEach(function (adapters) {
         var repl = db.replicate.to(remote, {
           retry: true,
           live: true,
-          back_off_function: function () { return 0; }
+          back_off_function() { return 0; }
         });
 
         var counter = 0;
@@ -301,7 +301,7 @@ adapters.forEach(function (adapters) {
 
           if (adapters[0] === 'http') {
             source = new PouchDB(dbs.name, {
-              fetch: function () {
+              fetch() {
                 throw err;
               }
             });
@@ -312,7 +312,7 @@ adapters.forEach(function (adapters) {
           if (adapters[1] === 'http') {
             source = new PouchDB(dbs.name);
             dest = new PouchDB(dbs.remote, {
-              fetch: function () {
+              fetch() {
                 throw err;
               }
             });

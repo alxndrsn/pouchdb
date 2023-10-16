@@ -42,7 +42,7 @@ adapters.forEach(function (adapters) {
       var rep = db.replicate.from(remote, {
         live: true,
         retry: true,
-        back_off_function: function () { return 0; }
+        back_off_function() { return 0; }
       });
 
       var paused = 0;
@@ -94,7 +94,7 @@ adapters.forEach(function (adapters) {
       var rep = db.replicate.from(remote, {
         live: true,
         retry: true,
-        back_off_function: function () { return 0; }
+        back_off_function() { return 0; }
       });
 
       var paused = 0;
@@ -161,7 +161,7 @@ adapters.forEach(function (adapters) {
       var rep = db.replicate.from(remote, {
         live: true,
         retry: true,
-        back_off_function: function () { return 0; }
+        back_off_function() { return 0; }
       });
 
       var numDocsToWrite = 10;
@@ -241,7 +241,7 @@ adapters.forEach(function (adapters) {
       var rep = db.replicate.from(remote, {
         live: true,
         retry: true,
-        back_off_function: function () { return 0; }
+        back_off_function() { return 0; }
       });
 
       var numDocsToWrite = 10;
@@ -324,7 +324,7 @@ adapters.forEach(function (adapters) {
         var rep = db.replicate.from(remote, {
           live: true,
           retry: true,
-          back_off_function: function () { return 0; }
+          back_off_function() { return 0; }
         });
 
         var numDocsToWrite = 10;
@@ -400,7 +400,7 @@ adapters.forEach(function (adapters) {
       var rep = db.replicate.from(remote, {
         live: true,
         retry: true,
-        back_off_function: function () { return 0; }
+        back_off_function() { return 0; }
       }).on('change', function () {});
 
       var numDocsToWrite = 10;
@@ -474,7 +474,7 @@ adapters.forEach(function (adapters) {
       var rep = db.replicate.from(remote, {
         live: true,
         retry: true,
-        back_off_function: function () { return 0; }
+        back_off_function() { return 0; }
       });
 
       var active = 0;
@@ -600,7 +600,7 @@ adapters.forEach(function (adapters) {
       var db = new PouchDB(dbs.name);
       var remote = new PouchDB(dbs.remote);
       return db.bulkDocs({
-        docs: docs,
+        docs,
         new_edits: false
       }).then(function () {
         function replicatePromise(fromDB, toDB) {
@@ -642,7 +642,7 @@ adapters.forEach(function (adapters) {
             live: true,
             retry: true,
             heartbeat: 5,
-            back_off_function: function () {
+            back_off_function() {
               called = true;
               replication.cancel();
             }

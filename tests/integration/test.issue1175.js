@@ -37,10 +37,10 @@ function MockDatabase(statusCodeToReturn, dataToReturn) {
     });
   };
   this.activeTasks = {
-    add: function () {},
-    get: function () {},
-    update: function () {},
-    remove: function () {},
+    add() {},
+    get() {},
+    update() {},
+    remove() {},
   };
 }
 function getCallback(expectError, done) {

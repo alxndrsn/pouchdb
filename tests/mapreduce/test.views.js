@@ -29,7 +29,7 @@ describe('test.views.js', function () {
       ]
     }, {}, function () {
       var queryFun = {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo, doc);
         }
       };
@@ -100,7 +100,7 @@ describe('test.views.js', function () {
       ]
     }, {}, function () {
       var queryFun = {
-        map: function (doc) {
+        map(doc) {
           emit(doc.key, doc);
         }
       };
@@ -145,7 +145,7 @@ describe('test.views.js', function () {
       ]
     }, {}, function () {
       var queryFun = {
-        map: function (doc) {
+        map(doc) {
           emit(doc.key, doc);
         }
       };
@@ -234,9 +234,9 @@ describe('test.views.js', function () {
         foo: x
       };
     });
-    db.bulkDocs({ docs: docs }, {}, function (err) {
+    db.bulkDocs({ docs }, {}, function (err) {
       var queryFun = {
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo, null);
         }
       };
@@ -280,7 +280,7 @@ describe('test.views.js', function () {
       ]
     }, {}, function () {
       var queryFun = {
-        map: function (doc) {
+        map(doc) {
           if (doc.doc_id) {
             emit(doc._id, { _id: doc.doc_id });
           }
@@ -301,7 +301,7 @@ describe('test.views.js', function () {
     var db = new PouchDB(dbs.name);
     db.post({ foo: 'bar' }, function () {
       var queryFun = {
-        map: function () {
+        map() {
           emit('key', 'val');
         }
       };
@@ -321,7 +321,7 @@ describe('test.views.js', function () {
       ]
     }, null, function () {
       var queryFun = {
-        map: function (doc) {
+        map(doc) {
           emit(doc.val, 1);
         },
         reduce: '_sum'
@@ -348,7 +348,7 @@ describe('test.views.js', function () {
       ]
     }, null, function () {
       var queryFun = {
-        map: function (doc) {
+        map(doc) {
           emit(doc.val, doc.val);
         },
         reduce: '_count'
@@ -375,7 +375,7 @@ describe('test.views.js', function () {
       ]
     }, null, function () {
       var queryFun = {
-        map: function (doc) {
+        map(doc) {
           emit(doc.val, 1);
         },
         reduce: '_stats'
@@ -542,10 +542,10 @@ describe('test.views.js', function () {
     var db = new PouchDB(dbs.name);
     db.bulkDocs({ docs: [{ foo: 'bar' }] }, null, function () {
       db.query({
-        map: function (doc) {
+        map(doc) {
           emit(doc.foo);
         },
-        reduce: function () {
+        reduce() {
           return 0;
         }
       }, function (err, data) {
@@ -628,7 +628,7 @@ describe('test.views.js', function () {
         num: ''
       }
     ];
-    db.bulkDocs({ docs: docs }, function () {
+    db.bulkDocs({ docs }, function () {
       var mapFunction = function (doc) {
         emit(doc.num, null);
       };
