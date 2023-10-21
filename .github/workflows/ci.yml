@@ -48,7 +48,7 @@ jobs:
     env:
       CLIENT: ${{ matrix.client }}
       SERVER: pouchdb-server
-      POUCHDB_SERVER_VERSION: 5.6.7
+      POUCHDB_SERVER_VERSION: 4.2.0
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/install-deps
