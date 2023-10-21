@@ -25,7 +25,7 @@ pouchdb-setup-server() {
   mkdir pouchdb-server-install
   cd pouchdb-server-install
   npm init -y
-  npm install pouchdb-server
+  npm install "pouchdb-server@${POUCHDB_SERVER_VERSION:-latest}"
   cd ..
 
   for pkg in packages/node_modules/* ; do
