@@ -33,7 +33,7 @@ cat > index.html <<EOF
 <!DOCTYPE html>
 <html>
   <body>
-    <script type="module" src="/packages/node_modules/pouchdb/lib/index.js"></script>
+    <script type="module" src="/packages/node_modules/pouchdb-browser/src/index.js"></script>
   </body>
 </html>
 EOF
