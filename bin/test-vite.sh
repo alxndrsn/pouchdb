@@ -29,7 +29,7 @@ npm i --force vite@4.5.0
 node bin/update-package-json-for-publish.js
 
 mkdir -p tmp/vite
-cat > tmp/vite/index.html <<EOF
+cat > index.html <<EOF
 <!DOCTYPE html>
 <html>
   <body>
@@ -39,5 +39,6 @@ cat > tmp/vite/index.html <<EOF
 EOF
 
 ./node_modules/.bin/vite build --target esnext --outDir tmp/vite/dist --minify false tmp/vite
-BUILD_NODE_DONE=1 POUCHDB_SRC='../../pouchdb-vite/.js' npm test
-
+# TODO this will go wrong if there's more than one JS file generated(?)
+cp ./tmp/vite/dist/assets/*.js pouchdb-vite.js
+BUILD_NODE_DONE=1 POUCHDB_SRC='../../pouchdb-vite.js' npm test
