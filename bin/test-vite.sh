@@ -38,7 +38,7 @@ cat > index.html <<EOF
 </html>
 EOF
 
-./node_modules/.bin/vite build --target esnext --outDir tmp/vite/dist --minify false tmp/vite
+./node_modules/.bin/vite build --target esnext --outDir tmp/vite/dist --minify false
 # TODO this will go wrong if there's more than one JS file generated(?)
 cp ./tmp/vite/dist/assets/*.js pouchdb-vite.js
 BUILD_NODE_DONE=1 POUCHDB_SRC='../../pouchdb-vite.js' npm test
