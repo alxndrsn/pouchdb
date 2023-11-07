@@ -34,17 +34,21 @@ modules.forEach(function (mod) {
     }
   }))).filter(function (dep) {
     // some modules require() themselves, e.g. for plugins
-    return dep !== pkg.name &&
-      // exclude built-ins like 'inherits', 'fs', etc.
-      builtinModules.indexOf(dep) === -1;
+    return dep !== pkg.name;
   }).sort();
 
   var deps = pkg.dependencies = {};
+  const peerDeps = pkg.peerDependencies = {};
   uniqDeps.forEach(function (dep) {
     if (topPkg.dependencies[dep]) {
       deps[dep] = topPkg.dependencies[dep];
     } else if (modules.indexOf(dep) !== -1) { // core pouchdb-* module
       deps[dep] = topPkg.version;
+    } else if (builtinModules.includes(dep)) {
+      // Convert built-ins like 'inherits', 'fs', etc. to peerDependencies
+      // While browserify will shim node built-ins by default, some newer
+      // bundlers will not (notably: vite).
+      peerDeps[dep] = '*';
     } else {
       throw new Error('Unknown dependency ' + dep);
     }
