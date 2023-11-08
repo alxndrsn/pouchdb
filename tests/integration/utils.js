@@ -165,14 +165,20 @@ testUtils.putTree = function (db, tree, callback) {
 };
 
 function parseHostWithCreds(host) {
-  var uriObj = testUtils.parseUri(host);
-  var url = `${uriObj.protocol}://${uriObj.host}:${uriObj.port}${uriObj.path}`;
-  var options = {};
-  if (uriObj.userInfo) {
-    options.headers = {};
-    options.headers['Authorization'] = 'Basic: ' + testUtils.btoa(uriObj.userInfo);
+  const url = new URL(host);
+
+  const options = {};
+
+  if (url.username || url.password) {
+    const userInfo = url.username + ':' + url.password;
+    options.headers = {
+      Authorization: 'Basic: ' + testUtils.btoa(userInfo),
+    };
+
+    url.username = url.password = '';
   }
-  return { url, options };
+
+  return { url:url.toString(), options };
 }
 
 testUtils.isCouchDB = function (cb) {
