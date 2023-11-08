@@ -49,12 +49,7 @@ function tests(suiteName, dbName, dbType, viewType) {
 
     beforeEach(function () {
       if (dbType === 'http') {
-        var uri = testUtils.parseUri(dbName);
-        var dbUrl = `${uri.protocol}://${uri.host}:${uri.port}${uri.path}`;
-        return PouchDB.fetch(dbUrl + '?q=1', {
-          method: 'PUT',
-          headers: { Authorization: 'Basic ' + testUtils.btoa(uri.userInfo) }
-        });
+        return testUtils.isCouchDB();
       }
     });
 

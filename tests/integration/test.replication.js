@@ -3946,8 +3946,8 @@ adapters.forEach(function (adapters) {
       var db = new PouchDB(dbs.name);
       var remote = new PouchDB(dbs.remote, {
         fetch: function (url, opts) {
-          var uri = testUtils.parseUri(url);
-          if (uri.path === '/') {
+          const uri = new URL(url);
+          if (uri.pathname === '/') {
             // Network error, as returned by the Fetch API:
             return Promise.reject(new TypeError('Failed to fetch'));
           }
@@ -3977,8 +3977,8 @@ adapters.forEach(function (adapters) {
       var db = new PouchDB(dbs.name);
       var remote = new PouchDB(dbs.remote, {
         fetch: function (url, opts) {
-          var uri = testUtils.parseUri(url);
-          if (uri.path === '/') {
+          const uri = new URL(url);
+          if (uri.pathname === '/') {
             return PouchDB.fetch(url, opts).then(function (response) {
               response.body = new Blob('this is not JSON');
               return response;

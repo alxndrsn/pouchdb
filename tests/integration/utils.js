@@ -268,7 +268,6 @@ testUtils.atob = pouchUtils.atob;
 testUtils.ajax = PouchForCoverage.ajax;
 testUtils.uuid = pouchUtils.uuid;
 testUtils.rev = pouchUtils.rev;
-testUtils.parseUri = pouchUtils.parseUri;
 testUtils.errors = PouchForCoverage.Errors;
 testUtils.assign = pouchUtils.assign;
 testUtils.generateReplicationId = pouchUtils.generateReplicationId;
