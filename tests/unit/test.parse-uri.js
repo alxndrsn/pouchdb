@@ -8,6 +8,7 @@ describe('test.parse-uri.js', function () {
 
   it('parses a basic uri', function () {
     var parsed = parseUri('http://foobar.com');
+    parsed.host.should.equal('foobar.com');
     parsed.protocol.should.equal('http');
   });
 
@@ -16,6 +17,7 @@ describe('test.parse-uri.js', function () {
     parsed.should.deep.equal({
       path: '/baz/bar/index.html',
       port: '',
+      host: 'foo.com',
       password: 'pass',
       user: 'user',
       protocol: 'http',
@@ -27,6 +29,7 @@ describe('test.parse-uri.js', function () {
       'http://u%24ern%40me:p%26%24%24w%40rd@foo.com');
     uri.password.should.equal('p&$$w@rd');
     uri.user.should.equal('u$ern@me');
+    uri.host.should.equal('foo.com');
   });
 
 });
