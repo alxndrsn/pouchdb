@@ -13,10 +13,10 @@ describe('test.parse-uri.js', function () {
   });
 
   it('parses a complex uri', function () {
-    var parsed = parseUri('http://user:pass@foo.com/baz/bar/index.html?hey=yo');
+    var parsed = parseUri('http://user:pass@foo.com:1234/baz/bar/index.html?hey=yo');
     parsed.should.deep.equal({
       path: '/baz/bar/index.html',
-      port: '',
+      port: '1234',
       host: 'foo.com',
       password: 'pass',
       user: 'user',
