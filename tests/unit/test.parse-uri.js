@@ -20,6 +20,7 @@ describe('test.parse-uri.js', function () {
       host: 'foo.com',
       password: 'pass',
       user: 'user',
+      userInfo: 'user:pass',
       protocol: 'http',
     });
   });
