@@ -1,10 +1,10 @@
 'use strict';
 
 var adapters = [
-  ['local', 'http'],
+//  ['local', 'http'],
   ['http', 'http'],
-  ['http', 'local'],
-  ['local', 'local']
+//  ['http', 'local'],
+//  ['local', 'local']
 ];
 
 adapters.forEach(function (adapters) {
@@ -12,13 +12,24 @@ adapters.forEach(function (adapters) {
 
     var dbs = {};
 
+    let iter = 0;
+
+    let destroyAfter;
+
     beforeEach(function () {
+      console.log(iter, 'beforeEach()', 'ENTRY');
       dbs.name = testUtils.adapterUrl(adapters[0], 'testdb');
       dbs.remote = testUtils.adapterUrl(adapters[1], 'test_repl_remote');
+      console.log(iter, 'beforeEach()', 'db_name_prefix:', dbs.name);
+      destroyAfter = [dbs.name, dbs.remote];
+      console.log(iter, 'beforeEach()', 'EXIT');
     });
 
     afterEach(function (done) {
-      testUtils.cleanup([dbs.name, dbs.remote], done);
+      console.log(iter, 'afterEach()', 'ENTRY');
+      testUtils.cleanup(destroyAfter, done);
+      console.log(iter, 'afterEach()', 'EXIT');
+      ++iter;
     });
 
     it('PouchDB.sync event', function (done) {
@@ -815,38 +826,106 @@ adapters.forEach(function (adapters) {
       });
     });
 
-    it('5007 sync 2 databases', function (done) {
-      var db = new PouchDB(dbs.name);
+    for (let i=0; i<1000; i++) {
+      const double_sync = true;
 
-      var remote1 = new PouchDB(dbs.remote);
-      var remote2 = new PouchDB(dbs.remote + '_2');
+      it.only(`5007 sync 2 databases #${i} (double_sync: ${double_sync})`, function (reallyDone) {
+        this.timeout(2000);
 
-      var sync1 = db.sync(remote1, {live: true});
-      var sync2 = db.sync(remote2, {live: true});
+        window.iterationNumber = i;
+        try {
+          console.log(i, 'Test ENTRY');
 
-      var numChanges = 0;
-      function onChange() {
-        if (++numChanges === 2) {
-          complete();
+          const done = async (...args) => {
+            console.log(i, 'done() called with:', args);
+            //console.log(i, 'done() toCancel:', toCancel.length);
+//            try { await remote1.destroy(); } catch(destrErr) { console.log('Ignoring:', destrErr); }
+//            try { await remote2.destroy(); } catch(destrErr) { console.log('Ignoring:', destrErr); }
+            reallyDone(...args);
+          };
+
+          var db = new PouchDB(dbs.name);
+          console.log(i, 'db.adapter:', db.adapter);
+
+          var remote1 = new PouchDB(dbs.remote);
+          const remote2name = dbs.remote + '_2';
+          var remote2 = double_sync && new PouchDB(remote2name);
+          destroyAfter.push(remote2name);
+
+          const logEvent = (objName, eventName) => (...args) => console.log(i, objName, eventName, args);
+
+          var sync1 = db.sync(remote1, {live: true});
+          sync1.on('error', done);
+          sync1.on('change',   logEvent('sync1', 'paused'))
+          sync1.on('paused',   logEvent('sync1', 'paused'))
+          sync1.on('active',   logEvent('sync1', 'paused'))
+          sync1.on('denied',   logEvent('sync1', 'paused'))
+          sync1.on('complete', logEvent('sync1', 'paused'))
+          var sync2 = double_sync && db.sync(remote2, {live: true})
+              .on('change',   logEvent('sync2', 'paused'))
+              .on('paused',   logEvent('sync2', 'paused'))
+              .on('active',   logEvent('sync2', 'paused'))
+              .on('denied',   logEvent('sync2', 'paused'))
+              .on('complete', logEvent('sync2', 'paused'))
+              .on('error', done);
+
+          // possibly check for active event
+
+          var numChanges = 0;
+          function onChange() {
+            console.log(i, 'onChange(); numChanges:', numChanges+1);
+            if (double_sync && ++numChanges === 2) {
+              complete();
+            }
+            if (!double_sync && ++numChanges === 1) {
+              complete();
+            }
+          }
+
+          function onChangesComplete(info) {
+            console.log('onChangesComplete()', info);
+          }
+
+          var changes1 = remote1.changes({live: true});
+          changes1.on('error', done);
+          changes1.on('change', onChange);
+          changes1.on('complete', onChangesComplete);
+          var changes2 = double_sync && remote2.changes({live: true}).on('change', onChange).on('complete', onChangesComplete).on('error', done);
+
+          const ll = db.listeners('change');
+          console.log(i, 'change listener count:', ll.length);
+          console.log(i, 'change listeners:', ll.map(f => f.toString()));
+
+          console.log(i, 'posting...');
+          // Give the sync() and changes() functions a chance to start (Safari-specific race condition):
+          setTimeout(() => {
+            db.post({foo: 'bar'}).then(res => {
+              if (!res.ok) {
+                console.log(i, 'post returned err:', res);
+                return done(err);
+              }
+              console.log(i, 'post completed OK!', res);
+            });
+          }, 100);
+
+          var toCancel = double_sync ? [changes1, changes2, sync1, sync2] : [changes1, /* changes2,*/ sync1 /*, sync2*/];
+          function complete(event, prev) {
+            console.log(i, 'complete()', event, 'toCancel.length:', toCancel.length, 'prev:', prev);
+            if (!toCancel.length) {
+              done();
+              return;
+            }
+            var cancelling = toCancel.shift();
+            cancelling.on('complete', info => complete('complete', info));
+            cancelling.on('error',    error => complete('error', error));
+            cancelling.cancel();
+          }
+        } catch (err) {
+          console.log(i, 'wtf!', err);
+          done(err);
         }
-      }
-
-      var changes1 = remote1.changes({live: true}).on('change', onChange);
-      var changes2 = remote2.changes({live: true}).on('change', onChange);
-
-      db.post({foo: 'bar'});
-      var toCancel = [changes1, changes2, sync1, sync2];
-      function complete() {
-        if (!toCancel.length) {
-          return remote2.destroy().then(function () {
-            done();
-          });
-        }
-        var cancelling = toCancel.shift();
-        cancelling.on('complete', complete);
-        cancelling.cancel();
-      }
-    });
+      });
+    }
 
     it('5782 sync rev-1 conflicts', function () {
       var local = new PouchDB(dbs.name);

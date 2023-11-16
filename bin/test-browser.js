@@ -155,7 +155,7 @@ async function startTest() {
   }
 
   const options = {
-    headless: true,
+    headless: false,
   };
   const browser = await playwright[browserName].launch(options);
   const page = await browser.newPage();
@@ -203,14 +203,14 @@ async function startTest() {
         }
 
         clearInterval(interval);
-        await browser.close();
+        //await browser.close();
         process.exit(!process.env.PERF && runner.failed ? 1 : 0);
       }
     } catch (e) {
       console.error('Tests failed:', e);
 
       clearInterval(interval);
-      await browser.close();
+      //await browser.close();
       process.exit(3);
     }
   }, 1000);

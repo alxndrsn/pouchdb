@@ -96,7 +96,8 @@ testUtils.cleanup = function (dbs, done) {
   var num = dbs.length;
   var finished = function () {
     if (--num === 0) {
-      done();
+      setTimeout(done, 500);
+//      done();
     }
   };
 
