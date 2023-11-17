@@ -832,10 +832,6 @@ adapters.forEach(function (adapters) {
       it.only(`5007 sync 2 databases #${i} (double_sync: ${double_sync})`, function (reallyDone) {
         this.timeout(2000);
 
-        window.iterationNumber = i;
-        try {
-          console.log(i, 'Test ENTRY');
-
           const done = async (...args) => {
             console.log(i, 'done() called with:', args);
             //console.log(i, 'done() toCancel:', toCancel.length);
@@ -843,6 +839,10 @@ adapters.forEach(function (adapters) {
 //            try { await remote2.destroy(); } catch(destrErr) { console.log('Ignoring:', destrErr); }
             reallyDone(...args);
           };
+
+        window.iterationNumber = i;
+        try {
+          console.log(i, 'Test ENTRY');
 
           var db = new PouchDB(dbs.name);
           console.log(i, 'db.adapter:', db.adapter);
@@ -902,7 +902,7 @@ adapters.forEach(function (adapters) {
             db.post({foo: 'bar'}).then(res => {
               if (!res.ok) {
                 console.log(i, 'post returned err:', res);
-                return done(err);
+                return done(res);
               }
               console.log(i, 'post completed OK!', res);
             });
