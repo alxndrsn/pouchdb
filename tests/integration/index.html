@@ -18,10 +18,6 @@
       // hanging requests caused by too many simultaneous requests to the same
       // domain (the couchdb/pouchdb-server).
 
-      // TODO consider moving this code to testUtils or similar to:
-      // * allow re-use in other integration tests
-      // * make sure it's linted
-
       let fetches = [];
 
       const originalFetch = fetch;
