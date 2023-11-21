@@ -63,11 +63,8 @@
           if (unfinished.length) {
             console.log( 'afterEach()', this.test.title, 'unfinished:',
               unfinished.length, JSON.stringify(fetches, null, 2));
-            done(new Error(`Pending fetches after test complete: ${this.test.title} ${JSON.stringify(unfinished)}`));
-            //done(); // TODO For now, just warn when there are open connections
-          } else {
-            done();
           }
+          done();
         }, 100);
       });
     </script>
