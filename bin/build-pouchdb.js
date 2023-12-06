@@ -170,6 +170,8 @@ function doBuildNode() {
 }
 
 function doBuildAll() {
+  console.log('doBuildAll() called by:', new Error().stack);
+  //process.exit(1);
   return rimrafMkdirp('lib', 'dist', 'lib/plugins')
     .then(doAll(buildForNode, buildForBrowserify))
     .then(doAll(buildForBrowser, buildPluginsForBrowserify))
@@ -180,6 +182,8 @@ function doBuild() {
   if (process.env.BUILD_NODE) { // rebuild before "npm test"
     return doBuildNode();
   } else { // normal, full build
+    console.log('doBuild() called by:', new Error().stack);
+    //process.exit(1);
     return doBuildAll();
   }
 }

@@ -26,9 +26,16 @@ function buildPackage(pkg) {
 }
 
 readDir('packages/node_modules').then(function (packages) {
-  return Promise.all(packages.map(buildPackage)).catch(function (err) {
-    console.error('build error');
-    console.error(err.stack);
-    process.exit(1);
-  });
+  throw new Error('build-modules failing deliberately');
+  console.log('buildPackage() running for:', packages);
+  return Promise.all(packages.map(buildPackage))
+    .then(() => {
+      console.log('buildPackage() passed for all of:', packages);
+      process.exit(11);
+    })
+    .catch(function (err) {
+      console.error('build error');
+      console.error(err.stack);
+      process.exit(1);
+    });
 });

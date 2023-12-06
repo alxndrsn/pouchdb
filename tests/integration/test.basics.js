@@ -33,6 +33,10 @@ adapters.forEach(function (adapter) {
       });
     });
 
+    it.only('should break', () => {
+      new PouchDB();
+    });
+
     it('Creating Pouch without name will throw', function (done) {
       try {
         new PouchDB();

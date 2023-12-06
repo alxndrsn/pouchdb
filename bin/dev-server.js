@@ -38,7 +38,7 @@ var rebuildPromise = Promise.resolve();
 function rebuildPouch() {
   rebuildPromise = rebuildPromise.then(buildPouchDB).then(function () {
     console.log('Rebuilt packages/node_modules/pouchdb');
-  }).catch(console.error);
+  });
   return rebuildPromise;
 }
 
@@ -56,7 +56,7 @@ function rebuildTestUtils() {
       'tests/integration/utils-bundle.js');
   }).then(function () {
     console.log('Rebuilt tests/integration/utils-bundle.js');
-  }).catch(console.error);
+  });
   return rebuildPromise;
 }
 
@@ -66,7 +66,7 @@ function rebuildPerf() {
       'tests/performance-bundle.js');
   }).then(function () {
     console.log('Rebuilt tests/performance-bundle.js');
-  }).catch(console.error);
+  });
   return rebuildPromise;
 }
 
@@ -94,6 +94,9 @@ Promise.resolve().then(function () {
   console.log('Rebuilt PouchDB/test/perf JS bundles');
   filesWritten = true;
   checkReady();
+}).catch(err => {
+  console.log('dev-server failed with:', err);
+  process.exit(1);
 });
 
 var HTTP_PORT = 8000;

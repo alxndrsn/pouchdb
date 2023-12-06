@@ -20,6 +20,7 @@ function addPath(pkgName, otherPath) {
 
 function writeFile(filename, contents) {
   var tmp = filename + '.tmp';
+  //console.log('\n\nWriting file:', filename, 'with contents:\n', contents, '\n\n');
   return writeFileAsync(tmp, contents, 'utf-8').then(function () {
     return renameAsync(tmp, filename);
   }).then(function () {
@@ -28,9 +29,12 @@ function writeFile(filename, contents) {
   });
 }
 
-function doUglify(pkgName, code, prepend, fileOut) {
-  var miniCode = prepend + terser.minify(code, { output: { ascii_only: true }}).code;
-  return writeFile(addPath(pkgName, fileOut), miniCode);
+async function doUglify(pkgName, code, prepend, fileOut) {
+  const filename = fileOut.replace(/.*\//, ''); 
+  const sourceMap = { filename, url: filename + '.map' };
+  const minified = await terser.minify(code, { output: { ascii_only: true }, sourceMap });
+  return writeFile(addPath(pkgName, fileOut), prepend + minified.code)
+      .then(() => writeFile(addPath(pkgName, fileOut) + '.map', minified.map));
 }
 
 var browserifyCache = {};
