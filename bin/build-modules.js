@@ -26,12 +26,12 @@ function buildPackage(pkg) {
 }
 
 readDir('packages/node_modules').then(function (packages) {
-  throw new Error('build-modules failing deliberately');
+//  throw new Error('build-modules failing deliberately');
   console.log('buildPackage() running for:', packages);
   return Promise.all(packages.map(buildPackage))
     .then(() => {
       console.log('buildPackage() passed for all of:', packages);
-      process.exit(11);
+//      process.exit(11);
     })
     .catch(function (err) {
       console.error('build error');
