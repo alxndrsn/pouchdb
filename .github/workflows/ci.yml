@@ -16,6 +16,7 @@ on:
 env:
   NODE_VERSION: 14
   TEST_HOST: localhost
+  DEBUG: pw:browser
 
 jobs:
 
@@ -102,6 +103,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           couchdb-version: ${{ matrix.couchdb }}
+      - run: npx playwright install --with-deps ${{ matrix.client }}
       - id: test
         run: ${{ matrix.cmd }}
         continue-on-error: true
@@ -175,6 +177,7 @@ jobs:
       - uses: ./.github/actions/install-deps
         with:
           node-version: ${{ env.NODE_VERSION }}
+      - run: npx playwright install --with-deps ${{ matrix.client }}
       - id: test
         run: ${{ matrix.cmd }}
         continue-on-error: true
@@ -212,6 +215,7 @@ jobs:
       - uses: ./.github/actions/install-deps
         with:
           node-version: ${{ env.NODE_VERSION }}
+      - run: "[[ $CLIENT = node ]] || npx playwright install --with-deps $CLIENT"
       - id: test
         run: ${{ matrix.cmd }}
         continue-on-error: true
@@ -234,7 +238,7 @@ jobs:
       matrix:
         node: [14, 16]
         cmd:
-          - CLIENT=firefox npm run test-webpack
+          - npx playwright install --with-deps firefox && CLIENT=firefox npm run test-webpack
           - AUTO_COMPACTION=true npm test
           - PERF=1 npm test
           - npm run test-unit
