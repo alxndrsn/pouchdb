@@ -159,14 +159,6 @@ PouchDB adapter for web workers, so that PouchDB blocks the DOM less.
 
 {% include anchor.html title="Server Side" hash="Server Side" %}
 
-#### [PouchDB Server](https://github.com/pouchdb/pouchdb-server)
-
-A standalone CouchDB-style REST interface server to PouchDB.
-
-#### [Express PouchDB](https://github.com/pouchdb/express-pouchdb)
-
-An Express submodule with a CouchDB-style REST interface to PouchDB. Powers PouchDB Server.
-
 #### [Express PouchDB Replication Stream](https://github.com/conor-mac-aoidh/express-pouchdb-replication-stream)
 
 Server-side Express endpoint to deliver a stream from [PouchDB Replication Stream](https://github.com/nolanlawson/pouchdb-replication-stream).

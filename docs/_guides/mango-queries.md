@@ -347,7 +347,7 @@ There are many more options besides these, although note that not all of them ca
 
 The most complete documentation for selector options can be found in the [CouchDB `_find` documentation](https://docs.couchdb.org/en/stable/api/database/find.html). You might also look at the [Cloudant Query Language](https://docs.cloudant.com/cloudant_query.html) documentation (which is nearly identical to Mango, other than `text` and other Cloudant-specific features). PouchDB uses CouchDB as the reference implementation; they ought to be functionally identical.
 
-It should be noted that, over HTTP, this API currently works with CouchDB 2.0+, Cloudant, and PouchDB Server.
+It should be noted that, over HTTP, this API currently works with CouchDB 2.0+, and Cloudant.
 CouchDB 2.0 is the reference implementation, so the API should be the same. CouchDB 1.6.1 and below is not supported.
 
 {% include anchor.html title="Related API documentation" hash="related-api-documentation" %}

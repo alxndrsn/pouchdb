@@ -24,7 +24,7 @@
     "publish-site": "./bin/publish-site.sh",
     "build-site": "node ./bin/build-site.js",
     "test-coverage": "./bin/test-coverage.sh",
-    "coverage": "COVERAGE=1 SERVER=pouchdb-server POUCHDB_SERVER_FLAGS=--in-memory PLUGINS=pouchdb-find ./bin/test-coverage.sh",
+    "coverage": "COVERAGE=1 PLUGINS=pouchdb-find ./bin/test-coverage.sh",
     "report-coverage": "npm run test-coverage && istanbul-coveralls --no-rm",
     "build-test": "npm run build-test-utils && npm run build-perf",
     "build-test-utils": "browserify tests/integration/utils.js > tests/integration/utils-bundle.js",

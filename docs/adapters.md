@@ -178,22 +178,10 @@ Currently PouchDB has full support for:
 * CouchDB 2.x ([tested in CI](https://github.com/pouchdb/pouchdb/actions))
 * CouchDB 3.x ([tested in CI](https://github.com/pouchdb/pouchdb/actions))
 * [Cloudant](https://cloudant.com/) (roughly the same as 2.x)
-* [PouchDB Server](https://github.com/pouchdb/pouchdb-server) ([tested in CI](https://github.com/pouchdb/pouchdb/actions))
-* [PouchDB Server --in-memory mode](https://github.com/pouchdb/pouchdb-server)
 
 [Drupal 8](http://wearepropeople.com/blog/a-content-staging-solution-for-drupal-8-and-more) has also announced support for PouchDB, and there is [rcouch](https://github.com/rcouch/rcouch) as well, but these are both untested by PouchDB.
 
 If you are ever unsure about a server, consider replicating from PouchDB to CouchDB, then from that CouchDB to the other server.
-
-#### PouchDB Server
-
-[PouchDB Server](https://github.com/pouchdb/pouchdb-server) is a standalone REST server that implements the CouchDB API, while using a LevelDB-based PouchDB under the hood. It also supports an `--in-memory` mode and any [LevelDOWN][] adapter, which you may find handy.
-
-PouchDB Server passes the PouchDB test suite at 100%, but be aware that it is not as full-featured or battle-tested as CouchDB.
-
-#### PouchDB Express
-
-The underlying module for PouchDB Server, [Express PouchDB](https://github.com/pouchdb/express-pouchdb) is an Express submodule that mimics most of the CouchDB API within your Express application.
 
 {% include anchor.html title="More resources" hash="more_resources"%}
 

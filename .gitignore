@@ -11,7 +11,6 @@ coverage
 bower_components
 .idea/
 .vscode/
-tests/pouchdb_server
 tests/performance-bundle.js
 packages/node_modules/pouchdb/dist/*
 pouchdb-webpack.js
@@ -20,7 +19,6 @@ lib_unit
 src_browser/
 tests/integration/utils-bundle.js
 *.heapsnapshot
-/pouchdb-server-install
 package-lock.json
 yarn.lock
 /.eslintcache

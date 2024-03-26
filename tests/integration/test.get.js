@@ -34,9 +34,8 @@ adapters.forEach(function (adapter) {
                                   'correct error name returned');
             err.message.should.equal(testUtils.errors.MISSING_DOC.message,
                                     'correct error message returned');
-            // todo: does not work in pouchdb-server.
-            // err.reason.should.equal(testUtils.errors.MISSING_DOC.reason,
-            //                           'correct error reason returned');
+            err.reason.should.equal(testUtils.errors.MISSING_DOC.reason,
+                                      'correct error reason returned');
             done();
           });
         });
@@ -57,9 +56,8 @@ adapters.forEach(function (adapter) {
                                   'correct error name returned');
             err.message.should.equal(testUtils.errors.MISSING_DOC.message,
                                     'correct error message returned');
-            // todo: does not work in pouchdb-server.
-            // err.reason.should.equal(testUtils.errors.MISSING_DOC.reason,
-            //                           'correct error reason returned');
+            err.reason.should.equal(testUtils.errors.MISSING_DOC.reason,
+                                      'correct error reason returned');
             done();
           });
         });

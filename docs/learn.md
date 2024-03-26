@@ -31,8 +31,6 @@ PouchDB requires a modern ES5 environment, so if you need to support older brows
 
 In Node.js, PouchDB uses [LevelDB][] under the hood, and also supports [many other backends](/adapters.html#pouchdb_in_node_js) via the [LevelUP ecosystem](https://github.com/rvagg/node-levelup).
 
-PouchDB can also run as its own CouchDB-compatible web server, using [PouchDB Server](https://github.com/pouchdb/pouchdb-server).
-
 [IndexedDB]: http://caniuse.com/#feat=indexeddb
 [WebSQL]: http://caniuse.com/#feat=sql-storage
 [LevelDB]: https://github.com/google/leveldb
