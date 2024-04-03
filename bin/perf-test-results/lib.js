@@ -37,6 +37,7 @@ module.exports = {
 };
 
 const fs = require('node:fs');
+const { execSync } = require('node:child_process');
 
 function loadResultFile(file) {
   console.error(`[compare-perf-results.lib]`, 'Loading file:', file, '...');
@@ -82,7 +83,7 @@ function printComparisonReport({ useStat }, ...results) {
   report();
   report('Using stat:', useStat);
   report('Comparing adapters:');
-  results.map(({ adapter }) => report('  *', adapter));
+  results.map(({ adapter }) => report('  *', adapter, describeAdapter(adapter)));
   report();
   reportTableRow('', '', ...results.map(r  => [ r.adapter,   r.adapter ]).flat());
   reportTableRow('', '', ...results.map(() => [ 'iterations', useStat  ]).flat());
@@ -124,4 +125,27 @@ function isBetter(a, ...others) {
 
 function arrWithout(arr, idx) {
   return [ ...arr.slice(0, idx), ...arr.slice(idx+1) ];
+}
+
+function describeAdapter(fullAdapterString) {
+  const match = fullAdapterString.match(/^(.*):([0-9a-f]*)$/);
+  if (match) {
+    const [, adapter, treeish] = match;
+    const commitDate = standardDate(gitExec(`show -s --format=%ci ${treeish}`));
+    const onMaster = gitExec(`branch master --contains ${treeish}`) === 'master';
+    const branches = gitExec(`branch -a --contains ${treeish}`);
+    const branch = onMaster ? 'master' : branches.includes('\n') ? '(many branches)' : branches;
+    const description = gitExec('show -s --format=%s', treeish);
+    return `[${commitDate}] ${branch} | ${description}`;
+  }
+  return adapter;
+}
+
+function gitExec(cmd, ...args) {
+  if(args.length) cmd = [ cmd, ...args ].join(' ');
+  return execSync(`git ${cmd}`, { encoding:'utf8' }).trim();
+}
+
+function standardDate(str) {
+  return new Date(str).toISOString().split('.')[0].replace('T', ' ')
 }
