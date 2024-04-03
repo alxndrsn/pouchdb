@@ -38,10 +38,29 @@ rawResults.forEach(({ adapter, client, results }) => {
     if (!testSuites[suite].includes(t)) testSuites[suite].push(t);
 
     if (!resultsByAdapter[adapter][suite])    resultsByAdapter[adapter][suite]    = {};
-    if (!resultsByAdapter[adapter][suite][t]) resultsByAdapter[adapter][suite][t] = { numIterations:0, min:Number.MAX_VALUE };
+    if (!resultsByAdapter[adapter][suite][t]) resultsByAdapter[adapter][suite][t] = { numIterations:0, min:Number.MAX_VALUE, median:-1, all:[] };
 
+    resultsByAdapter[adapter][suite][t].all.push(median);
     resultsByAdapter[adapter][suite][t].min = Math.min(resultsByAdapter[adapter][suite][t].min, median);
     resultsByAdapter[adapter][suite][t].numIterations++;
+  });
+});
+
+Object.values(resultsByAdapter).forEach(adapterRes => {
+  Object.values(adapterRes).forEach(suite => {
+    console.log('suite:', JSON.stringify(suite, null, 2));
+    Object.values(suite).forEach(test => {
+      console.log('test:', JSON.stringify(test, null, 2));
+      test.all.sort();
+      const len = test.all.length;
+      const mid = Math.floor(len / 2);
+      console.log({ len, mid });
+      if(len % 2) {
+        test.median = test.all[mid];
+      } else {
+        test.median = (test.all[mid] + test.all[mid-1]) / 2;
+      }
+    });
   });
 });
 
@@ -56,4 +75,4 @@ const sortedResults = adapters.map(adapter => ({
   adapter, results:resultsByAdapter[adapter]
 }));
 
-printComparisonReport({ useStat:'min' }, ...sortedResults);
+printComparisonReport({ useStat:'median' }, ...sortedResults);
