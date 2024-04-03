@@ -83,10 +83,9 @@ function printComparisonReport({ useStat }, ...results) {
   report();
   report('Using stat:', useStat);
   report('Comparing adapters:');
-  results.map(({ adapter }, idx) => report(`  ${idx+1}.`, adapter, describeAdapter(adapter)));
+  results.map(({ adapter }, idx) => report(`  #${idx+1}.`, adapter, describeAdapter(adapter)));
   report();
-  reportTableRow('', '', ...results.map((r, idx)  => [ idx+1, idx+1 ]).flat());
-  reportTableRow('', '', ...results.map(() => [ 'itr', useStat  ]).flat());
+  reportTableRow('', '', ...results.map((r, idx)  => [ 'itr', `#${idx+1}` ]).flat());
 
   const [ a, ...others ] = results;
   Object.entries(a.results)
