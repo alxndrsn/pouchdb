@@ -58,8 +58,8 @@ const colFormat = idx => {
     case 0:  return { width:11, pad:'padEnd' };
     case 1:  return { width:31, pad:'padEnd' };
   }
-  if (idx & 1) return { width:17, pad:'padStart' };
-  else        return { width:17, pad:'padStart' };
+  if (idx & 1) return { width:9, pad:'padStart' };
+  else         return { width:3, pad:'padStart' };
 };
 function reportTableRow(...cols) {
   report(cols.map((c, i) => {
@@ -83,10 +83,10 @@ function printComparisonReport({ useStat }, ...results) {
   report();
   report('Using stat:', useStat);
   report('Comparing adapters:');
-  results.map(({ adapter }) => report('  *', adapter, describeAdapter(adapter)));
+  results.map(({ adapter }, idx) => report(`  ${idx+1}.`, adapter, describeAdapter(adapter)));
   report();
-  reportTableRow('', '', ...results.map(r  => [ r.adapter,   r.adapter ]).flat());
-  reportTableRow('', '', ...results.map(() => [ 'iterations', useStat  ]).flat());
+  reportTableRow('', '', ...results.map((r, idx)  => [ idx+1, idx+1 ]).flat());
+  reportTableRow('', '', ...results.map(() => [ 'itr', useStat  ]).flat());
 
   const [ a, ...others ] = results;
   Object.entries(a.results)
@@ -111,6 +111,8 @@ function printComparisonReport({ useStat }, ...results) {
           );
         });
     });
+  report();
+  report('  * itr = test iterations');
   report();
 }
 
