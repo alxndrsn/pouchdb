@@ -49,7 +49,7 @@ function loadResultFile(file) {
   return { adapter:`${adapter}:${description}`, client:`${client.browser.name} ${client.browser.major}`, results };
 }
 
-function report(...args) { console.log('   ', ...args); }
+function report(...args) { console.log(...args); }
 
 const colFormat = idx => {
   switch (idx) {
@@ -79,11 +79,12 @@ function forHumans(n) {
 
 function printComparisonReport({ client, useStat }, ...results) {
   report();
-  report('Using stat:', useStat);
-  if (client) report('Client:', client);
-  report('Comparing adapters:');
-  results.map(({ adapter }, idx) => report(`  #${idx+1}.`, adapter, describeAdapter(adapter)));
+  report('* Using stat:', useStat);
+  if (client) report('* Client:', client);
+  report('* Adapters:');
+  results.map(({ adapter }, idx) => report(`  ${idx+1}.`, adapter.replace(':', ' - '), describeAdapter(adapter)));
   report();
+  report('```');
   reportTableRow('', '', ...results.map((r, idx)  => [ 'itr', `#${idx+1}` ]).flat());
 
   const [ a, ...others ] = results;
@@ -111,6 +112,7 @@ function printComparisonReport({ client, useStat }, ...results) {
     });
   report();
   report('  * itr = test iterations');
+  report('```');
   report();
 }
 
