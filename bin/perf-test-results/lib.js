@@ -58,7 +58,7 @@ const colFormat = idx => {
     case 0:  return { width:11, pad:'padEnd' };
     case 1:  return { width:31, pad:'padEnd' };
   }
-  if (idx & 1) return { width:9, pad:'padStart' };
+  if (idx & 1) return { width:10, pad:'padStart' };
   else         return { width:3, pad:'padStart' };
 };
 function reportTableRow(...cols) {
