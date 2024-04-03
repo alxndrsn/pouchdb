@@ -10,12 +10,13 @@ const rawResults = files.map(loadResultFile);
 const adapters = [];
 const testSuites = {};
 const resultsByAdapter = {};
+const clients = {};
 
 const clientFilter  = process.env.CLIENT;
 const adapterFilter = process.env.ADAPTERS && process.env.ADAPTERS.split(',');
 const gitFilter     = process.env.COMMITS  && process.env.COMMITS.split(',').map(commit => commit.substring(0, 7));
 
-rawResults.forEach(({ adapter, client, results }) => {
+const filteredResults = rawResults.filter(({ adapter, client, results }) => {
   if (adapterFilter) {
     if (!adapterFilter.includes(adapter.split(':')[0])) return;
   }
@@ -23,12 +24,21 @@ rawResults.forEach(({ adapter, client, results }) => {
     if (!gitFilter.includes(adapter.split(':')[1])) return;
   }
   if (clientFilter) {
-    if (client.toLowerCase() !== clientFilter.toLowerCase()) return;
+    if (!clientFilter.toLowerCase().split(',').includes(client.toLowerCase())) return;
   }
 
+  return true;
+});
+
+filteredResults.forEach(({ adapter, client, results }) => {
   if (!adapters.includes(adapter)) {
     adapters.push(adapter);
     resultsByAdapter[adapter] = {};
+    clients[adapter] = [];
+  }
+
+  if (!clients[adapter].includes(client)) {
+    clients[adapter].push(client);
   }
 
   Object.entries(results).forEach(([ t, { median } ]) => {
@@ -48,13 +58,10 @@ rawResults.forEach(({ adapter, client, results }) => {
 
 Object.values(resultsByAdapter).forEach(adapterRes => {
   Object.values(adapterRes).forEach(suite => {
-    console.log('suite:', JSON.stringify(suite, null, 2));
     Object.values(suite).forEach(test => {
-      console.log('test:', JSON.stringify(test, null, 2));
       test.all.sort();
       const len = test.all.length;
       const mid = Math.floor(len / 2);
-      console.log({ len, mid });
       if(len % 2) {
         test.median = test.all[mid];
       } else {
@@ -75,4 +82,11 @@ const sortedResults = adapters.map(adapter => ({
   adapter, results:resultsByAdapter[adapter]
 }));
 
-printComparisonReport({ useStat:'median' }, ...sortedResults);
+const allClients = new Set();
+Object.entries(clients).forEach(([ adapter, clients ]) => {
+  clients.forEach(c => allClients.add(c));
+});
+if(allClients.length > 1) throw new Error(`More than one client used for adapter: ${adapter}.  Client-based differentiation is not currently supported, and will give confusing results.`);
+const client = [...allClients][0];
+
+printComparisonReport({ client, useStat:'median' }, ...sortedResults);

@@ -46,9 +46,7 @@ function loadResultFile(file) {
   const gitMatch = srcRoot.match(/^\.\.\/\.\.\/dist-bundles\/([0-9a-f]{40})$/);
   const description = (gitMatch && gitMatch[1].substr(0,7)) || srcRoot;
 
-  const browserName = client.browser.name;
-
-  return { adapter:`${adapter}:${description}`, client:browserName, results };
+  return { adapter:`${adapter}:${description}`, client:`${client.browser.name} ${client.browser.major}`, results };
 }
 
 function report(...args) { console.log('   ', ...args); }
@@ -79,9 +77,10 @@ function forHumans(n) {
   return n != null ? n.toFixed(2) : null;
 }
 
-function printComparisonReport({ useStat }, ...results) {
+function printComparisonReport({ client, useStat }, ...results) {
   report();
   report('Using stat:', useStat);
+  if (client) report('Client:', client);
   report('Comparing adapters:');
   results.map(({ adapter }, idx) => report(`  #${idx+1}.`, adapter, describeAdapter(adapter)));
   report();
@@ -132,12 +131,12 @@ function describeAdapter(fullAdapterString) {
   const match = fullAdapterString.match(/^(.*):([0-9a-f]*)$/);
   if (match) {
     const [, adapter, treeish] = match;
-    const commitDate = standardDate(gitExec(`show -s --format=%ci ${treeish}`));
+    const commitDate = utc(gitExec(`show -s --format=%ci ${treeish}`));
     const onMaster = gitExec(`branch master --contains ${treeish}`) === 'master';
     const branches = gitExec(`branch -a --contains ${treeish}`);
-    const branch = onMaster ? 'master' : branches.includes('\n') ? '(many branches)' : branches;
+    const branch = onMaster ? 'master' : branches.includes('\n') ? 'many branches' : branches;
     const description = gitExec('show -s --format=%s', treeish);
-    return `[${commitDate}] ${branch} | ${description}`;
+    return `[${commitDate}] ${description} (${branch})`;
   }
   return adapter;
 }
@@ -147,6 +146,6 @@ function gitExec(cmd, ...args) {
   return execSync(`git ${cmd}`, { encoding:'utf8' }).trim();
 }
 
-function standardDate(str) {
+function utc(str) {
   return new Date(str).toISOString().split('.')[0].replace('T', ' ')
 }
