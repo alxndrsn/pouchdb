@@ -5,6 +5,14 @@ const { loadResultFile, printComparisonReport, SUITE_FOR } = require('./lib');
 
 const [ , , ...files ] = process.argv;
 
+let useStat = 'min';
+if (files[0] === '--min' || files[0] === '--median') {
+  if (files[0] === '--median') {
+    useStat = 'median';
+  }
+  files.shift();
+}
+
 const rawResults = files.map(loadResultFile);
 
 const adapters = [];
@@ -99,4 +107,4 @@ Object.entries(clients).forEach(([ adapter, clients ]) => {
 if(allClients.length > 1) throw new Error(`More than one client used for adapter: ${adapter}.  Client-based differentiation is not currently supported, and will give confusing results.`);
 const client = [...allClients][0];
 
-printComparisonReport({ client, useStat:'median' }, ...sortedResults);
+printComparisonReport({ client, useStat }, ...sortedResults);
