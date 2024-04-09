@@ -1,5 +1,7 @@
 'use strict';
 
+const should = require("chai").should();
+
 var adapters = ['local', 'http'];
 var repl_adapters = [
   ['local', 'http'],
@@ -2050,6 +2052,7 @@ adapters.forEach(function (adapter) {
       } catch (caughtErr) {
         err = caughtErr;
       }
+      should.not.exist(res);
 
       if (adapter === 'local') {
         err.message.should.equal('missing');
@@ -2085,6 +2088,7 @@ adapters.forEach(function (adapter) {
       } catch (caughtErr) {
         err = caughtErr;
       }
+      should.not.exist(res);
 
       if (adapter === 'local') {
         err.message.should.equal('missing');
@@ -2120,6 +2124,7 @@ adapters.forEach(function (adapter) {
       } catch (caughtErr) {
         err = caughtErr;
       }
+      should.not.exist(res);
 
       if (adapter === 'local') {
         err.message.should.equal('missing');
