@@ -392,16 +392,6 @@ Utilities for PouchDB adapters.
 npm install --save-exact pouchdb-adapter-utils
 ```
 
-### pouchdb-ajax
-
-PouchDB's `ajax()` function.
-
-#### Example usage
-
-```bash
-npm install --save-exact pouchdb-ajax
-```
-
 ### pouchdb-binary-utils
 
 Utilities for operating on binary strings and Buffers/Blobs.
