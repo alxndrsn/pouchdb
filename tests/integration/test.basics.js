@@ -122,6 +122,7 @@ adapters.forEach(function (adapter) {
       }).then(function () {
         throw new Error('should not be here');
       }).catch(function (err) {
+        console.log('err:', err);
         err.should.have.property('status', 409);
         err.docId.should.equal(savedDocId);
       });
