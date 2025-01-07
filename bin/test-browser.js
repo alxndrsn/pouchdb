@@ -156,6 +156,7 @@ class RemoteRunner {
   }
 
   async handleEnd() {
+    // TODO if suite ==== multi-tab, make sure _N_ end events have been seen before actually processing the END of the testing
     closeRequested = true;
     await this.browser.close();
     process.exit(this.failed ? 1 : 0);
@@ -269,6 +270,10 @@ async function startTest() {
     ctx.on('console', message => {
       console.log(message.text());
     });
+
+    if(suite === 'multi-tab') {
+      // TODO open _N_ tabs
+    }
 
     const page1 = await ctx.newPage();
     await page1.goto(testUrl);
