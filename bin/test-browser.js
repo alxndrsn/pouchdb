@@ -270,8 +270,11 @@ async function startTest() {
       console.log(message.text());
     });
 
-    const page = await ctx.newPage();
-    await page.goto(testUrl);
+    const page1 = await ctx.newPage();
+    await page1.goto(testUrl);
+
+    const page2 = await ctx.newPage();
+    await page2.goto(testUrl);
 
     const userAgent = await page.evaluate('navigator.userAgent');
     console.log('Testing on:', userAgent);
