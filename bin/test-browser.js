@@ -38,6 +38,8 @@ if (process.env.PERF) {
   testUrl = testRoot + 'mapreduce/index.html';
 } else if (process.env.TYPE === 'find') {
   testUrl = testRoot + 'find/index.html';
+} else if (process.env.TYPE === 'multi-tab') {
+  testUrl = testRoot + 'multi-tab/index.html';
 } else {
   testUrl = testRoot + 'integration/index.html';
 }
