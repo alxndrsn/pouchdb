@@ -61,11 +61,11 @@ testUtils.readBlobPromise = function (blob) {
   });
 };
 
-testUtils.base64Blob = function (blob, callback) {
-  if (testUtils.isNode()) {
-    callback(blob.toString('base64'));
+testUtils.base64Blob = function (blobber, callback) {
+  if (testUtils.isNode() && Buffer.isBuffer(blobber)) {
+    callback(blobber.toString('base64'));
   } else {
-    testUtils.readBlob(blob, function (binary) {
+    testUtils.readBlob(blobber, function (binary) {
       callback(testUtils.btoa(binary));
     });
   }
