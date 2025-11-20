@@ -32,7 +32,11 @@ testUtils.adapterType = function () {
 
 testUtils.readBlob = function (blob, callback) {
   if (testUtils.isNode()) {
-    callback(blob.toString('binary'));
+    if (Buffer.isBuffer(blobOrBuffer)) {
+      callback(blobOrBuffer.toString('binary'));
+    } else {
+      blobOrBuffer.arrayBuffer().then(ab => callback(Buffer.from(ab).toString('binary')));
+    }
   } else {
     var reader = new FileReader();
     reader.onloadend = function () {
