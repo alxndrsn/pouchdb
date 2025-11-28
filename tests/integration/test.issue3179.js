@@ -8,7 +8,7 @@ var adapters = [
 ];
 
 adapters.forEach(function (adapters) {
-  describe('test.issue3179.js-' + adapters[0] + '-' + adapters[1], function () {
+  describe.only('test.issue3179.js-' + adapters[0] + '-' + adapters[1], function () {
 
     var dbs = {};
 
@@ -100,7 +100,7 @@ adapters.forEach(function (adapters) {
       });
     });
 
-    it.only('#3179 conflicts synced, live sync', async function () {
+    it('#3179 conflicts synced, live sync', async function () {
       const local = new PouchDB(dbs.name);
       const remote = new PouchDB(dbs.remote);
       const sync1 = local.sync(remote, { live: true });
