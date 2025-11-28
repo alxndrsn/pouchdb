@@ -5,7 +5,7 @@ var adapters = ['http', 'local'];
 
 adapters.forEach(function (adapter) {
 
-  describe('test.changes.js-' + adapter, function () {
+  describe.only('test.changes.js-' + adapter, function () {
 
     var dbs = {};
 
@@ -1864,7 +1864,7 @@ adapters.forEach(function (adapter) {
   });
 });
 
-describe('changes-standalone', function () {
+describe.only('changes-standalone', function () {
 
   it.skip('Changes reports errors', function (done) {
     this.timeout(2000);

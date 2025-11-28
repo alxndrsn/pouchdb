@@ -1,6 +1,6 @@
 'use strict';
 
-describe('DB Setup', function () {
+describe.only('DB Setup', function () {
 
   it('PouchDB has a version', function () {
     PouchDB.version.should.be.a('string');

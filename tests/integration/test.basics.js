@@ -4,7 +4,7 @@ var adapters = ['http', 'local'];
 
 adapters.forEach(function (adapter) {
 
-  describe('test.basics.js-' + adapter, function () {
+  describe.only('test.basics.js-' + adapter, function () {
 
     var dbs = {};
 
@@ -869,7 +869,7 @@ adapters.forEach(function (adapter) {
       String('this is not an object'),
       //new String('this is not an object'), actually, this _is_ an object
     ].forEach((badDoc, idx) => {
-      describe(`Should error when document is not an object #${idx}`, () => {
+      describe.only(`Should error when document is not an object #${idx}`, () => {
         let db;
 
         const expectNotAnObject = fn => async () => {

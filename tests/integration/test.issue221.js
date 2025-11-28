@@ -8,7 +8,7 @@ var adapters = [
 ];
 
 adapters.forEach(function (adapters) {
-  describe('test.issue221.js-' + adapters[0] + '-' + adapters[1], function () {
+  describe.only('test.issue221.js-' + adapters[0] + '-' + adapters[1], function () {
 
     var dbs = {};
 

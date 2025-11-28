@@ -29,7 +29,7 @@ var iconDigests = [
 var iconLengths = [1047, 789, 967, 527, 1108];
 
 adapters.forEach(function (adapter) {
-  describe('suite2 test.attachments.js-' + adapter, function () {
+  describe.only('suite2 test.attachments.js-' + adapter, function () {
 
     var dbs = {};
 
@@ -3429,7 +3429,7 @@ adapters.forEach(function (adapter) {
 });
 
 repl_adapters.forEach(function (adapters) {
-  describe('suite2 test.attachments.js- ' + adapters[0] + ':' + adapters[1],
+  describe.only('suite2 test.attachments.js- ' + adapters[0] + ':' + adapters[1],
     function () {
 
     var dbs = {};

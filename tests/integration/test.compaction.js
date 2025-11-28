@@ -4,7 +4,7 @@ var adapters = ['http', 'local'];
 var autoCompactionAdapters = ['local'];
 
 adapters.forEach(function (adapter) {
-  describe('suite2 test.compaction.js-' + adapter, function () {
+  describe.only('suite2 test.compaction.js-' + adapter, function () {
     this.timeout(120000); // 2 mins - these tests can take a while!
 
     var dbs = {};

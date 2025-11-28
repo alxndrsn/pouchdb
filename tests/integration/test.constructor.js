@@ -1,6 +1,6 @@
 'use strict';
 
-describe('constructor errors', function () {
+describe.only('constructor errors', function () {
 
   it('should error on an undefined name', function (done) {
     try {

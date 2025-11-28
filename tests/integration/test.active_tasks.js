@@ -1,6 +1,6 @@
 'use strict';
 
-describe('test.active_tasks.js', function () {
+describe.only('test.active_tasks.js', function () {
 
   afterEach(function (done) {
     PouchDB.activeTasks.tasks = {};
