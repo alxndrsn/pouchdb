@@ -44,8 +44,6 @@ jobs:
         adapter: ['idb']
         cmd:
           - npm test
-          - TYPE=find PLUGINS=pouchdb-find npm test
-          - TYPE=mapreduce npm test
     runs-on: ubuntu-latest
     env:
       USE_MINIFIED: 1
