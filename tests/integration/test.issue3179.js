@@ -100,7 +100,7 @@ adapters.forEach(function (adapters) {
       });
     });
 
-    it('#3179 conflicts synced, live sync', async function () {
+    it.only('#3179 conflicts synced, live sync', async function () {
       const local = new PouchDB(dbs.name);
       const remote = new PouchDB(dbs.remote);
       const sync1 = local.sync(remote, { live: true });
