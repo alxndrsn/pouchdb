@@ -101,6 +101,8 @@ adapters.forEach(function (adapters) {
     });
 
     it('#3179 conflicts synced, live sync', async function () {
+      const log = (...args) => console.log(104, ...args);
+
       const local = new PouchDB(dbs.name);
       const remote = new PouchDB(dbs.remote);
       const sync1 = local.sync(remote, { live: true });
@@ -171,27 +173,41 @@ adapters.forEach(function (adapters) {
         });
       }
 
+      log('putting 1');
       await local.put({ _id: '1' });
+      log('waiting for update 1');
       await waitForUptodate();
+      log('cleanup()');
       await cleanup(sync1);
 
+      log('waiting for update 2');
       await waitForUptodate();
+      log('getting 1');
       const doc1 = await local.get('1');
       const randomNumber = Math.random();
       doc1.foo = randomNumber;
+      log('putting doc1 with foo =', randomNumber);
       await local.put(doc1);
 
+      log('getting doc 2');
       const doc2 = await remote.get('1');
       // set conflicting property `foo`
       doc2.foo = randomNumber + 1;
+      log('putting conflicting value for foo:', randomNumber+1);
       await remote.put(doc2);
 
+      log('sycing 2...');
       const sync2 = local.sync(remote, { live: true });
+      log('waiting for update 3');
       await waitForUptodate();
 
+      log('getting doc3 with conflicts...');
       const doc3 = await local.get('1', { conflicts: true });
+      log('got:', doc3);
       should.exist(doc3._conflicts, 'conflicts expected, but none were found');
+      log('removing doc3 conflict[0] from local');
       await local.remove(doc3._id, doc3._conflicts[0]);
+      log('waiting for conflicts resolved');
       await waitForConflictsResolved();
 
       const localDoc = await local.get('1', { conflicts: true, revs: true });
@@ -201,6 +217,7 @@ adapters.forEach(function (adapters) {
       });
 
       remoteDoc.should.deep.equal(localDoc);
+      log('final cleanup');
       await cleanup(sync2);
     });
 
