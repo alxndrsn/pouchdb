@@ -228,6 +228,24 @@ async function startTest() {
     // Playwright v1.39.0, v1.40.1 and v1.41.1, page.addInitScript() did not appear to work.
     const ctx = await browser.newContext();
 
+//    ctx.on('console', async msg => {                                                                                 
+//      const prefix = `[${browserName}] [${new Date().toISOString()}] [${msg.type()}]`;   
+//      const text = msg.text();                                                                                        
+//                                                                                                                      
+//      try {                                                                                                           
+//        const values = [];                                                                                            
+//        for(const arg of msg.args()) values.push(await arg.jsonValue());                                              
+//                                                                                                                      
+//        console.log(prefix, ...values);                                                                               
+//      } catch(err) {                                                                                                  
+//        if(err.message !== 'jsHandle.jsonValue: Execution context was destroyed, most likely because of a navigation') {
+//          console.log(prefix, `dbg: err.message=<${err.message}>`);                                                   
+//          console.log(prefix, 'WARNING: gathering log details failed; will log original text instead.  This may be missing information in some browsers.  Error caught:', err);
+//        }                                                                                                             
+//        console.log(prefix, text);                                                                                    
+//      }                                                                                                               
+//    });
+
     // Playwright's Browser.on('close') event handler would be the more obvious
     // choice here, but it does not seem to be triggered if the browser is closed
     // by an external event (e.g. process is killed, user closes non-headless
