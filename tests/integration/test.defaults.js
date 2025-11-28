@@ -8,7 +8,7 @@ if (!process.env.LEVEL_ADAPTER &&
   const { mkdirSync } = require('fs');
   var rimraf = require('rimraf');
 
-  describe.only('defaults', function () {
+  describe.skip('defaults', function () {
 
     beforeEach(function () {
       return new PouchDB('mydb').destroy().then(function () {

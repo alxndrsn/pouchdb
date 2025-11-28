@@ -3,7 +3,7 @@
 var adapters = ['http', 'local'];
 
 adapters.forEach(function (adapter) {
-  describe.only('test.get.js-' + adapter, function () {
+  describe('test.get.js-' + adapter, function () {
 
     var dbs = {};
 

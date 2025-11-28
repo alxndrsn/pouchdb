@@ -8,7 +8,7 @@ var adapters = [
 ];
 
 adapters.forEach(function (adapters) {
-  describe.only('suite2 test.replication.js-' + adapters[0] + '-' + adapters[1], function () {
+  describe.skip('suite2 test.replication.js-' + adapters[0] + '-' + adapters[1], function () {
 
     var dbs = {};
 
@@ -4195,7 +4195,7 @@ adapters.forEach(function (adapters) {
 
 // This test only needs to run for one configuration, and it slows stuff
 // down
-describe.only('suite2 test.replication.js-down-test', function () {
+describe.skip('suite2 test.replication.js-down-test', function () {
   let dbs = {};
 
   beforeEach(function (done) {

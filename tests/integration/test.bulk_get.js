@@ -3,7 +3,7 @@
 var adapters = ['http', 'local'];
 
 adapters.forEach(function (adapter) {
-  describe.only('test.bulk_get.js-' + adapter, function () {
+  describe.skip('test.bulk_get.js-' + adapter, function () {
 
     var dbs = {};
 

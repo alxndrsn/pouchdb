@@ -6,9 +6,9 @@ if (!process.env.LEVEL_ADAPTER &&
   !process.env.ADAPTERS) {
   // these tests don't make sense for anything other than default leveldown
 
-  describe.only('test.failures.js', function () {
+  describe('test.failures.js', function () {
 
-    describe.only('invalid path', function () {
+    describe('invalid path', function () {
 
       var invalidPath = 'C:\\/path/to/thing/that/doesnt/exist\\with\\backslashes\\too';
 
@@ -50,7 +50,7 @@ if (!process.env.LEVEL_ADAPTER &&
 
     });
 
-    describe.only('error stack', function () {
+    describe('error stack', function () {
       var dbs = {};
 
       beforeEach(function () {

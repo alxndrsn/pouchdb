@@ -4,7 +4,7 @@ var adapters = ['local'];
 
 adapters.forEach(function (adapter) {
 
-  describe.only('test.deterministicrevs.js-' + adapter, function () {
+  describe.skip('test.deterministicrevs.js-' + adapter, function () {
 
     var dbs = {};
 

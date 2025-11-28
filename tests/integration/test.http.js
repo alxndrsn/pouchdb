@@ -1,6 +1,6 @@
 'use strict';
 
-describe.only('test.http.js', function () {
+describe('test.http.js', function () {
 
   var dbs = {};
 

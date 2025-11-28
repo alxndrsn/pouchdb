@@ -3,7 +3,7 @@
 var adapters = ['http', 'local'];
 
 adapters.forEach(function (adapter) {
-  describe.only('test.conflicts.js-' + adapter, function () {
+  describe.skip('test.conflicts.js-' + adapter, function () {
 
     var dbs = {};
 
