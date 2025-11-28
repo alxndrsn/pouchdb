@@ -853,7 +853,13 @@ adapters.forEach(function (adapter) {
       });
     });
 
-    it('Create a db with a reserved name', function () {
+    it.only('Create a db with a reserved name (promises)', async () => {
+      const db = new PouchDB('__proto__');
+      await db.info();
+      await db.destroy();
+    });
+
+    it.only('Create a db with a reserved name (callbacks)', function () {
       var db = new PouchDB('__proto__');
       return db.info().then(function () {
         return db.destroy();
