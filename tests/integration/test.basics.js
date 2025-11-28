@@ -26,8 +26,7 @@ adapters.forEach(function (adapter) {
       db.name.should.equal(dbs.name);
     });
 
-    it.only('4314 Create a pouch with + in name', function () {
-			console.log('4314: dbs.name:', dbs.name);
+    it('4314 Create a pouch with + in name', function () {
       var db = new PouchDB(dbs.name + '+suffix');
       return db.info().then(function () {
         return db.destroy();
@@ -854,21 +853,7 @@ adapters.forEach(function (adapter) {
       });
     });
 
-    it.only('Create a db with a reserved name (promises)', async function() {
-      this.timeout(5_000);
-
-      console.log('Creating db...');
-      const db = new PouchDB('lollerskatres');
-
-      console.log('Fetching info...');
-      const info = await db.info();
-      console.log('info:', JSON.stringify(info));
-
-      console.log('Destroying db...');
-      await db.destroy();
-    });
-
-    it.only('Create a db with a reserved name (callbacks)', function () {
+    it('Create a db with a reserved name', function () {
       var db = new PouchDB('__proto__');
       return db.info().then(function () {
         return db.destroy();
